@@ -4,7 +4,7 @@
 
 Repo GitHub đích: https://github.com/7mlabs/sdk-astro. Bản source local tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, đã giữ third-party notices. Source chưa được push; package chưa được phát hành trên npm, PyPI, NuGet hoặc crates.io.
 
-Kiểm tra quyền ngày 2026-10-03: connector GitHub có `pull: true`, `push: false`; `gh auth status` báo chưa đăng nhập. Cần cấp quyền ghi `7mlabs/sdk-astro` cho kết nối GitHub đang dùng, hoặc đăng nhập GitHub CLI bằng tài khoản có quyền ghi repo. Không gửi token trong chat hoặc commit credentials.
+Kiểm tra quyền ngày 2026-10-03: connector GitHub có `pull: true`, `push: false`; `gh auth status` báo chưa đăng nhập. Git HTTPS qua credential helper sẵn có trên máy đã chạy `git push --dry-run origin main` thành công; có thể dùng Git trực tiếp để upload. Đây là dry run, chưa cập nhật GitHub hoặc xác nhận các hooks khi push thật. Không gửi token trong chat hoặc commit credentials.
 
 ## Kiểm tra source và build candidate
 
@@ -23,7 +23,7 @@ python3 scripts/check-repository.py --artifacts
 
 CI `.github/workflows/neutral-engine.yml` chạy candidate builds trên `macos-15` (ARM64) và `ubuntu-24.04` (x64), thêm kiểm tra installed compression helpers/TypeScript. Artifacts theo platform lưu riêng; không phát hành registry. Linux wheel thường không thay thế manylinux wheel dành cho public PyPI.
 
-`scripts/export-website-data.mjs` cần artifacts build/test thật trước khi export. Trong checkout SDK độc lập, truyền output rõ ràng thay vì dùng default sibling website:
+`scripts/export-website-data.mjs` cần artifacts build/test thật và các báo cáo compression-schema/MCP integration được khai báo trong `scripts/website-catalog.mjs` trước khi export. Có thể xem các bước kiểm thử liên quan trong [payload-compression.md](payload-compression.md) và [integrations.md](integrations.md). Trong checkout SDK độc lập, truyền output rõ ràng thay vì dùng default sibling website:
 
 ```bash
 node scripts/export-website-data.mjs --output artifacts/website-data

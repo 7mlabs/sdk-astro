@@ -1,6 +1,6 @@
 # GitHub công khai và phân phối package
 
-Repo đích là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đang public và trống khi kiểm tra ngày 2026-10-03. Source engine/SDK được chuẩn bị trong checkout local riêng; chưa push hoặc publish registry. Kết nối GitHub hiện chỉ có quyền đọc (`push: false`) và GitHub CLI chưa đăng nhập. Xem [thiết lập GitHub và phát hành](github-setup.md).
+Repo đích là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đang public và trống khi kiểm tra ngày 2026-10-03. Source engine/SDK được chuẩn bị trong checkout local riêng; chưa push hoặc publish registry. Connector chỉ có quyền đọc và CLI chưa đăng nhập, nhưng Git HTTPS qua credential helper đã xác thực bằng dry run thành công. Bước push thật còn chờ owner chọn license. Xem [thiết lập GitHub và phát hành](github-setup.md).
 
 ## Điều kiện trước khi public
 
