@@ -97,3 +97,5 @@ Ví dụ dùng ngày 01/01/2000 lúc 12:00 UTC và tọa độ TP.HCM; giờ đ�
 Repo `7mlabs/sdk-astro` chứa source engine và SDK mới theo `AGPL-3.0-only`, dùng nhánh miễn phí của Swiss Ephemeris. Toàn văn [LICENSE](LICENSE) và [NOTICE](NOTICE) được giữ trong source và SDK packages. UI renderer độc lập có [license MIT riêng](examples/frontend/ui/LICENSE).
 
 Package chưa publish trên registry; các tên package chưa được xác nhận quyền sở hữu. CI candidate build/test artifact trên macOS ARM64 và Linux x64, không phát hành package. Kết quả build ở local chỉ xác nhận nền tảng đã chạy, không thay thế kết quả GitHub Actions. Xem [license](docs/license.md), [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).
+
+[Candidate CI ngày 2026-10-03 đã qua](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) trên macOS 15 ARM64 và Ubuntu 24.04 x64: 107 tests Rust, 339 cases parity giữa 5 ngôn ngữ, kiểm tra bộ nén và license trong package. Xem [phạm vi bằng chứng](docs/testing.md); Linux wheel vẫn cần bước manylinux trước khi phát hành PyPI.

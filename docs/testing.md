@@ -192,7 +192,9 @@ Fixtures đã lưu trong `tests/conformance/natal-references.json`; scripts test
 
 Repeated calls và concurrency không thay thế memory leak sanitizer/fuzz tests. Parity cùng core xác minh binding/serialization; references thiên văn được kiểm tra riêng như dưới đây. Chưa kiểm tra rộng toàn bộ lịch sử hoặc toàn khoảng năm 1800–2399.
 
-Chỉ macOS ARM64 được test trực tiếp trong phiên này. Linux CI candidate chưa được chạy trên GitHub; Windows Node linking chưa được triển khai. Node 18/20/22, Python 3.10–3.12, .NET TFM khác, Linux/Windows/ARM64 targets khác chưa được xác minh. Không quảng bá các target này là supported release.
+Candidate `0.10.0-alpha.1` đã qua [GitHub Actions run 37093556052](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052), tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda`, trên macOS 15 ARM64 và Ubuntu 24.04 x64 với Node 24, Python 3.13 và .NET 10. Mỗi job qua 107 tests Rust, 339 fresh-install/parity cases giữa Node/Python/.NET/Rust/C, 106 compression checks, 13 real fixture roundtrips, installed helpers/TypeScript và license/checksum validation. Bản sửa station giữ nguyên tolerance và bổ sung test về giới hạn thời điểm biểu diễn bằng f64.
+
+Windows Node linking chưa được triển khai. Node 18/20/22, Python 3.10–3.12, .NET TFM khác, Linux distro/architecture khác và macOS x64 chưa được xác minh. Ubuntu CI không thay thế kiểm tra manylinux wheel; chưa quảng bá các target này là supported registry release. Các kết quả macOS trong các mục lịch sử phía trên thuộc phiên bản/đợt chạy được mô tả ở từng mục.
 
 Legacy `LoveCompatScoringTests.GoldenScores_AreStable` đã lỗi từ source gốc. Neutral engine không chứa compatibility scoring và không phụ thuộc test đó. Không sửa kỳ vọng legacy để làm đẹp kết quả test mới.
 

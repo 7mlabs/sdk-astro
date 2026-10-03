@@ -1,6 +1,6 @@
 # GitHub công khai và phân phối package
 
-Repo là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), tách riêng source engine/SDK mới. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. Package chưa publish registry. Git HTTPS qua credential helper đã xác thực bằng dry run thành công. Xem [thiết lập GitHub và phát hành](github-setup.md).
+Repo công khai là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đã upload source engine/SDK riêng. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. Package chưa publish registry. Xem [thiết lập GitHub và phát hành](github-setup.md).
 
 ## Điều kiện trước khi public
 
@@ -26,7 +26,7 @@ Candidate hiện build một platform mỗi lần, tạo tgz/nupkg cùng tên gi
 
 ## CI và phát hành
 
-CI candidate build/test macOS ARM64 và Linux x64, upload artifact phục vụ kiểm tra; không tạo release hoặc publish registry. Kết quả local chỉ xác nhận macOS ARM64. Release tương lai: tag → build matrix → fresh-install/parity → assemble → checksum/notices → publish → registry fresh-install verification → cập nhật docs. Owner cần cấu hình quyền GitHub và publisher registry, ưu tiên OIDC theo [hướng dẫn setup](github-setup.md).
+CI candidate build/test macOS ARM64 và Linux x64, upload artifact phục vụ kiểm tra; không tạo release hoặc publish registry. [Run ngày 2026-10-03](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) đã qua cả hai nền tảng; bằng chứng Linux giới hạn ở Ubuntu 24.04 x64 và không xác nhận tính portable của wheel trên các distro khác. Release tương lai: tag → build matrix → fresh-install/parity → assemble → checksum/notices → publish → registry fresh-install verification → cập nhật docs. Owner cần cấu hình publisher registry, ưu tiên OIDC theo [hướng dẫn setup](github-setup.md).
 
 ## Không duy trì server
 

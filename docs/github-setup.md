@@ -4,11 +4,13 @@
 
 Repo GitHub: https://github.com/7mlabs/sdk-astro. Source tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, giữ third-party notices. Owner đã chọn AGPL-3.0-only ngày 2026-10-03; xem [license.md](license.md). Package chưa được phát hành trên npm, PyPI, NuGet hoặc crates.io.
 
-Kiểm tra quyền ngày 2026-10-03: connector GitHub có `pull: true`, `push: false`; `gh auth status` báo chưa đăng nhập. Git HTTPS qua credential helper sẵn có trên máy đã chạy `git push --dry-run origin main` thành công; có thể dùng Git trực tiếp để upload. Đây là dry run, chưa cập nhật GitHub hoặc xác nhận các hooks khi push thật. Không gửi token trong chat hoặc commit credentials.
+Source đã được push lên nhánh `main` của repo công khai ngày 2026-10-03 bằng Git HTTPS qua credential helper sẵn có. Không cần gửi token trong chat hoặc commit credentials.
+
+[Candidate CI đã qua trên macOS ARM64 và Linux x64](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052), tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda`: mỗi job có 107 tests Rust, 339 cases parity giữa 5 ngôn ngữ, 106 compression checks, 13 fixture roundtrips, installed SDK helpers/TypeScript và kiểm tra license/checksum trong package. Artifacts `candidate-darwin-arm64` và `candidate-linux-x64` lưu 14 ngày; chúng phục vụ kiểm tra candidate, chưa là bản phát hành registry.
 
 ## Kiểm tra source và build candidate
 
-Chạy từ root repo với Rust 1.83+, Node 24, Python 3.13 và .NET 10 SDK. Native provider cần compiler C. macOS ARM64 đã được kiểm thử local; Linux x64 sẽ cần GitHub Actions xác nhận. Windows chưa được builder hỗ trợ.
+Chạy từ root repo với Rust 1.83+, Node 24, Python 3.13 và .NET 10 SDK. Native provider cần compiler C. macOS ARM64 đã được kiểm thử local; CI xác nhận candidate trên macOS 15 ARM64 và Ubuntu 24.04 x64. Windows chưa được builder hỗ trợ.
 
 ```bash
 python3 scripts/check-repository.py
