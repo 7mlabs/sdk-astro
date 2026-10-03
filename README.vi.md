@@ -46,7 +46,7 @@ console.log({
 
 Giờ đầu vào là **UTC**; ứng dụng cần đổi giờ địa phương trước khi gọi SDK. Tọa độ tính bằng độ, bắc/đông dương. Response gồm metadata tính toán, warnings và errors bên cạnh `data`. [Request và response đầy đủ →](docs/natal.md)
 
-Package có TypeScript declarations. `calculate()` chạy đồng bộ và throw lỗi có `.code`/`.result` khi tính toán thất bại; `calculateJson()` trả JSON envelope. Dùng worker cho các lượt quét tháng/năm dài trong ứng dụng tương tác.
+Package có TypeScript declarations. `calculate()` chạy đồng bộ và throw lỗi có `.code`/`.result` khi tính toán thất bại; `calculateJson()` trả chuỗi JSON chứa envelope. Dùng worker cho các lượt quét tháng/năm dài trong ứng dụng tương tác.
 
 ## Tính năng
 

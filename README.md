@@ -46,7 +46,7 @@ console.log({
 
 Input time is **UTC**; convert local civil time before calling the SDK. Coordinates use degrees, with north/east positive. The response includes calculation metadata, warnings and errors alongside `data`. [View a complete request and response →](docs/natal.md)
 
-TypeScript declarations are included. `calculate()` is synchronous and throws an error with `.code` and `.result` on calculation failure; `calculateJson()` returns a JSON envelope. Use a worker for long month/year scans in interactive applications.
+TypeScript declarations are included. `calculate()` is synchronous and throws an error with `.code` and `.result` on calculation failure; `calculateJson()` returns a JSON string containing the envelope. Use a worker for long month/year scans in interactive applications.
 
 ## Capabilities
 
