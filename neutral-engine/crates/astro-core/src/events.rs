@@ -23,6 +23,7 @@ const EXTREMA_TOLERANCE: f64 = 1e-7;
 const TANGENCY_TOLERANCE: f64 = 1e-10;
 const DUPLICATE_SECONDS: f64 = 0.001;
 const MAX_ITERATIONS: usize = 80;
+const MAX_REPRESENTABLE_TIME_PROBES: usize = 128;
 const MAX_EVENTS: usize = 30000;
 const MAX_EVALUATIONS: usize = 2_000_000;
 
@@ -293,6 +294,7 @@ fn refine<F>(
 where
     F: FnMut(f64) -> Result<f64, String>,
 {
+    let original_bounds = (left, right);
     let crossing_direction = if fl * fr < 0. { (fr - fl).signum() } else { 0. };
     if fl == 0. {
         return Ok(Root {
@@ -318,6 +320,7 @@ where
     } else {
         (right, fr)
     };
+    let mut representable_time_stalled = false;
     for _ in 0..MAX_ITERATIONS {
         if (right - left) * 86400. <= TIME_TOLERANCE && best.1.abs() <= tolerance {
             return Ok(Root {
@@ -335,6 +338,7 @@ where
             left + span / 2.
         };
         if t == left || t == right {
+            representable_time_stalled = true;
             break;
         }
         let f = evaluate(t)?;
@@ -361,6 +365,62 @@ where
         } else {
             (right, fr)
         };
+    }
+    // Provider rates can jitter at neighboring f64 Julian days. Once the
+    // bracket has no representable interior, further bisection cannot help.
+    // Probe only nearby times inside the original interval, retaining actual
+    // residuals and an evaluated sign bracket with the original orientation.
+    if representable_time_stalled && best.1.abs() > tolerance && left > 0. {
+        let anchor = left.to_bits();
+        let mut samples = vec![(left, fl), (right, fr)];
+        for distance in 1..=MAX_REPRESENTABLE_TIME_PROBES / 2 {
+            for bits in [anchor - distance as u64, anchor + distance as u64] {
+                let t = f64::from_bits(bits);
+                if t < original_bounds.0
+                    || t > original_bounds.1
+                    || samples.iter().any(|sample| sample.0 == t)
+                {
+                    continue;
+                }
+                let f = evaluate(t)?;
+                if !f.is_finite() {
+                    return Err("Provider returned a non-finite root function".into());
+                }
+                samples.push((t, f));
+                for &(candidate, residual) in &samples {
+                    if residual.abs() > tolerance {
+                        continue;
+                    }
+                    let lower = samples
+                        .iter()
+                        .filter(|sample| {
+                            sample.0 <= candidate
+                                && sample.1 != 0.
+                                && sample.1.signum() == fl.signum()
+                        })
+                        .max_by(|a, b| a.0.total_cmp(&b.0));
+                    let upper = samples
+                        .iter()
+                        .filter(|sample| {
+                            sample.0 >= candidate
+                                && sample.1 != 0.
+                                && sample.1.signum() == fr.signum()
+                        })
+                        .min_by(|a, b| a.0.total_cmp(&b.0));
+                    if let (Some(lower), Some(upper)) = (lower, upper) {
+                        let bracket_seconds = (upper.0 - lower.0) * 86400.;
+                        if bracket_seconds <= TIME_TOLERANCE {
+                            return Ok(Root {
+                                t: candidate,
+                                bracket_seconds,
+                                residual: residual.abs(),
+                                crossing_direction,
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
     if (right - left) * 86400. <= TIME_TOLERANCE && best.1.abs() <= tolerance {
         Ok(Root {
@@ -882,7 +942,7 @@ pub(super) fn scan(
         events,
         snapshot: json!({"utc":utc,"local":local,"julianDayUt1":midpoint,"positions":positions}),
         period: json!({"kind":period.kind,"year":period.year,"month":period.month,"day":period.day,"utcOffsetMinutes":offset,"startUtc":utc_value(&bounds.start),"endUtc":utc_value(&bounds.end),"startJulianDayUt1":start,"endJulianDayUt1":end,"durationDays":end-start}),
-        metadata: json!({"samplingHours":6,"timeToleranceSeconds":TIME_TOLERANCE,"angularToleranceDegrees":ANGULAR_TOLERANCE,"stationToleranceDegreesPerDay":STATION_TOLERANCE,"velocityExtremaToleranceDegreesPerDay":EXTREMA_TOLERANCE,"tangencyToleranceDegrees":TANGENCY_TOLERANCE,"duplicateTimeToleranceSeconds":DUPLICATE_SECONDS,"maximumProviderBodyEvaluations":MAX_EVALUATIONS,"maximumRefinementIterations":MAX_ITERATIONS,"rootIsolation":"velocityExtremaPartitioned","interval":"startInclusiveEndExclusive","truncated":false,"eventLimit":MAX_EVENTS,"gridIntervals":grid_intervals,"eclipseMethod":"Swiss global eclipse maximum, no local visibility"}),
+        metadata: json!({"samplingHours":6,"timeToleranceSeconds":TIME_TOLERANCE,"angularToleranceDegrees":ANGULAR_TOLERANCE,"stationToleranceDegreesPerDay":STATION_TOLERANCE,"velocityExtremaToleranceDegreesPerDay":EXTREMA_TOLERANCE,"tangencyToleranceDegrees":TANGENCY_TOLERANCE,"duplicateTimeToleranceSeconds":DUPLICATE_SECONDS,"maximumProviderBodyEvaluations":MAX_EVALUATIONS,"maximumRefinementIterations":MAX_ITERATIONS,"maximumRepresentableTimeProbes":MAX_REPRESENTABLE_TIME_PROBES,"rootIsolation":"velocityExtremaPartitioned","interval":"startInclusiveEndExclusive","truncated":false,"eventLimit":MAX_EVENTS,"gridIntervals":grid_intervals,"eclipseMethod":"Swiss global eclipse maximum, no local visibility"}),
     })
 }
 
@@ -1359,6 +1419,84 @@ mod eclipse_tests {
 #[cfg(test)]
 mod edge_search_tests {
     use super::*;
+    #[test]
+    fn adjacent_float_rate_jitter_requires_an_actual_residual_and_sign_bracket() {
+        let center: f64 = 2461358.5191023992;
+        let left = f64::from_bits(center.to_bits() - 32);
+        let right = f64::from_bits(center.to_bits() + 32);
+        let candidate = f64::from_bits(center.to_bits() - 1);
+        let noisy_rate = |t: f64| {
+            if t == candidate {
+                -STATION_TOLERANCE / 2.
+            } else if t <= center {
+                -STATION_TOLERANCE * 1.2
+            } else {
+                STATION_TOLERANCE * 1.2
+            }
+        };
+        let mut samples = Vec::new();
+        let root = refine(
+            left,
+            right,
+            noisy_rate(left),
+            noisy_rate(right),
+            STATION_TOLERANCE,
+            |t| {
+                samples.push(t);
+                Ok(noisy_rate(t))
+            },
+        )
+        .unwrap();
+        assert_eq!(root.t, candidate);
+        assert_eq!(root.residual, noisy_rate(root.t).abs());
+        assert!(root.residual <= STATION_TOLERANCE);
+        assert!(root.bracket_seconds <= TIME_TOLERANCE);
+        assert_eq!(root.crossing_direction, 1.);
+        let proof_right = root.t + root.bracket_seconds / 86400.;
+        assert!(noisy_rate(root.t) * noisy_rate(proof_right) < 0.);
+        assert!(samples.iter().all(|t| *t >= left && *t <= right));
+        assert!(samples.len() <= MAX_ITERATIONS + MAX_REPRESENTABLE_TIME_PROBES);
+
+        let reversed = refine(
+            left,
+            right,
+            -noisy_rate(left),
+            -noisy_rate(right),
+            STATION_TOLERANCE,
+            |t| Ok(-noisy_rate(t)),
+        )
+        .unwrap();
+        assert_eq!(reversed.t, candidate);
+        assert_eq!(reversed.crossing_direction, -1.);
+
+        // Merely shrinking the time bracket never makes a failed residual pass.
+        let no_passing_sample = |t: f64| {
+            Ok(if t <= center {
+                -STATION_TOLERANCE * 1.2
+            } else {
+                STATION_TOLERANCE * 1.2
+            })
+        };
+        assert!(refine(
+            left,
+            right,
+            noisy_rate(left),
+            noisy_rate(right),
+            STATION_TOLERANCE,
+            no_passing_sample
+        )
+        .is_err());
+        // The only lower-residual point is outside this original bracket.
+        assert!(refine(
+            center,
+            f64::from_bits(center.to_bits() + 1),
+            noisy_rate(center),
+            noisy_rate(right),
+            STATION_TOLERANCE,
+            |t| Ok(noisy_rate(t))
+        )
+        .is_err());
+    }
     #[test]
     fn two_close_contacts_on_one_station_interval_do_not_gain_a_false_tangent() {
         let day: Period =

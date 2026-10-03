@@ -481,6 +481,9 @@
         "maximumRefinementIterations": {
           "const": 80
         },
+        "maximumRepresentableTimeProbes": {
+          "const": 128
+        },
         "rootIsolation": {
           "const": "velocityExtremaPartitioned"
         },

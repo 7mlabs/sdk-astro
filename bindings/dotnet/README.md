@@ -18,7 +18,7 @@ Operations: natal, natalDomains, couple, composite, events, forecast, chart, har
 
 Basic natal supports Gregorian UTC 1800–2399, tropical geocentric apparent Sun–Pluto, Placidus/Whole Sign houses, ASC/MC/DSC/IC and major aspects. Use UTC, not local civil time. Coordinates use degrees, north/east positive. Longitude is normalized and speed is degrees/day. Placidus polar failure returns an error without silently changing house systems. The compiled Moshier and time models require no external data files or downloads.
 
-This alpha is local-only and has not been published. Verified host: macOS ARM64. Swiss licensing notices/source provenance accompany the native binary in `third-party/`; public licensing is still a release gate. Full contract, limitations, installation and testing are in repository `docs/natal.md`, `docs/api.md`, `docs/packages.md`, `docs/testing.md`.
+This package has not been published to a public registry. Source: https://github.com/7mlabs/sdk-astro. The engine/SDK use AGPL-3.0-only, choosing the free AGPL option of Swiss Ephemeris; complete LICENSE, NOTICE and third-party dependency notices are bundled. Distribution and integration must follow AGPL requirements; see repository docs/license.md. Platform evidence and installation instructions are in docs/testing.md and docs/packages.md.
 
 `natalDomains` trả một natal cá nhân (`chartKind: individualNatal`, `subjectCount: 1`). Đọc `data.context.advanced` cho trạng thái/chuỗi chủ tinh/configurations và `data.domains.<id>.report` cho các nhà liên quan, góc chiếu, facts và evidence phục vụ báo cáo. `love`/`relationships` đều dùng một người; operation này không nhận người thứ hai.
 

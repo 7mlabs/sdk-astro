@@ -78,6 +78,8 @@ Nguồn thuật toán provider: [Swiss programming interface](https://www.astro.
 
 Scanner dùng UT1 JD cho tìm nghiệm, provider tính vị trí apparent tropical/geocentric ở time model Swiss; UTC/TT/UT1 giữ đúng giao diện provider. Quét grid 6 giờ, chia khoảng tại extrema của relative velocity, unwrap longitude và tìm crossing trên từng đoạn. Refine dùng bracket với provider thật; không gọi một contact là exact chỉ vì snapshot nằm trong orb. Hai roots gần station và repeated hits được kiểm thử riêng.
 
+Khi secant/bisection dừng do không còn mốc JD biểu diễn được giữa hai endpoints, scanner có thể kiểm tra tối đa 128 mốc JD lân cận trong khoảng gốc. Chỉ nhận mốc có residual từ provider thực đạt cùng tolerance và có bracket đổi dấu bao quanh theo cùng chiều, rộng tối đa `0.25 s`; nếu không đạt vẫn trả lỗi. `maximumRepresentableTimeProbes` ghi giới hạn bổ sung này. Cơ chế xử lý nhiễu tốc độ ở độ phân giải rất nhỏ, không nới tolerances hoặc dùng tốc độ nội suy làm kết quả.
+
 - Angular root residual tối đa `1e-6°`, bracket tối đa `0.25 s`.
 - Station root residual tối đa `1e-8°/day`.
 - Internal relative-velocity extrema tolerance `1e-7°/day`, tangency matching `1e-10°`; đây là quy tắc tìm/isolating roots, không phải orb của report.

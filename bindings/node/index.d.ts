@@ -566,6 +566,8 @@ export interface EventSnapshot {
 export interface EventSearchMetadata {
   samplingHours: 6; timeToleranceSeconds: 0.25; angularToleranceDegrees: 0.000001;
   stationToleranceDegreesPerDay: 0.00000001; maximumRefinementIterations: 80;
+  /** Additional evaluated nearby JDs allowed after representable-time refinement stalls. */
+  maximumRepresentableTimeProbes?: 128;
   rootIsolation: 'velocityExtremaPartitioned'; interval: 'startInclusiveEndExclusive';
   truncated: false; eventLimit: 30000; gridIntervals: number;
   eclipseMethod: 'Swiss global eclipse maximum, no local visibility';
