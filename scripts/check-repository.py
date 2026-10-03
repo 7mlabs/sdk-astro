@@ -118,8 +118,8 @@ def check_source():
             if not path.is_relative_to(ROOT) or not path.exists():
                 broken.append(f"{filename.relative_to(ROOT)} -> {target}")
     require(not broken, "Broken/outside-repository documentation links:\n" + "\n".join(broken))
-    blockers = ["Registry ownership/trusted publishers not verified",
-                "Final multi-platform npm/NuGet assembly and portable Linux wheels not verified",
+    blockers = ["PyPI/NuGet ownership/trusted publishers not verified",
+                "Final multi-platform NuGet assembly and portable Linux wheels not verified",
                 "Windows package builder not implemented"]
     return {"engineVersion": version, "pythonVersion": python_version,
             "documentationFiles": len(markdown), "localLinks": link_count,

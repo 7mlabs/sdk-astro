@@ -6,6 +6,8 @@ Repo đích: [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro). Đây là 
 
 ## Trạng thái hiện tại
 
+Node.js đã phát hành [@7mlabs/astrology `0.10.0-alpha.1` trên npm](https://www.npmjs.com/package/@7mlabs/astrology), kênh `alpha`, chứa sẵn binary macOS ARM64 và Linux x64. Python, .NET và UI renderer vẫn là artifacts local, chưa phát hành registry. Xem [cài đặt và cập nhật npm](docs/node-release.md).
+
 Bản alpha `0.10.0-alpha.1` có hai luồng cá nhân **ngày giờ UTC + tọa độ → natal JSON**: `natal` trả lá số cơ bản và `natalDomains` bổ sung dữ liệu theo 10 lĩnh vực cá nhân: công việc, tình cảm, quan hệ, gia đình, tài chính, bản thân, học tập, sáng tạo, nội tâm và đời sống hằng ngày. Đầu ra cơ bản gồm Sun–Pluto, longitude/latitude/distance, speed/retrograde, zodiac sign, ASC/MC/DSC/IC, 12 nhà và major aspects. Hỗ trợ tropical, geocentric, Placidus hoặc Whole Sign; dùng Swiss Ephemeris native với Moshier tích hợp, chạy offline trong process của caller.
 
 `natalDomains` trả natal của **một cá nhân**, 26 points, đủ 325 cặp góc, aspects theo preset hoặc custom rules, chủ tinh/occupants của 12 nhà và các views có selection reasons. Mỗi lĩnh vực có `report` mở rộng nhà liên quan và facts nâng cao: body conditions, distributions, dispositor chains/cycles, mutual domicile receptions, supported aspect patterns và evidence để dựng báo cáo. `love`/`relationships` không so sánh hai người. Có các mục báo cáo con và `customProfiles` để dev khai báo selectors riêng; mọi profile dùng chung công thức core. Profile và rules có version; engine không trả scoring hoặc luận giải. Bỏ `domains` mặc định tạo cả 10 lĩnh vực; chọn danh sách IDs để giảm phần report lặp lại.
@@ -36,7 +38,8 @@ Package local Node.js, Python, .NET và sample Rust/C cùng gọi một core. Ge
 | [Nén payload cho LLM](docs/payload-compression.md) | Bộ nén dùng chung, chọn lĩnh vực, budget và giải nén |
 | [MCP và frontend host](docs/integrations.md) | Adapter stdio local, native worker và runtime matrix |
 | [API](docs/api.md) | Input/output, quy ước tính, lỗi và giới hạn |
-| [Cài package](docs/packages.md) | Cài tgz/wheel/nupkg và chạy từng ngôn ngữ |
+| [Cài package](docs/packages.md) | Cài npm alpha hoặc local wheel/nupkg và chạy từng ngôn ngữ |
+| [Phát hành Node.js](docs/node-release.md) | Cài/cập nhật npm, nền tảng, checksum và release gate |
 | [Kiểm thử](docs/testing.md) | Unit, fresh install, parity và giới hạn bằng chứng |
 | [Frontend](docs/frontend.md) | Playground JSON/chart, WASM và chức năng offline |
 | [Phân phối public](docs/distribution.md) | GitHub, registry, license và dữ liệu |
@@ -46,7 +49,7 @@ Package local Node.js, Python, .NET và sample Rust/C cùng gọi một core. Ge
 
 ## Build và test trực tiếp
 
-Máy build cần Rust 1.83+, Node/npm, Python và .NET 10 SDK. Sau khi public prebuilt package, consumer chỉ cần runtime ngôn ngữ của mình trên nền tảng được hỗ trợ.
+Máy build cần Rust 1.83+, Node/npm, Python và .NET 10 SDK. Consumer npm chỉ cần Node.js trên nền tảng được hỗ trợ; không cần toolchain build.
 
 ```bash
 python3 -m venv artifacts/python-build
@@ -59,7 +62,13 @@ Script test cài các artifact thật vào project riêng, không dùng source i
 
 ## Ví dụ Node.js
 
-Cài tgz tạo trong `artifacts/packages`, rồi:
+Cài bản alpha đã phát hành, rồi chạy ví dụ:
+
+```sh
+npm install @7mlabs/astrology@alpha
+```
+
+Để cập nhật, chạy lại lệnh trên. Dùng `npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1` và commit lockfile để giữ đúng phiên bản.
 
 ```js
 const { calculate } = require('@7mlabs/astrology');
@@ -96,6 +105,6 @@ Ví dụ dùng ngày 01/01/2000 lúc 12:00 UTC và tọa độ TP.HCM; giờ đ�
 
 Repo `7mlabs/sdk-astro` chứa source engine và SDK mới theo `AGPL-3.0-only`, dùng nhánh miễn phí của Swiss Ephemeris. Toàn văn [LICENSE](LICENSE) và [NOTICE](NOTICE) được giữ trong source và SDK packages. UI renderer độc lập có [license MIT riêng](examples/frontend/ui/LICENSE).
 
-Package chưa publish trên registry; các tên package chưa được xác nhận quyền sở hữu. CI candidate build/test artifact trên macOS ARM64 và Linux x64, không phát hành package. Kết quả build ở local chỉ xác nhận nền tảng đã chạy, không thay thế kết quả GitHub Actions. Xem [license](docs/license.md), [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).
+Package npm `@7mlabs/astrology@0.10.0-alpha.1` đã phát hành public với dist-tag `alpha`; đã kiểm tra registry integrity/tag và cài lại từ registry vào project mới. Python/PyPI, .NET/NuGet, Rust/crates.io và UI renderer chưa phát hành. Source npm vẫn giữ `private: true`; chỉ tarball đã qua release gate có metadata public. Xem [license](docs/license.md), [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).
 
-[Candidate CI ngày 2026-10-03 đã qua](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) trên macOS 15 ARM64 và Ubuntu 24.04 x64: 107 tests Rust, 339 cases parity giữa 5 ngôn ngữ, kiểm tra bộ nén và license trong package. Xem [phạm vi bằng chứng](docs/testing.md); Linux wheel vẫn cần bước manylinux trước khi phát hành PyPI.
+[CI của bản phát hành ngày 2026-10-03 đã qua](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: 108 tests Rust, 339 cases parity giữa 5 ngôn ngữ và kiểm tra tarball npm cuối trên cả hai target với Node 18/24, gồm schema, compression và TypeScript. SHA256 tarball: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. npm trusted publisher đã cấu hình cho workflow `npm-release.yml`, environment `npm-release`; lần phát hành đầu dùng tài khoản npm đã xác thực, chưa có lần publish thực tế bằng OIDC. Xem [phạm vi bằng chứng](docs/testing.md); Linux wheel vẫn cần bước manylinux trước khi phát hành PyPI.

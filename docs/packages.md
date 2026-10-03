@@ -1,6 +1,6 @@
 # Cài package và chạy source mẫu
 
-Các tên package hiện là tên thử nội bộ, chưa có trên registry và chưa xác minh quyền sở hữu. Local artifacts có binary của host build. Không chạy các lệnh registry dự kiến rồi hiểu rằng package đã được phát hành.
+Node.js đã có [@7mlabs/astrology `0.10.0-alpha.1` trên npm](https://www.npmjs.com/package/@7mlabs/astrology), kênh `alpha`. Python, .NET, Rust và UI renderer chưa phát hành registry; các hướng dẫn tương ứng bên dưới vẫn dùng source hoặc artifacts local. Local artifacts từ builder có binary của host; bản npm public đã ghép macOS ARM64 và Linux x64 vào cùng tarball.
 
 ## Build từ repo
 
@@ -20,9 +20,13 @@ Nếu Node/npm không nằm trên PATH, set `NODE_BIN` và `NPM_CLI` đến exec
 ## Node.js
 
 ```bash
-npm install /absolute/path/to/7mlabs-astrology-0.10.0-alpha.1.tgz
+npm install @7mlabs/astrology@alpha
 node sample.cjs
 ```
+
+Cập nhật alpha bằng cách chạy lại `npm install @7mlabs/astrology@alpha`. Để pin version, dùng `npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1` và commit lockfile; `npm ci` cài lại theo lockfile. Bản thử nghiệm chưa đưa vào `latest`, nên dùng tag `alpha` hoặc version tường minh.
+
+Package npm chứa sẵn addon cho macOS ARM64 và Linux x64/glibc 2.38+. Cùng tarball đã qua CI trên hai target với Node 18/24 và cài lại từ registry trên macOS ARM64; Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa hỗ trợ. Consumer không cần Rust/compiler/server hoặc tải binary sau cài đặt. Xem [nền tảng và release evidence](node-release.md). Muốn thử artifact local, thay tên package trong lệnh bằng đường dẫn tuyệt đối tới `.tgz`.
 
 ```js
 const { calculate } = require('@7mlabs/astrology');
@@ -111,9 +115,9 @@ Examples từ consumer đã cài: `node composite.cjs`, `python composite.py`, `
 
 Dedicated examples: `node forecast.cjs`, `python forecast.py`, `.NET Example --forecast`. Rust/C và các default sample CLIs nhận raw JSON như trước. Native calculate synchronous; dùng worker cho scans dài trong ứng dụng có UI/event loop.
 
-## Sau khi public
+## Các registry còn lại
 
-Lệnh dự kiến: `npm install @7mlabs/astrology`, `pip install sevenmlabs-astrology`, `dotnet add package SevenMLabs.Astrology`. Phải có release và registry verification trước khi gọi các lệnh này là đã hoạt động. Package không gọi một backend bí mật, không có credential và không tải ephemeris lúc import.
+PyPI `sevenmlabs-astrology`, NuGet `SevenMLabs.Astrology` và crates.io chưa phát hành; tiếp tục dùng hướng dẫn local/source phía trên. Chỉ chuyển sang lệnh cài registry sau khi có release và registry verification của từng nền tảng. SDK tính cục bộ, không cần credential hoặc tải ephemeris lúc import.
 
 ## Bộ nén payload riêng
 

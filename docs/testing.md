@@ -2,15 +2,27 @@
 
 Bản mẫu được chạy trên macOS ARM64, Node.js 24.19.0, Python 3.13.3, .NET SDK 10.0.101 và Rust 1.83.0. Các test xác minh geometry từ positions, natal, báo cáo cá nhân, synastry, midpoint composite C, events và forecast cá nhân của bản `0.10.0-alpha.1`, gồm grouped queries và bộ nén payload; không xác minh toàn bộ source legacy.
 
+## Bản npm đã phát hành: 0.10.0-alpha.1
+
+[@7mlabs/astrology](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành public ngày 2026-10-03 với tag `alpha`. [CI run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) kiểm tra commit `a17850e01507485312e5cb584ed1eb82a786fcbc` trên macOS 15 ARM64 và Ubuntu 24.04 x64:
+
+- Mỗi candidate target qua **108 Rust tests**, **339 parity cases** giữa Node/Python/.NET/Rust/C, 106 compression checks, 13 real fixture roundtrips, SDK helpers/TypeScript và package license/checksum gates.
+- Một tarball npm ghép cả hai native binaries được fresh-install offline vào consumer riêng trên **bốn tổ hợp** macOS ARM64/Linux x64 × Node **18/24**. Mỗi tổ hợp qua toàn bộ **339 cases** trong một process SDK, đối chiếu với Rust CLI mới, đủ 8 query helpers, query schema/semantic checks, 27 compression contract cases/13 roundtrips và TypeScript strict.
+- Registry SHA512 integrity, legacy checksum và tag `alpha` trùng release đã kiểm tra. Fresh install từ npm trên macOS ARM64 xác minh native checksum rồi chạy natal, geometry và compression roundtrip; Linux registry smoke chưa chạy riêng, consumer CI dùng chính cùng tarball.
+
+SHA256 `7mlabs-astrology-0.10.0-alpha.1.tgz`: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. npm trusted publisher đã cấu hình cho repository/workflow/environment tương ứng; lần phát hành này dùng tài khoản npm có 2FA. Chưa có lần publish thực tế bằng OIDC, nên không ghi cấu hình publisher là một test phát hành tự động đã qua. Python/.NET/Rust và UI renderer chưa phát hành registry.
+
+Các fingerprints, counts và CI run cũ phía dưới là đối chứng của những đợt chạy được ghi rõ; không thay thế bằng chứng của tarball npm public này.
+
 ## Cài artifact thật
 
 `scripts/build-packages.py` tạo tgz, wheel và nupkg chứa native binary. `scripts/test-packages.py` kiểm tra checksum, tạo consumer theo fingerprint artifact, rồi cài bằng npm offline, pip no-index và NuGet local feed. Mỗi fingerprint dùng cache riêng để không tái sử dụng nupkg cùng version từ lần build trước.
 
-Node/Python/.NET samples chạy từ consumer, không import binding source và không cài compiler trong consumer. Rust sample dùng crate path local; C sample được compile và link native library. Chưa publish/cài từ public registry.
+Node/Python/.NET samples chạy từ consumer, không import binding source và không cài compiler trong consumer. Rust sample dùng crate path local; C sample được compile và link native library. Đây là luồng kiểm tra artifacts local; cài npm public được kiểm chứng riêng ở phần bản phát hành phía trên.
 
-## Kiểm chứng hiện hành: compression 0.10.0-alpha.1
+## Compression: đối chứng trước lần phát hành npm
 
-Ba artifacts native đã build và cài offline trên macOS ARM64 vào consumer `783f6cd94295`. Node/Python/.NET dùng binary trong package; Rust dùng path crate, C link native ABI. Tên package vẫn là local alpha, chưa publish registry.
+Ba artifacts native đã build và cài offline trên macOS ARM64 vào consumer `783f6cd94295`. Node/Python/.NET dùng binary trong package; Rust dùng path crate, C link native ABI. Đợt kiểm tra này diễn ra trước lần phát hành npm và trước các regression fixes bổ sung; các counts bên dưới thuộc fingerprint này.
 
 - Rust workspace: **106 tests đạt** (80 core, 9 couple, 9 composite, 6 forecast, 1 FFI, 1 provider); 11 compression tests kiểm tra số thực, null, namespace, section evidence, escape collisions, budget decimal/exponent, malformed references và metadata/depth limits. Fmt/Clippy all-targets `-D warnings` đạt.
 - Calculation regression: **339/339 cases** trả toàn bộ decoded JSON giống nhau qua Node/Python/.NET/Rust/C. Repeat/concurrent tests và bốn reference natal tiếp tục đạt.
@@ -192,9 +204,9 @@ Fixtures đã lưu trong `tests/conformance/natal-references.json`; scripts test
 
 Repeated calls và concurrency không thay thế memory leak sanitizer/fuzz tests. Parity cùng core xác minh binding/serialization; references thiên văn được kiểm tra riêng như dưới đây. Chưa kiểm tra rộng toàn bộ lịch sử hoặc toàn khoảng năm 1800–2399.
 
-Candidate `0.10.0-alpha.1` đã qua [GitHub Actions run 37093556052](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052), tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda`, trên macOS 15 ARM64 và Ubuntu 24.04 x64 với Node 24, Python 3.13 và .NET 10. Mỗi job qua 107 tests Rust, 339 fresh-install/parity cases giữa Node/Python/.NET/Rust/C, 106 compression checks, 13 real fixture roundtrips, installed helpers/TypeScript và license/checksum validation. Bản sửa station giữ nguyên tolerance và bổ sung test về giới hạn thời điểm biểu diễn bằng f64.
+Candidate tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda` từng qua [run 37093556052](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) với 107 Rust tests. Bản npm public dùng commit mới `a17850e01507485312e5cb584ed1eb82a786fcbc` và [run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), thêm regression về trạng thái provider giữa các lần gọi và 108 Rust tests, cùng bốn final npm consumer jobs Node 18/24. Bản sửa station giữ nguyên tolerance và kiểm tra giới hạn thời điểm biểu diễn bằng f64. Parity dùng chung core xác minh bindings/serialization; không thay thế toàn bộ kiểm chứng thiên văn độc lập.
 
-Windows Node linking chưa được triển khai. Node 18/20/22, Python 3.10–3.12, .NET TFM khác, Linux distro/architecture khác và macOS x64 chưa được xác minh. Ubuntu CI không thay thế kiểm tra manylinux wheel; chưa quảng bá các target này là supported registry release. Các kết quả macOS trong các mục lịch sử phía trên thuộc phiên bản/đợt chạy được mô tả ở từng mục.
+Windows Node linking chưa được triển khai. Final npm matrix xác minh Node 18 và 24 trên macOS ARM64/Linux x64; Node 20/22 chưa có final release matrix riêng. Python 3.10–3.12, .NET TFM khác, Linux distro/architecture khác và macOS x64 chưa được xác minh. Linux addon yêu cầu glibc 2.38+; Ubuntu CI không thay thế kiểm tra manylinux wheel. Không quảng bá các target chưa kiểm chứng là supported registry release. Các kết quả macOS trong các mục lịch sử phía trên thuộc phiên bản/đợt chạy được mô tả ở từng mục.
 
 Legacy `LoveCompatScoringTests.GoldenScores_AreStable` đã lỗi từ source gốc. Neutral engine không chứa compatibility scoring và không phụ thuộc test đó. Không sửa kỳ vọng legacy để làm đẹp kết quả test mới.
 
@@ -208,4 +220,4 @@ artifacts/python-build/bin/python scripts/build-packages.py
 artifacts/python-build/bin/python scripts/test-packages.py
 ```
 
-Trước public release: thêm test install từ registry thực, target OS/runtime matrix, memory sanitizers, fuzz, data coverage, provider concurrency và browser/native parity nếu phát hành browser build.
+Các lần phát hành tiếp theo giữ fresh registry install verification và mở rộng OS/runtime matrix theo binary thực tế. Memory sanitizers, fuzz, data coverage rộng hơn và browser/native parity cần bổ sung khi triển khai phần tương ứng; không coi registry smoke hoặc parity cùng core là bằng chứng những kiểm tra đó đã chạy.
