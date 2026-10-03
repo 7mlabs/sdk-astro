@@ -1,12 +1,15 @@
 # Changelog
 
-## 0.10.0 — stable target, đang chờ xác minh phát hành
+## 0.10.0 — npm stable, 2026-10-03
 
 - Chuyển package npm `@7mlabs/astrology` sang version `0.10.0` và kênh ổn định `latest`; lệnh cài chính là `npm install @7mlabs/astrology`.
 - Đồng bộ version core và SDK Node/Python/.NET thành `0.10.0`; Python và .NET tiếp tục dùng artifacts local, chưa phát hành registry.
 - Release tooling xác thực version và chọn dist-tag từ metadata: stable dùng `latest`, prerelease giữ kênh riêng. Source npm tiếp tục có `private: true`; chỉ tarball đã qua gate được publish.
 - Phạm vi binary giữ macOS ARM64 và Linux x64/glibc 2.38+; UI renderer giữ version độc lập `0.9.0-alpha.1`.
-- Bằng chứng CI, checksum tarball và xác minh registry/OIDC sẽ được ghi sau khi hoàn tất release gate và publish.
+- Bảy jobs build/kiểm chứng của [run 37098509933](https://github.com/7mlabs/sdk-astro/actions/runs/37098509933) qua; cùng tarball qua 339 conformance cases trên từng tổ hợp macOS ARM64/Linux x64 × Node 18/24, query/compression/TypeScript checks và full release checker. Publish bằng npm OIDC thành công.
+- Run gốc báo lỗi ở bước kiểm tra registry sau publish do hết thời gian chờ metadata lan truyền. Xác minh registry thủ công sau đó kiểm tra identity/license, `latest = 0.10.0`, integrity và checksum; cài mới bằng tên package không có tag trên macOS ARM64/Node 24.19.0 qua natal, geometry, individual domains và compact exact roundtrip.
+- Tăng cửa sổ xác minh registry lên 300 giây, dùng deadline và giới hạn thời gian cho từng request; regression tests bao phủ metadata/version/dist-tag lan truyền chậm và lỗi kéo dài.
+- Tarball `7mlabs-astrology-0.10.0.tgz`: SHA256 `23e71995eb71119acbce39219edcb252d158aac63a3ddcb9b1210a5fe6d8755a`, 2.212.282 bytes, build từ commit `4322f811a7a0956645e6936d63465ef438379899`. Không dùng lại version public cho bytes khác.
 
 ## 0.10.0-alpha.1 — npm alpha, 2026-10-03
 

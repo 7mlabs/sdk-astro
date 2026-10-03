@@ -1,6 +1,6 @@
 # Cài package và chạy source mẫu
 
-Mục tiêu phát hành Node.js là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology), kênh ổn định `latest`; đang chờ xác minh phát hành. Python/.NET cũng có metadata `0.10.0` nhưng cùng Rust và UI renderer chưa phát hành registry; hướng dẫn tương ứng bên dưới dùng source hoặc artifacts local. Local artifacts từ builder có binary của host; npm assembler ghép macOS ARM64 và Linux x64 vào cùng tarball.
+Node.js đã có [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) public trên npm, kênh ổn định `latest`. Python/.NET cũng có metadata `0.10.0` nhưng cùng Rust và UI renderer chưa phát hành registry; hướng dẫn tương ứng bên dưới dùng source hoặc artifacts local. Local artifacts từ builder có binary của host; npm assembler ghép macOS ARM64 và Linux x64 vào cùng tarball.
 
 ## Build từ repo
 
@@ -24,9 +24,9 @@ npm install @7mlabs/astrology
 node sample.cjs
 ```
 
-Cập nhật kênh ổn định `latest` bằng cách chạy lại `npm install @7mlabs/astrology`. Để pin version, dùng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile; `npm ci` cài lại theo lockfile.
+Cập nhật kênh ổn định tường minh bằng `npm install @7mlabs/astrology@latest`. Để pin version, dùng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile; `npm ci` cài lại theo lockfile.
 
-Package npm chứa sẵn addon cho macOS ARM64 và Linux x64/glibc 2.38+. Tarball alpha trước đó đã qua CI trên hai target với Node 18/24 và cài lại từ registry trên macOS ARM64; bản ổn định phải qua lại cùng gate; Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa hỗ trợ. Consumer không cần Rust/compiler/server hoặc tải binary sau cài đặt. Xem [nền tảng và release evidence](node-release.md). Muốn thử artifact local, thay tên package trong lệnh bằng đường dẫn tuyệt đối tới `.tgz`.
+Package npm chứa sẵn addon cho macOS ARM64 và Linux x64/glibc 2.38+. Tarball ổn định đã qua đủ bốn consumer jobs trên hai target với Node 18/24, rồi được xác minh checksum/integrity và cài mới từ registry trên macOS ARM64; Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa hỗ trợ. Consumer không cần Rust/compiler/server hoặc tải binary sau cài đặt. Xem [nền tảng và release evidence](node-release.md). Muốn thử artifact local, thay tên package trong lệnh bằng đường dẫn tuyệt đối tới `.tgz`.
 
 ```js
 const { calculate } = require('@7mlabs/astrology');

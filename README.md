@@ -96,14 +96,14 @@ const restored = expandContext(context);
 
 | Language | Distribution | Status |
 | --- | --- | --- |
-| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Stable npm target: `0.10.0` (`latest`); publication verification pending |
+| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Public npm stable: `0.10.0` (`latest`) |
 | Python | `sevenmlabs-astrology` | Local `0.10.0` wheels; PyPI release pending |
 | .NET | `SevenMLabs.Astrology` | Local `0.10.0` NuGet artifacts; public release pending |
 | Rust / C | Core crates and C ABI | Source integration examples |
 
 The npm release includes **macOS ARM64** and **Linux x64** binaries. Linux requires **glibc 2.38+** and `libgcc_s.so.1`. Node.js 18/24 were tested on both targets; Node.js 22 or 24 is recommended for new applications. Windows, macOS Intel, Linux ARM64 and Alpine/musl binaries are not included. [Full platform requirements →](docs/node-release.md)
 
-Run the install command again to update from the stable `latest` channel. To pin this release:
+Update explicitly with `npm install @7mlabs/astrology@latest`. To pin this release:
 
 ```sh
 npm install --save-exact @7mlabs/astrology@0.10.0
@@ -129,7 +129,7 @@ Most detailed guides are currently written in Vietnamese; API identifiers and JS
 
 Birth calculations currently support Gregorian UTC **1800–2399**, tropical geocentric positions, and **Placidus** or **Whole Sign** houses. Swiss Ephemeris uses the bundled Moshier model. Timezone conversion is caller-managed; IANA timezone conversion, sidereal/topocentric charts, Davison, progressions and return charts are future work. [Calculation scope →](docs/natal.md)
 
-Publication verification for **0.10.0** is pending. The earlier **0.10.0-alpha.1** release passed **108 Rust tests** and **339 cross-language conformance cases**; its final tarball was tested on macOS ARM64 and Linux x64 with Node.js 18/24, then installed from npm on macOS ARM64. [Historical alpha CI evidence](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Validation details](docs/testing.md)
+The stable **0.10.0** tarball passed **339 conformance cases** on each of four macOS ARM64/Linux x64 × Node.js 18/24 combinations, along with query, compression and TypeScript checks. All seven build/validation jobs passed, and npm OIDC publication succeeded. The workflow’s post-publish registry check timed out during propagation; subsequent registry integrity checks and a fresh install on macOS ARM64 verified `0.10.0` on `latest`. [Release run](https://github.com/7mlabs/sdk-astro/actions/runs/37098509933) · [Validation details](docs/testing.md)
 
 For source development, start with the [build instructions](docs/github-setup.md). Suggestions and reproducible bug reports are welcome in [GitHub Issues](https://github.com/7mlabs/sdk-astro/issues).
 

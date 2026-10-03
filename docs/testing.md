@@ -1,10 +1,19 @@
 # Kết quả cài đặt và kiểm thử trực tiếp
 
-Bản mẫu được chạy trên macOS ARM64, Node.js 24.19.0, Python 3.13.3, .NET SDK 10.0.101 và Rust 1.83.0. Các test xác minh geometry từ positions, natal, báo cáo cá nhân, synastry, midpoint composite C, events và forecast cá nhân của bản `0.10.0-alpha.1`, gồm grouped queries và bộ nén payload; không xác minh toàn bộ source legacy.
+Tài liệu ghi riêng bằng chứng npm stable hiện tại và các đối chứng lịch sử. Các lượt local trước stable chạy trên macOS ARM64, Node.js 24.19.0, Python 3.13.3, .NET SDK 10.0.101 và Rust 1.83.0, xác minh geometry, natal, báo cáo cá nhân, synastry, midpoint composite C, events, forecast, grouped queries và bộ nén của `0.10.0-alpha.1`; không xác minh toàn bộ source legacy.
 
 ## Xác minh bản ổn định 0.10.0
 
-Đang chờ kết quả release gate và publish cho npm `0.10.0` trên kênh `latest`. Phần này sẽ ghi CI run, commit, SHA256 tarball, registry integrity/dist-tag và fresh registry install sau khi đã kiểm tra; cấu hình trusted publisher chưa tự chứng minh publish OIDC thành công. Python/.NET vẫn chưa phát hành registry.
+Npm `0.10.0` đã phát hành public trên `latest` ngày 2026-10-03 bằng OIDC. [Run 37098509933](https://github.com/7mlabs/sdk-astro/actions/runs/37098509933) build source commit `4322f811a7a0956645e6936d63465ef438379899`; cả bảy jobs candidate/assembly/final consumer qua. Run gốc báo lỗi duy nhất ở bước kiểm tra registry sau publish vì metadata chưa lan truyền trong thời gian chờ ban đầu; các kết quả kiểm tra registry bên dưới là lượt xác minh thủ công sau đó, không phải một workflow run toàn bộ green.
+
+- Hai candidate jobs macOS ARM64/Linux x64 và npm assembly job qua Rust/cross-language, compression, helper/TypeScript và license/checksum gates.
+- Bốn final consumer jobs cài offline chính tarball cuối trên macOS ARM64/Linux x64 × Node 18/24. Mỗi job qua **339 conformance cases**, **8 query helpers**, query schema/semantic checks, **27 compression contract cases/13 fixture roundtrips** và TypeScript strict. Full release checker xác nhận source/tag/run và đủ bốn reports khớp tarball.
+- Npm OIDC publish step thành công. Sau khi registry metadata lan truyền, kiểm tra identity/license, `latest = 0.10.0`, registry SHA512 integrity và checksum đều khớp tarball đã qua gate.
+- Fresh registry consumer cài bằng `npm install @7mlabs/astrology` trên **macOS ARM64, Node 24.19.0**, nhận đúng **0.10.0**. Package/native checksum, natal, geometry query, individual domains và compact exact roundtrip qua. Linux registry smoke chưa chạy riêng; CI dùng chính cùng tarball.
+
+Tarball `7mlabs-astrology-0.10.0.tgz`: **2.212.282 bytes**, SHA256 `23e71995eb71119acbce39219edcb252d158aac63a3ddcb9b1210a5fe6d8755a`. Registry SHA512 integrity: `sha512-tYyQi85+mbfYqO4iHHdRNx2cnj1vN6GhQby28VHwjE7HxomSvkq0Oq4eGHm/8Z2dzyBNETi+TxJBYqrCMXnQYA==`.
+
+Bằng chứng local: `artifacts/npm-stable-release/manifest.json`, bốn reports trong `artifacts/npm-stable-release/reports/`, `artifacts/npm-stable-release/registry-verification.json` và `artifacts/npm-stable-registry-consumer/test-results.json`. Python/.NET/Rust và UI renderer chưa phát hành registry. Những run/fingerprints/checksums alpha phía dưới được giữ như lịch sử, không thay thế bằng chứng stable này.
 
 ## Lịch sử: bản npm alpha đã phát hành 0.10.0-alpha.1
 
@@ -14,7 +23,7 @@ Bản mẫu được chạy trên macOS ARM64, Node.js 24.19.0, Python 3.13.3, .
 - Một tarball npm ghép cả hai native binaries được fresh-install offline vào consumer riêng trên **bốn tổ hợp** macOS ARM64/Linux x64 × Node **18/24**. Mỗi tổ hợp qua toàn bộ **339 cases** trong một process SDK, đối chiếu với Rust CLI mới, đủ 8 query helpers, query schema/semantic checks, 27 compression contract cases/13 roundtrips và TypeScript strict.
 - Registry SHA512 integrity, legacy checksum và tag `alpha` trùng release đã kiểm tra. Fresh install từ npm trên macOS ARM64 xác minh native checksum rồi chạy natal, geometry và compression roundtrip; Linux registry smoke chưa chạy riêng, consumer CI dùng chính cùng tarball.
 
-SHA256 `7mlabs-astrology-0.10.0-alpha.1.tgz`: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. npm trusted publisher đã cấu hình cho repository/workflow/environment tương ứng; lần phát hành này dùng tài khoản npm có 2FA. Chưa có lần publish thực tế bằng OIDC, nên không ghi cấu hình publisher là một test phát hành tự động đã qua. Python/.NET/Rust và UI renderer chưa phát hành registry.
+SHA256 `7mlabs-astrology-0.10.0-alpha.1.tgz`: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. npm trusted publisher đã cấu hình cho repository/workflow/environment tương ứng; lần phát hành này dùng tài khoản npm có 2FA. Tại thời điểm bản alpha này, chưa có lần publish thực tế bằng OIDC, nên cấu hình publisher chưa là một test phát hành tự động đã qua. Python/.NET/Rust và UI renderer chưa phát hành registry.
 
 Các fingerprints, counts và CI run cũ phía dưới là đối chứng của những đợt chạy được ghi rõ; không thay thế bằng chứng của tarball npm public này.
 

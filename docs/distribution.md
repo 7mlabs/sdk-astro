@@ -1,6 +1,6 @@
 # GitHub công khai và phân phối package
 
-Repo công khai là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đã upload source engine/SDK riêng. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. Mục tiêu hiện tại là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) trên kênh ổn định `latest`, đang chờ xác minh phát hành; npm alpha `0.10.0-alpha.1` trước đó đã phát hành public; Python/.NET/Rust/UI renderer chưa phát hành registry. Xem [thiết lập GitHub và phát hành](github-setup.md).
+Repo công khai là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đã upload source engine/SDK riêng. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành public trên kênh ổn định `latest`; npm alpha `0.10.0-alpha.1` trước đó đã phát hành public; Python/.NET/Rust/UI renderer chưa phát hành registry. Xem [thiết lập GitHub và phát hành](github-setup.md).
 
 ## Điều kiện trước khi public
 
@@ -26,7 +26,7 @@ Mỗi runtime có một package; engine native được đóng gói hoặc chọ
 npm install @7mlabs/astrology
 ```
 
-Cập nhật bằng cách chạy lại lệnh trên. Pin bằng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile. Kênh ổn định dùng `latest`; nền tảng và libc requirements nằm trong [hướng dẫn Node.js](node-release.md).
+Cập nhật tường minh bằng `npm install @7mlabs/astrology@latest`. Pin bằng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile. Kênh ổn định dùng `latest`; nền tảng và libc requirements nằm trong [hướng dẫn Node.js](node-release.md).
 
 Candidate build một platform mỗi lần, tạo tgz/nupkg cùng tên giữa hai job. npm assembler đã ghép hai candidate vào một tarball duy nhất trước release; không publish riêng hai candidate cùng package/version. NuGet vẫn cần assembly nhiều runtime trước public. Linux wheel hiện có tag Linux thường, cần manylinux build/repair và kiểm thử môi trường sạch trước public PyPI. Windows chưa được builder hỗ trợ.
 
@@ -34,7 +34,7 @@ Candidate build một platform mỗi lần, tạo tgz/nupkg cùng tên giữa ha
 
 CI candidate build/test macOS ARM64 và Linux x64, assemble npm tarball rồi fresh-install tarball cuối trên Node 18/24 ở mỗi target; workflow này không publish registry. Bằng chứng lịch sử npm alpha `0.10.0-alpha.1`: [run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) đã qua tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: 108 tests Rust, 339 parity cases giữa năm ngôn ngữ và bốn final npm consumer jobs. SHA256 tarball alpha đã publish: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. Registry integrity/tag và fresh registry install trên macOS ARM64 đã được kiểm tra. Bằng chứng Linux giới hạn ở Ubuntu 24.04 x64 và không xác nhận tính portable của wheel trên các distro khác.
 
-Bản stable `0.10.0` đang chờ CI run, checksum tarball và registry verification riêng. Workflow `npm-release.yml` tách quyền publish, chạy lại gates rồi chọn `latest` cho stable, `alpha` cho prerelease và kiểm tra registry checksum/dist-tag. Trusted publisher đã cấu hình cho `7mlabs/sdk-astro`, workflow `npm-release.yml`, environment `npm-release`; bản alpha đầu dùng tài khoản npm có 2FA. Đang chờ xác minh publish stable thực tế qua OIDC; cấu hình publisher không tự chứng minh đường phát hành thành công. Bản tiếp theo phải tăng version rồi dùng tag tương ứng. Các publisher PyPI/NuGet/crates.io được xử lý sau; xem [hướng dẫn setup](github-setup.md).
+Bản stable `0.10.0`: [run 37098509933](https://github.com/7mlabs/sdk-astro/actions/runs/37098509933), source commit `4322f811a7a0956645e6936d63465ef438379899`, tarball SHA256 `23e71995eb71119acbce39219edcb252d158aac63a3ddcb9b1210a5fe6d8755a`. Cả bảy jobs build/kiểm chứng qua, gồm bốn final consumer jobs Node 18/24 trên macOS ARM64/Linux x64, và publish bằng npm OIDC thành công. Run gốc báo lỗi do kiểm tra registry sau publish hết thời gian chờ metadata lan truyền; xác minh thủ công sau đó đã kiểm tra identity/license, `latest = 0.10.0`, integrity/checksum và fresh bare install trên macOS ARM64. Bằng chứng từng bước ở [Node release](node-release.md). Workflow `npm-release.yml` tách quyền publish, chạy lại gates rồi chọn `latest` cho stable, `alpha` cho prerelease và kiểm tra registry checksum/dist-tag. Trusted publisher đã cấu hình cho `7mlabs/sdk-astro`, workflow `npm-release.yml`, environment `npm-release`; bản alpha đầu dùng tài khoản npm có 2FA. Publish OIDC đã được kiểm chứng bằng lần phát hành stable `0.10.0`; trạng thái lỗi của bước registry ban đầu được giữ rõ trong bằng chứng. Bản tiếp theo phải tăng version rồi dùng tag tương ứng. Các publisher PyPI/NuGet/crates.io được xử lý sau; xem [hướng dẫn setup](github-setup.md).
 
 ## Không duy trì server
 
