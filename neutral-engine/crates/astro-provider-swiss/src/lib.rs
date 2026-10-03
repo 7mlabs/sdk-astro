@@ -59,6 +59,7 @@ extern "C" {
         backward: c_int,
         err: *mut c_char,
     ) -> c_int;
+    fn swe_deltat_ex(jd: c_double, flags: c_int, err: *mut c_char) -> c_double;
     fn swe_set_tid_acc(value: c_double);
     fn swe_close();
 }
@@ -82,14 +83,23 @@ fn message(buffer: &[c_char; 256]) -> String {
     }
 }
 
+/// Caller owns PROVIDER. Initialize Swiss before setting the manual Moshier
+/// tidal acceleration: its first lazy initialization resets earlier settings.
+fn reset_provider() {
+    unsafe {
+        swe_close();
+        // The public Moshier delta-T call initializes the cold context without
+        // selecting an external ephemeris or leaving any planetary cache.
+        swe_deltat_ex(2451545., 4, std::ptr::null_mut());
+        swe_set_tid_acc(-25.580);
+    }
+}
+
 /// Caller validates Gregorian civil UTC and coordinates before entering this boundary.
 pub fn natal(utc: [i32; 5], second: f64, lat: f64, lon: f64, system: u8) -> Result<Sky, String> {
     let _guard = PROVIDER.lock().map_err(|_| "Provider lock is poisoned")?;
     // All stateful calls, including time conversion and cleanup, share the lock.
-    unsafe {
-        swe_close();
-        swe_set_tid_acc(-25.580);
-    }
+    reset_provider();
     struct Cleanup;
     impl Drop for Cleanup {
         fn drop(&mut self) {
@@ -184,10 +194,7 @@ pub struct CivilUtc {
 impl EphemerisSession {
     pub fn new() -> Result<Self, String> {
         let guard = PROVIDER.lock().map_err(|_| "Provider lock is poisoned")?;
-        unsafe {
-            swe_close();
-            swe_set_tid_acc(-25.580);
-        }
+        reset_provider();
         Ok(Self { _guard: guard })
     }
 

@@ -2,12 +2,14 @@ name: SDK candidate validation
 # Build/install evidence only. This workflow does not publish registry packages.
 on:
   push:
+    branches: ['**']
   pull_request:
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
 concurrency:
-  group: sdk-candidate-${{ github.ref }}
+  group: sdk-candidate-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   packages:
@@ -60,6 +62,27 @@ jobs:
         run: python scripts/check-compression-bindings.py --typescript artifacts/ci-tools/node_modules/typescript/lib/tsc.js
       - name: Validate candidate artifacts and evidence
         run: python scripts/check-repository.py --artifacts --platform ${{ matrix.platform }} --arch ${{ matrix.arch }}
+      - name: Record immutable candidate provenance
+        env:
+          CANDIDATE_PLATFORM: ${{ matrix.platform }}
+          CANDIDATE_ARCH: ${{ matrix.arch }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest = json.loads(Path('artifacts/packages/manifest.json').read_text())
+          provenance = {
+              'repository': os.environ['GITHUB_REPOSITORY'],
+              'commitSha': os.environ['GITHUB_SHA'],
+              'platform': os.environ['CANDIDATE_PLATFORM'],
+              'arch': os.environ['CANDIDATE_ARCH'],
+              'engineVersion': manifest['engineVersion'],
+              'workflow': '.github/workflows/neutral-engine.yml',
+              'runId': os.environ['GITHUB_RUN_ID'],
+              'source': 'github-actions-build'
+          }
+          Path('artifacts/candidate-provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
+          PY
       - uses: actions/upload-artifact@v7
         with:
           name: candidate-${{ matrix.platform }}-${{ matrix.arch }}
@@ -73,3 +96,99 @@ jobs:
             artifacts/test-results.json
             artifacts/compression-test-results.json
             artifacts/compression-binding-tests.json
+            artifacts/candidate-provenance.json
+
+  assemble:
+    needs: packages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v7
+        with:
+          name: candidate-darwin-arm64
+          path: artifacts/npm-candidates/darwin-arm64
+      - uses: actions/download-artifact@v7
+        with:
+          name: candidate-linux-x64
+          path: artifacts/npm-candidates/linux-x64
+      - name: Assemble public tarball from the same source commit
+        run: >-
+          python scripts/prepare-npm-release.py
+          --darwin artifacts/npm-candidates/darwin-arm64
+          --linux artifacts/npm-candidates/linux-x64
+          --commit "$GITHUB_SHA"
+      - name: Validate release identity and contents
+        run: python scripts/check-npm-release.py --manifest artifacts/npm-release/manifest.json --commit "$GITHUB_SHA"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: npm-release
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            artifacts/npm-release/*.tgz
+            artifacts/npm-release/manifest.json
+            artifacts/npm-release/SHA256SUMS
+
+  verify:
+    needs: assemble
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            platform: darwin
+            arch: arm64
+            node: '18'
+          - os: macos-15
+            platform: darwin
+            arch: arm64
+            node: '24'
+          - os: ubuntu-24.04
+            platform: linux
+            arch: x64
+            node: '18'
+          - os: ubuntu-24.04
+            platform: linux
+            arch: x64
+            node: '24'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - name: Build a fresh reference CLI on this host
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+          cargo build --manifest-path examples/rust/Cargo.toml --locked
+      - name: Install test tools only
+        run: npm install --prefix artifacts/npm-test-tools --ignore-scripts --no-audit --no-fund typescript@5.9.3 ajv@8.20.0
+      - uses: actions/download-artifact@v7
+        with:
+          name: npm-release
+          path: artifacts/npm-release
+      - name: Fresh install, repeated-call parity, schema and TypeScript checks
+        run: >-
+          node scripts/test-npm-release.cjs
+          --manifest artifacts/npm-release/manifest.json
+          --reference-cli examples/rust/target/debug/astrology-rust-example
+          --typescript artifacts/npm-test-tools/node_modules/typescript/lib/tsc.js
+          --ajv-module artifacts/npm-test-tools/node_modules/ajv/dist/2020.js
+          --report artifacts/npm-release/test-${{ matrix.platform }}-${{ matrix.arch }}-node${{ matrix.node }}.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: npm-verification-${{ matrix.platform }}-${{ matrix.arch }}-node${{ matrix.node }}
+          if-no-files-found: error
+          retention-days: 30
+          path: artifacts/npm-release/test-*.json

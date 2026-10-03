@@ -1,0 +1,68 @@
+name: npm release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the verified alpha using the configured npm trusted publisher
+        type: boolean
+        default: false
+  push:
+    tags: ['v*-alpha.*']
+
+permissions:
+  contents: read
+concurrency:
+  group: npm-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  candidates:
+    uses: ./.github/workflows/neutral-engine.yml
+    permissions:
+      contents: read
+
+  publish:
+    if: >-
+      github.repository == '7mlabs/sdk-astro' &&
+      (startsWith(github.ref, 'refs/tags/v') || inputs.publish == true)
+    needs: candidates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: npm-release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install pinned official npm with OIDC support
+        run: npm install --prefix artifacts/npm-cli --ignore-scripts --no-audit --no-fund npm@12.2.0
+      - uses: actions/download-artifact@v7
+        with:
+          name: npm-release
+          path: artifacts/npm-release
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: npm-verification-*
+          merge-multiple: true
+          path: artifacts/npm-reports
+      - name: Require all final tarball evidence before publication
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            python scripts/check-npm-release.py --manifest artifacts/npm-release/manifest.json --commit "$GITHUB_SHA" --reports artifacts/npm-reports --tag "$GITHUB_REF_NAME"
+          else
+            python scripts/check-npm-release.py --manifest artifacts/npm-release/manifest.json --commit "$GITHUB_SHA" --reports artifacts/npm-reports
+          fi
+      - name: Publish the verified alpha with npm OIDC
+        run: node artifacts/npm-cli/node_modules/npm/bin/npm-cli.js publish artifacts/npm-release/*.tgz --access public --tag alpha --registry=https://registry.npmjs.org/
+      - name: Verify registry received the exact tested tarball
+        run: python scripts/check-npm-registry.py --manifest artifacts/npm-release/manifest.json
