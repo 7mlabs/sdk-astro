@@ -1,0 +1,2825 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:forecast-response:1.0",
+  "title": "Individual forecast events, impacts and evidence references",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "engineVersion",
+    "data",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "engineVersion": {
+      "type": "string"
+    },
+    "data": {},
+    "calculation": {},
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "calculation",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/data"
+        },
+        "calculation": {
+          "$ref": "#/$defs/calculation"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+          },
+          "minItems": 0,
+          "maxItems": 0
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "const": null
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+          },
+          "minItems": 1
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "position": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto"
+          ]
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        },
+        "speed": {
+          "type": "number"
+        },
+        "isRetrograde": {
+          "type": "boolean"
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "pointId": {
+          "enum": [
+            "T:sun",
+            "T:moon",
+            "T:mercury",
+            "T:venus",
+            "T:mars",
+            "T:jupiter",
+            "T:saturn",
+            "T:uranus",
+            "T:neptune",
+            "T:pluto"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "longitude",
+        "latitude",
+        "distanceAu",
+        "speed",
+        "isRetrograde",
+        "sign",
+        "degreeInSign",
+        "pointId"
+      ],
+      "additionalProperties": false
+    },
+    "relation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transitPointId": {
+          "enum": [
+            "T:sun",
+            "T:moon",
+            "T:mercury",
+            "T:venus",
+            "T:mars",
+            "T:jupiter",
+            "T:saturn",
+            "T:uranus",
+            "T:neptune",
+            "T:pluto"
+          ]
+        },
+        "natalPointId": {
+          "enum": [
+            "N:sun",
+            "N:moon",
+            "N:mercury",
+            "N:venus",
+            "N:mars",
+            "N:jupiter",
+            "N:saturn",
+            "N:uranus",
+            "N:neptune",
+            "N:pluto",
+            "N:ascendant",
+            "N:midheaven",
+            "N:descendant",
+            "N:imumCoeli",
+            "N:H1",
+            "N:H2",
+            "N:H3",
+            "N:H4",
+            "N:H5",
+            "N:H6",
+            "N:H7",
+            "N:H8",
+            "N:H9",
+            "N:H10",
+            "N:H11",
+            "N:H12"
+          ]
+        },
+        "signedDelta": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "transitPointId",
+        "natalPointId",
+        "signedDelta",
+        "separation",
+        "aspectIndexes"
+      ],
+      "additionalProperties": false
+    },
+    "aspect": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transitPointId": {
+          "enum": [
+            "T:sun",
+            "T:moon",
+            "T:mercury",
+            "T:venus",
+            "T:mars",
+            "T:jupiter",
+            "T:saturn",
+            "T:uranus",
+            "T:neptune",
+            "T:pluto"
+          ]
+        },
+        "natalPointId": {
+          "enum": [
+            "N:sun",
+            "N:moon",
+            "N:mercury",
+            "N:venus",
+            "N:mars",
+            "N:jupiter",
+            "N:saturn",
+            "N:uranus",
+            "N:neptune",
+            "N:pluto",
+            "N:ascendant",
+            "N:midheaven",
+            "N:descendant",
+            "N:imumCoeli",
+            "N:H1",
+            "N:H2",
+            "N:H3",
+            "N:H4",
+            "N:H5",
+            "N:H6",
+            "N:H7",
+            "N:H8",
+            "N:H9",
+            "N:H10",
+            "N:H11",
+            "N:H12"
+          ]
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "index",
+        "relationId",
+        "transitPointId",
+        "natalPointId",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying"
+      ],
+      "additionalProperties": false
+    },
+    "overlay": {
+      "type": "object",
+      "properties": {
+        "transitPointId": {
+          "enum": [
+            "T:sun",
+            "T:moon",
+            "T:mercury",
+            "T:venus",
+            "T:mars",
+            "T:jupiter",
+            "T:saturn",
+            "T:uranus",
+            "T:neptune",
+            "T:pluto"
+          ]
+        },
+        "natalHouseId": {
+          "enum": [
+            "N:H1",
+            "N:H2",
+            "N:H3",
+            "N:H4",
+            "N:H5",
+            "N:H6",
+            "N:H7",
+            "N:H8",
+            "N:H9",
+            "N:H10",
+            "N:H11",
+            "N:H12"
+          ]
+        },
+        "natalHouseNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "natalRulerPointId": {
+          "enum": [
+            "N:sun",
+            "N:moon",
+            "N:mercury",
+            "N:venus",
+            "N:mars",
+            "N:jupiter",
+            "N:saturn",
+            "N:uranus",
+            "N:neptune",
+            "N:pluto"
+          ]
+        },
+        "natalOccupantPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:sun",
+              "N:moon",
+              "N:mercury",
+              "N:venus",
+              "N:mars",
+              "N:jupiter",
+              "N:saturn",
+              "N:uranus",
+              "N:neptune",
+              "N:pluto"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 10,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "transitPointId",
+        "natalHouseId",
+        "natalHouseNumber",
+        "natalRulerPointId",
+        "natalOccupantPointIds"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/position"
+          },
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relation"
+          },
+          "minItems": 26,
+          "maxItems": 260
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspect"
+          }
+        },
+        "houseOverlays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/overlay"
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "utc",
+        "local",
+        "julianDayUt1",
+        "positions",
+        "relations",
+        "aspects",
+        "houseOverlays"
+      ],
+      "additionalProperties": false
+    },
+    "personalImpact": {
+      "type": "object",
+      "properties": {
+        "primaryNatalPointId": {
+          "anyOf": [
+            {
+              "enum": [
+                "N:sun",
+                "N:moon",
+                "N:mercury",
+                "N:venus",
+                "N:mars",
+                "N:jupiter",
+                "N:saturn",
+                "N:uranus",
+                "N:neptune",
+                "N:pluto",
+                "N:ascendant",
+                "N:midheaven",
+                "N:descendant",
+                "N:imumCoeli",
+                "N:H1",
+                "N:H2",
+                "N:H3",
+                "N:H4",
+                "N:H5",
+                "N:H6",
+                "N:H7",
+                "N:H8",
+                "N:H9",
+                "N:H10",
+                "N:H11",
+                "N:H12"
+              ]
+            },
+            {
+              "const": null
+            }
+          ]
+        },
+        "primaryAngle": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 180
+        },
+        "houseOverlays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/overlay"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspect"
+          }
+        },
+        "affectedNatalPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:sun",
+              "N:moon",
+              "N:mercury",
+              "N:venus",
+              "N:mars",
+              "N:jupiter",
+              "N:saturn",
+              "N:uranus",
+              "N:neptune",
+              "N:pluto",
+              "N:ascendant",
+              "N:midheaven",
+              "N:descendant",
+              "N:imumCoeli",
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "affectedNatalHouseIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "rulerLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "natalPointId": {
+                "enum": [
+                  "N:sun",
+                  "N:moon",
+                  "N:mercury",
+                  "N:venus",
+                  "N:mars",
+                  "N:jupiter",
+                  "N:saturn",
+                  "N:uranus",
+                  "N:neptune",
+                  "N:pluto",
+                  "N:ascendant",
+                  "N:midheaven",
+                  "N:descendant",
+                  "N:imumCoeli",
+                  "N:H1",
+                  "N:H2",
+                  "N:H3",
+                  "N:H4",
+                  "N:H5",
+                  "N:H6",
+                  "N:H7",
+                  "N:H8",
+                  "N:H9",
+                  "N:H10",
+                  "N:H11",
+                  "N:H12"
+                ]
+              },
+              "natalHouseIds": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "N:H1",
+                    "N:H2",
+                    "N:H3",
+                    "N:H4",
+                    "N:H5",
+                    "N:H6",
+                    "N:H7",
+                    "N:H8",
+                    "N:H9",
+                    "N:H10",
+                    "N:H11",
+                    "N:H12"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 12,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "natalPointId",
+              "natalHouseIds"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "primaryNatalPointId",
+        "primaryAngle",
+        "houseOverlays",
+        "contacts",
+        "affectedNatalPointIds",
+        "affectedNatalHouseIds",
+        "rulerLinks"
+      ],
+      "additionalProperties": false
+    },
+    "ingressEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "ingress"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "boundaryLongitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "fromSign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "toSign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "direction": {
+              "enum": [
+                "direct",
+                "retrograde"
+              ]
+            }
+          },
+          "required": [
+            "boundaryLongitude",
+            "fromSign",
+            "toSign",
+            "direction"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "bracketedRoot"
+            },
+            "bracketSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.25
+            },
+            "residual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e-06
+            },
+            "residualUnit": {
+              "const": "degrees"
+            }
+          },
+          "required": [
+            "method",
+            "bracketSeconds",
+            "residual",
+            "residualUnit"
+          ],
+          "additionalProperties": false
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "stationEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "station"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "direction": {
+              "enum": [
+                "direct",
+                "retrograde"
+              ]
+            }
+          },
+          "required": [
+            "direction"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "bracketedRoot"
+            },
+            "bracketSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.25
+            },
+            "residual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e-08
+            },
+            "residualUnit": {
+              "const": "degrees/day"
+            }
+          },
+          "required": [
+            "method",
+            "bracketSeconds",
+            "residual",
+            "residualUnit"
+          ],
+          "additionalProperties": false
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "lunarPhaseEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "lunarPhase"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "const": [
+            "sun",
+            "moon"
+          ]
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "enum": [
+                "newMoon",
+                "firstQuarter",
+                "fullMoon",
+                "lastQuarter"
+              ]
+            },
+            "angle": {
+              "enum": [
+                0,
+                90,
+                180,
+                270
+              ]
+            }
+          },
+          "required": [
+            "phase",
+            "angle"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "bracketedRoot"
+            },
+            "bracketSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.25
+            },
+            "residual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e-06
+            },
+            "residualUnit": {
+              "const": "degrees"
+            }
+          },
+          "required": [
+            "method",
+            "bracketSeconds",
+            "residual",
+            "residualUnit"
+          ],
+          "additionalProperties": false
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "planetaryAspectEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "planetaryAspect"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "angle": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 180
+            },
+            "branchLongitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            }
+          },
+          "required": [
+            "angle",
+            "branchLongitude"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "bracketedRoot"
+            },
+            "bracketSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.25
+            },
+            "residual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e-06
+            },
+            "residualUnit": {
+              "const": "degrees"
+            }
+          },
+          "required": [
+            "method",
+            "bracketSeconds",
+            "residual",
+            "residualUnit"
+          ],
+          "additionalProperties": false
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "solarEclipseEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "solarEclipse"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "const": [
+            "sun",
+            "moon"
+          ]
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "eclipseType": {
+              "enum": [
+                "total",
+                "annular",
+                "partial",
+                "hybrid",
+                "penumbral"
+              ]
+            },
+            "visibilityScope": {
+              "const": "global"
+            },
+            "providerFlags": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "contacts": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/eclipseContact"
+              },
+              "minItems": 0,
+              "maxItems": 10
+            }
+          },
+          "required": [
+            "eclipseType",
+            "visibilityScope",
+            "providerFlags",
+            "contacts"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/eclipsePrecision"
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "lunarEclipseEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "lunarEclipse"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "const": [
+            "sun",
+            "moon"
+          ]
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "eclipseType": {
+              "enum": [
+                "total",
+                "annular",
+                "partial",
+                "hybrid",
+                "penumbral"
+              ]
+            },
+            "visibilityScope": {
+              "const": "global"
+            },
+            "providerFlags": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "contacts": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/eclipseContact"
+              },
+              "minItems": 0,
+              "maxItems": 10
+            }
+          },
+          "required": [
+            "eclipseType",
+            "visibilityScope",
+            "providerFlags",
+            "contacts"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/eclipsePrecision"
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "natalTransitEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "natalTransit"
+        },
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/utc"
+        },
+        "local": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/local"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/position"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "angle": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 180
+            },
+            "branchLongitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "targetPointId": {
+              "enum": [
+                "N:sun",
+                "N:moon",
+                "N:mercury",
+                "N:venus",
+                "N:mars",
+                "N:jupiter",
+                "N:saturn",
+                "N:uranus",
+                "N:neptune",
+                "N:pluto",
+                "N:ascendant",
+                "N:midheaven",
+                "N:descendant",
+                "N:imumCoeli",
+                "N:H1",
+                "N:H2",
+                "N:H3",
+                "N:H4",
+                "N:H5",
+                "N:H6",
+                "N:H7",
+                "N:H8",
+                "N:H9",
+                "N:H10",
+                "N:H11",
+                "N:H12"
+              ]
+            },
+            "targetLongitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            }
+          },
+          "required": [
+            "angle",
+            "branchLongitude",
+            "targetPointId",
+            "targetLongitude"
+          ],
+          "additionalProperties": false
+        },
+        "precision": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "bracketedRoot"
+            },
+            "bracketSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.25
+            },
+            "residual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e-06
+            },
+            "residualUnit": {
+              "const": "degrees"
+            }
+          },
+          "required": [
+            "method",
+            "bracketSeconds",
+            "residual",
+            "residualUnit"
+          ],
+          "additionalProperties": false
+        },
+        "personalImpact": {
+          "$ref": "#/$defs/personalImpact"
+        },
+        "highlightReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "station",
+              "newOrFullMoon",
+              "slowBodyIngress",
+              "slowBodyPlanetaryAspect",
+              "nonLunarNatalTransit",
+              "eclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "utc",
+        "local",
+        "julianDayUt1",
+        "bodyIds",
+        "positions",
+        "details",
+        "precision",
+        "personalImpact",
+        "highlightReasons"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ingressEvent"
+        },
+        {
+          "$ref": "#/$defs/stationEvent"
+        },
+        {
+          "$ref": "#/$defs/lunarPhaseEvent"
+        },
+        {
+          "$ref": "#/$defs/planetaryAspectEvent"
+        },
+        {
+          "$ref": "#/$defs/solarEclipseEvent"
+        },
+        {
+          "$ref": "#/$defs/lunarEclipseEvent"
+        },
+        {
+          "$ref": "#/$defs/natalTransitEvent"
+        }
+      ]
+    },
+    "eventReference": {
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primaryContact": {
+          "type": "boolean"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+            "not": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                },
+                {
+                  "pattern": "[^a-zA-Z0-9_-]"
+                }
+              ]
+            }
+          },
+          "minItems": 0,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "enum": [
+                  "natalContact",
+                  "exactNatalTarget",
+                  "transitThroughFocusHouse"
+                ]
+              },
+              "natalPointIds": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "N:sun",
+                    "N:moon",
+                    "N:mercury",
+                    "N:venus",
+                    "N:mars",
+                    "N:jupiter",
+                    "N:saturn",
+                    "N:uranus",
+                    "N:neptune",
+                    "N:pluto",
+                    "N:ascendant",
+                    "N:midheaven",
+                    "N:descendant",
+                    "N:imumCoeli",
+                    "N:H1",
+                    "N:H2",
+                    "N:H3",
+                    "N:H4",
+                    "N:H5",
+                    "N:H6",
+                    "N:H7",
+                    "N:H8",
+                    "N:H9",
+                    "N:H10",
+                    "N:H11",
+                    "N:H12"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 26,
+                "uniqueItems": true
+              },
+              "natalHouseIds": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "N:H1",
+                    "N:H2",
+                    "N:H3",
+                    "N:H4",
+                    "N:H5",
+                    "N:H6",
+                    "N:H7",
+                    "N:H8",
+                    "N:H9",
+                    "N:H10",
+                    "N:H11",
+                    "N:H12"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 12,
+                "uniqueItems": true
+              },
+              "aspectIndexes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "code",
+              "natalPointIds",
+              "natalHouseIds",
+              "aspectIndexes"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "eventId",
+        "primaryContact",
+        "sectionIds",
+        "reasons"
+      ],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "natalPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:sun",
+              "N:moon",
+              "N:mercury",
+              "N:venus",
+              "N:mars",
+              "N:jupiter",
+              "N:saturn",
+              "N:uranus",
+              "N:neptune",
+              "N:pluto",
+              "N:ascendant",
+              "N:midheaven",
+              "N:descendant",
+              "N:imumCoeli",
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "natalHouseIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "snapshotAspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "snapshotOverlayPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "T:sun",
+              "T:moon",
+              "T:mercury",
+              "T:venus",
+              "T:mars",
+              "T:jupiter",
+              "T:saturn",
+              "T:uranus",
+              "T:neptune",
+              "T:pluto"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "eventIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "maxItems": 30000,
+          "uniqueItems": true
+        },
+        "highlightEventIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "maxItems": 30000,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "natalPointIds",
+        "natalHouseIds",
+        "snapshotAspectIndexes",
+        "snapshotOverlayPointIds",
+        "eventIds",
+        "highlightEventIds"
+      ],
+      "additionalProperties": false
+    },
+    "view": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "origin": {
+          "enum": [
+            "builtin",
+            "custom"
+          ]
+        },
+        "profileVersion": {
+          "type": "string"
+        },
+        "definition": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/profileDefinition"
+        },
+        "primaryNatalPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:sun",
+              "N:moon",
+              "N:mercury",
+              "N:venus",
+              "N:mars",
+              "N:jupiter",
+              "N:saturn",
+              "N:uranus",
+              "N:neptune",
+              "N:pluto",
+              "N:ascendant",
+              "N:midheaven",
+              "N:descendant",
+              "N:imumCoeli",
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "primaryNatalHouseIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "natalPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:sun",
+              "N:moon",
+              "N:mercury",
+              "N:venus",
+              "N:mars",
+              "N:jupiter",
+              "N:saturn",
+              "N:uranus",
+              "N:neptune",
+              "N:pluto",
+              "N:ascendant",
+              "N:midheaven",
+              "N:descendant",
+              "N:imumCoeli",
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "natalHouseIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "N:H1",
+              "N:H2",
+              "N:H3",
+              "N:H4",
+              "N:H5",
+              "N:H6",
+              "N:H7",
+              "N:H8",
+              "N:H9",
+              "N:H10",
+              "N:H11",
+              "N:H12"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "snapshotAspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "snapshotOverlayPointIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "T:sun",
+              "T:moon",
+              "T:mercury",
+              "T:venus",
+              "T:mars",
+              "T:jupiter",
+              "T:saturn",
+              "T:uranus",
+              "T:neptune",
+              "T:pluto"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "eventReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/eventReference"
+          },
+          "minItems": 0,
+          "maxItems": 30000
+        },
+        "highlightEventIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "maxItems": 30000,
+          "uniqueItems": true
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "messageContext": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "dailyMessage",
+                "monthlyOverview",
+                "yearlyOverview"
+              ]
+            },
+            "snapshotAspectIndexes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "eventIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0,
+              "maxItems": 30000,
+              "uniqueItems": true
+            },
+            "highlightEventIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0,
+              "maxItems": 30000,
+              "uniqueItems": true
+            },
+            "natalHouseIds": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "N:H1",
+                  "N:H2",
+                  "N:H3",
+                  "N:H4",
+                  "N:H5",
+                  "N:H6",
+                  "N:H7",
+                  "N:H8",
+                  "N:H9",
+                  "N:H10",
+                  "N:H11",
+                  "N:H12"
+                ]
+              },
+              "minItems": 0,
+              "maxItems": 12,
+              "uniqueItems": true
+            },
+            "narrative": {
+              "const": null
+            }
+          },
+          "required": [
+            "kind",
+            "snapshotAspectIndexes",
+            "eventIds",
+            "highlightEventIds",
+            "natalHouseIds",
+            "narrative"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "origin",
+        "profileVersion",
+        "definition",
+        "primaryNatalPointIds",
+        "primaryNatalHouseIds",
+        "natalPointIds",
+        "natalHouseIds",
+        "snapshotAspectIndexes",
+        "snapshotOverlayPointIds",
+        "eventReferences",
+        "highlightEventIds",
+        "sections",
+        "messageContext"
+      ],
+      "additionalProperties": false
+    },
+    "overview": {
+      "type": "object",
+      "properties": {
+        "eventCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30000
+        },
+        "byType": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/counts"
+        },
+        "natalHouseEventCounts": {
+          "type": "object",
+          "properties": {
+            "N:H1": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H2": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H3": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H4": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H5": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H6": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H7": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H8": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H9": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H10": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H11": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            },
+            "N:H12": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30000
+            }
+          },
+          "required": [
+            "N:H1",
+            "N:H2",
+            "N:H3",
+            "N:H4",
+            "N:H5",
+            "N:H6",
+            "N:H7",
+            "N:H8",
+            "N:H9",
+            "N:H10",
+            "N:H11",
+            "N:H12"
+          ],
+          "additionalProperties": false
+        },
+        "domainEventCounts": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+            "not": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                },
+                {
+                  "pattern": "[^a-zA-Z0-9_-]"
+                }
+              ]
+            }
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 30000
+          },
+          "minProperties": 1,
+          "maxProperties": 18
+        },
+        "highlightEventIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "maxItems": 30000,
+          "uniqueItems": true
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              "eventIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "maxItems": 30000,
+                "uniqueItems": true
+              },
+              "highlightEventIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "maxItems": 30000,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "date",
+              "eventIds",
+              "highlightEventIds"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 366
+        },
+        "months": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "year": {
+                "type": "integer",
+                "minimum": 1800,
+                "maximum": 2399
+              },
+              "month": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "eventIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "maxItems": 30000,
+                "uniqueItems": true
+              },
+              "highlightEventIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "maxItems": 30000,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "year",
+              "month",
+              "eventIds",
+              "highlightEventIds"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 12
+        }
+      },
+      "required": [
+        "eventCount",
+        "byType",
+        "natalHouseEventCounts",
+        "domainEventCounts",
+        "highlightEventIds",
+        "days",
+        "months"
+      ],
+      "additionalProperties": false
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "N"
+        },
+        "natal": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/natal"
+        },
+        "context": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/context"
+        },
+        "calculation": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/basicNatalCalculation"
+        }
+      },
+      "required": [
+        "id",
+        "natal",
+        "context",
+        "calculation"
+      ],
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "chartKind": {
+          "const": "individualForecast"
+        },
+        "subjectCount": {
+          "const": 1
+        },
+        "subject": {
+          "$ref": "#/$defs/subject"
+        },
+        "period": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/period"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/snapshot"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "minItems": 0,
+          "maxItems": 30000
+        },
+        "domains": {
+          "type": "object",
+          "maxProperties": 10,
+          "properties": {
+            "career": {
+              "$ref": "#/$defs/view"
+            },
+            "love": {
+              "$ref": "#/$defs/view"
+            },
+            "relationships": {
+              "$ref": "#/$defs/view"
+            },
+            "family": {
+              "$ref": "#/$defs/view"
+            },
+            "finance": {
+              "$ref": "#/$defs/view"
+            },
+            "identity": {
+              "$ref": "#/$defs/view"
+            },
+            "learning": {
+              "$ref": "#/$defs/view"
+            },
+            "creativity": {
+              "$ref": "#/$defs/view"
+            },
+            "innerLife": {
+              "$ref": "#/$defs/view"
+            },
+            "dailyLife": {
+              "$ref": "#/$defs/view"
+            }
+          },
+          "additionalProperties": false
+        },
+        "customDomains": {
+          "type": "object",
+          "maxProperties": 8,
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+            "not": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "career",
+                    "love",
+                    "relationships",
+                    "family",
+                    "finance",
+                    "identity",
+                    "learning",
+                    "creativity",
+                    "innerLife",
+                    "dailyLife",
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                },
+                {
+                  "pattern": "[^a-zA-Z0-9_-]"
+                }
+              ]
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/view"
+          }
+        },
+        "profileCatalog": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/profileDefinition"
+          }
+        },
+        "overview": {
+          "$ref": "#/$defs/overview"
+        }
+      },
+      "required": [
+        "chartKind",
+        "subjectCount",
+        "subject",
+        "period",
+        "snapshot",
+        "events",
+        "domains",
+        "customDomains",
+        "profileCatalog",
+        "overview"
+      ],
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "domains"
+          ],
+          "properties": {
+            "domains": {
+              "type": "object",
+              "minProperties": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "customDomains"
+          ],
+          "properties": {
+            "customDomains": {
+              "type": "object",
+              "minProperties": 1
+            }
+          }
+        }
+      ]
+    },
+    "calculation": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "const": "individual-forecast-data"
+        },
+        "chartKind": {
+          "const": "individualForecast"
+        },
+        "provider": {
+          "const": "swiss-ephemeris"
+        },
+        "providerVersion": {
+          "type": "string"
+        },
+        "ephemeris": {
+          "const": "moshier"
+        },
+        "zodiac": {
+          "const": "tropical"
+        },
+        "coordinates": {
+          "const": "geocentric"
+        },
+        "positionType": {
+          "const": "apparent"
+        },
+        "referenceFrame": {
+          "const": "ecliptic-of-date"
+        },
+        "calendar": {
+          "const": "gregorian"
+        },
+        "inputTimeScale": {
+          "const": "UTC"
+        },
+        "planetTimeScale": {
+          "const": "TT"
+        },
+        "searchTimeScale": {
+          "const": "UT1"
+        },
+        "timeModel": {
+          "type": "string"
+        },
+        "angleUnit": {
+          "const": "degrees"
+        },
+        "speedUnit": {
+          "const": "degrees/day"
+        },
+        "distanceUnit": {
+          "const": "AU"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ingress",
+              "station",
+              "lunarPhase",
+              "planetaryAspect",
+              "solarEclipse",
+              "lunarEclipse"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true
+        },
+        "aspectPreset": {
+          "enum": [
+            "major",
+            "extended",
+            "custom"
+          ]
+        },
+        "aspectRules": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/aspectRule"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "search": {
+          "$ref": "urn:7mlabs:astrology:events-response:1.0#/$defs/search"
+        },
+        "includeNatalTransits": {
+          "type": "boolean"
+        },
+        "rulership": {
+          "enum": [
+            "traditional",
+            "modern"
+          ]
+        },
+        "domainProfile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "sevenmlabs-domain-selection"
+            },
+            "version": {
+              "const": "2.0"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "forecastProfile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "sevenmlabs-individual-forecast"
+            },
+            "version": {
+              "const": "1.0"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "customProfileCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "transitTargetMotion": {
+          "const": "fixedNatalLongitudes"
+        },
+        "snapshotPolicy": {
+          "const": "periodMidpoint"
+        },
+        "highlightPolicy": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "sevenmlabs-calendar-highlights"
+            },
+            "version": {
+              "const": "1.0"
+            },
+            "slowBodyIds": {
+              "const": [
+                "mars",
+                "jupiter",
+                "saturn",
+                "uranus",
+                "neptune",
+                "pluto"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "version",
+            "slowBodyIds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "scope",
+        "chartKind",
+        "provider",
+        "providerVersion",
+        "ephemeris",
+        "zodiac",
+        "coordinates",
+        "positionType",
+        "referenceFrame",
+        "calendar",
+        "inputTimeScale",
+        "planetTimeScale",
+        "searchTimeScale",
+        "timeModel",
+        "angleUnit",
+        "speedUnit",
+        "distanceUnit",
+        "bodyIds",
+        "eventTypes",
+        "aspectPreset",
+        "aspectRules",
+        "search",
+        "includeNatalTransits",
+        "rulership",
+        "domainProfile",
+        "forecastProfile",
+        "customProfileCount",
+        "transitTargetMotion",
+        "snapshotPolicy",
+        "highlightPolicy"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "description": "One natal source and bounded global/exact transit events; snapshot and event contact indexes have separate scopes. Ten builtin profiles with thirty sections and custom profiles reference shared physical facts without narrative or scores. Reference resolution, geometric residuals and calendar summaries are checked by the development validator."
+}

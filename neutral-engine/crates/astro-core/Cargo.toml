@@ -1,0 +1,12 @@
+[package]
+name = "astro-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+astro-provider-swiss = { path = "../astro-provider-swiss" }

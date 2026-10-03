@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astro UI · local native engine</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/ui/styles.css"><link rel="stylesheet" href="/ui/example.css">
+</head>
+<body>
+  <header class="example-header"><a href="/">7MLABS <span>/ ASTRO UI</span></a><span id="host-status" role="status">Đang kiểm tra engine…</span></header>
+  <main>
+    <div class="example-intro"><p class="example-eyebrow">REUSABLE UI / LOCAL ENGINE</p><h1>Khám phá dữ liệu lá số.</h1><p>Widget nhận payload thật qua native worker trên máy. Dữ liệu sinh dưới đây là mẫu thử; chỉnh JSON để tính dữ liệu của bạn.</p></div>
+    <div class="example-layout">
+      <form id="request-form" class="example-input">
+        <label for="sample">Request mẫu</label><select id="sample">
+          <option value="natal">Natal cơ bản</option><option value="natalDomains">Natal · lĩnh vực</option><option value="couple">Cặp đôi · synastry</option><option value="composite">Composite</option><option value="forecast">Forecast ngày</option><option value="events">Sự kiện tháng</option><option value="query">Truy vấn hình học</option><option value="chart">Chart · vị trí cung cấp</option><option value="harmonic">Harmonic · vị trí cung cấp</option><option value="synastry">Synastry · vị trí cung cấp</option>
+        </select>
+        <label for="request">JSON đầu vào</label><textarea id="request" spellcheck="false" rows="22"></textarea>
+        <button id="run" type="submit" disabled>Tính bằng engine →</button>
+        <p id="request-status" class="example-note" role="status">UTC và tọa độ được truyền đúng như request.</p>
+        <button id="download" type="button" class="example-download" hidden>Tải JSON kết quả</button>
+      </form>
+      <section class="example-output" aria-label="Kết quả tính toán"><div id="astro-result"><p class="example-note">Chọn request mẫu rồi chạy engine.</p></div></section>
+    </div>
+  </main>
+  <footer>Node host · một native worker · JSON đầu vào / đầu ra · không có WASM trong browser</footer>
+  <script type="module" src="/ui/example.mjs"></script>
+</body>
+</html>

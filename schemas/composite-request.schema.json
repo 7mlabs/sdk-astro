@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:composite-request:1.0",
+  "title": "Symbolic midpoint composite chart and ten domain reports",
+  "description": "Two strict Gregorian UTC birth inputs; shortest-arc midpoint chart C. Default ambiguous antipodes fail, invalid midpoint house order fails, and no date/location is invented for C. Calendar validity, unique custom IDs and rule angles are enforced by core.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operation",
+    "personA",
+    "personB"
+  ],
+  "properties": {
+    "operation": {
+      "const": "composite"
+    },
+    "personA": {
+      "$ref": "#/$defs/birthInput"
+    },
+    "personB": {
+      "$ref": "#/$defs/birthInput"
+    },
+    "houseMethod": {
+      "enum": [
+        "midpoint",
+        "wholeSignFromMidpointAscendant"
+      ],
+      "default": "midpoint"
+    },
+    "antipodalPolicy": {
+      "enum": [
+        "error",
+        "lowerLongitude"
+      ],
+      "default": "error"
+    },
+    "domains": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/domains"
+    },
+    "customProfiles": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/customProfiles"
+    },
+    "rulership": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/rulership"
+    },
+    "aspectPreset": {
+      "enum": [
+        "major",
+        "extended"
+      ],
+      "default": "extended"
+    },
+    "aspectRules": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/aspectRules"
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "required": [
+          "aspectRules",
+          "aspectPreset"
+        ],
+        "type": "object",
+        "properties": {
+          "aspectRules": {},
+          "aspectPreset": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": [
+          "domains"
+        ],
+        "properties": {
+          "domains": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "required": [
+          "customProfiles"
+        ],
+        "properties": {
+          "customProfiles": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "birthInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "utc",
+        "location"
+      ],
+      "properties": {
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/utc"
+        },
+        "location": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/location"
+        },
+        "houseSystem": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/houseSystem"
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "houseMethod": {
+          "enum": [
+            "midpoint",
+            "wholeSignFromMidpointAscendant"
+          ],
+          "default": "midpoint"
+        },
+        "antipodalPolicy": {
+          "enum": [
+            "error",
+            "lowerLongitude"
+          ],
+          "default": "error"
+        },
+        "domains": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/domains"
+        },
+        "customProfiles": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/customProfiles"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "domains"
+            ],
+            "properties": {
+              "domains": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "customProfiles"
+            ],
+            "properties": {
+              "customProfiles": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+[package]
+name = "astrology-rust-example"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+astro-core = { path = "../../neutral-engine/crates/astro-core" }

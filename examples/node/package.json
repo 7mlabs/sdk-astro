@@ -1,0 +1,5 @@
+{
+  "name": "astrology-node-example",
+  "private": true,
+  "scripts": { "test": "node test.cjs" }
+}

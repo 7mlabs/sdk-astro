@@ -1,0 +1,2345 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "engineVersion",
+    "data",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "engineVersion": {
+      "type": "string"
+    },
+    "data": {},
+    "calculation": {},
+    "warnings": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/error"
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:query-response:1.0",
+  "title": "Compact on-demand calculation query payload",
+  "$defs": {
+    "aspectRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "angle",
+        "maxOrb"
+      ],
+      "properties": {
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed",
+        "isRetrograde",
+        "house"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "isRetrograde": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "house": {
+          "const": null
+        }
+      }
+    },
+    "bodyPlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed",
+        "isRetrograde",
+        "house",
+        "latitude",
+        "distanceAu"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto"
+          ]
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": "number"
+        },
+        "isRetrograde": {
+          "type": "boolean"
+        },
+        "house": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "contextPoint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "longitude",
+            "signIndex",
+            "sign",
+            "degreeInSign",
+            "speed",
+            "isRetrograde",
+            "house",
+            "latitude",
+            "distanceAu"
+          ],
+          "properties": {
+            "id": {
+              "enum": [
+                "sun",
+                "moon",
+                "mercury",
+                "venus",
+                "mars",
+                "jupiter",
+                "saturn",
+                "uranus",
+                "neptune",
+                "pluto"
+              ]
+            },
+            "kind": {
+              "const": "body"
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "signIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11
+            },
+            "sign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "degreeInSign": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 30
+            },
+            "speed": {
+              "type": "number"
+            },
+            "isRetrograde": {
+              "type": "boolean"
+            },
+            "house": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "distanceAu": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "longitude",
+            "signIndex",
+            "sign",
+            "degreeInSign",
+            "speed",
+            "isRetrograde",
+            "house"
+          ],
+          "properties": {
+            "id": {
+              "enum": [
+                "ascendant",
+                "midheaven",
+                "descendant",
+                "imumCoeli"
+              ]
+            },
+            "kind": {
+              "const": "angle"
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "signIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11
+            },
+            "sign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "degreeInSign": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 30
+            },
+            "speed": {
+              "const": null
+            },
+            "isRetrograde": {
+              "const": null
+            },
+            "house": {
+              "const": null
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "longitude",
+            "signIndex",
+            "sign",
+            "degreeInSign",
+            "speed",
+            "houseNumber"
+          ],
+          "properties": {
+            "id": {
+              "enum": [
+                "H1",
+                "H2",
+                "H3",
+                "H4",
+                "H5",
+                "H6",
+                "H7",
+                "H8",
+                "H9",
+                "H10",
+                "H11",
+                "H12"
+              ]
+            },
+            "kind": {
+              "const": "houseCusp"
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "signIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11
+            },
+            "sign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "degreeInSign": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 30
+            },
+            "speed": {
+              "const": null
+            },
+            "houseNumber": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          }
+        }
+      ]
+    },
+    "house": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "number",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "occupants",
+        "rulerBodyId",
+        "rulerPlacement"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "occupants": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/bodyPlacement"
+          },
+          "maxItems": 10
+        },
+        "rulerBodyId": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto"
+          ]
+        },
+        "rulerPlacement": {
+          "$ref": "#/$defs/bodyPlacement"
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "point1",
+        "point2",
+        "signedDelta",
+        "separation",
+        "aspectIndexes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "point1": {
+          "type": "string"
+        },
+        "point2": {
+          "type": "string"
+        },
+        "signedDelta": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "maxItems": 16,
+          "uniqueItems": true
+        }
+      }
+    },
+    "aspect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "point1",
+        "point2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "point1": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto",
+            "ascendant",
+            "midheaven",
+            "descendant",
+            "imumCoeli",
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        },
+        "point2": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto",
+            "ascendant",
+            "midheaven",
+            "descendant",
+            "imumCoeli",
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "data": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "inputLongitude",
+            "longitude",
+            "signIndex",
+            "sign",
+            "degreeInSign"
+          ],
+          "properties": {
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "normalize"
+            },
+            "inputLongitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "signIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11
+            },
+            "sign": {
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "degreeInSign": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 30
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "longitude1",
+            "longitude2",
+            "signedDelta",
+            "separation"
+          ],
+          "properties": {
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "separation"
+            },
+            "longitude1": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "longitude2": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "signedDelta": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "separation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 180
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "longitude1",
+            "longitude2",
+            "longitude",
+            "antipodal",
+            "antipodalPolicy",
+            "resolution"
+          ],
+          "properties": {
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "midpoint"
+            },
+            "longitude1": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "longitude2": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "antipodal": {
+              "type": "boolean"
+            },
+            "antipodalPolicy": {
+              "enum": [
+                "error",
+                "lowerLongitude"
+              ]
+            },
+            "resolution": {
+              "enum": [
+                "unambiguous",
+                "lowerLongitude"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "positions",
+            "rule",
+            "relation",
+            "aspect",
+            "motionMode",
+            "distanceRate"
+          ],
+          "properties": {
+            "group": {
+              "const": "aspects"
+            },
+            "action": {
+              "const": "between"
+            },
+            "positions": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/placement"
+              },
+              "maxItems": 2
+            },
+            "rule": {
+              "$ref": "#/$defs/aspectRule"
+            },
+            "relation": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "point1",
+                "point2",
+                "signedDelta",
+                "separation"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "point1": {
+                  "type": "string"
+                },
+                "point2": {
+                  "type": "string"
+                },
+                "signedDelta": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "separation": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 180
+                }
+              }
+            },
+            "aspect": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "point1",
+                "point2",
+                "angle",
+                "orb",
+                "maxOrb",
+                "matched",
+                "applying"
+              ],
+              "properties": {
+                "point1": {
+                  "type": "string"
+                },
+                "point2": {
+                  "type": "string"
+                },
+                "angle": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 180
+                },
+                "orb": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "maxOrb": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 15
+                },
+                "matched": {
+                  "type": "boolean"
+                },
+                "applying": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "motionMode": {
+              "enum": [
+                "none",
+                "relative",
+                "fixedSecond"
+              ]
+            },
+            "distanceRate": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "longitude",
+            "houseCusps",
+            "house",
+            "boundaryRule"
+          ],
+          "properties": {
+            "group": {
+              "const": "houses"
+            },
+            "action": {
+              "const": "locate"
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360
+            },
+            "houseCusps": {
+              "type": "array",
+              "minItems": 12,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360
+              },
+              "maxItems": 12
+            },
+            "house": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "number",
+                "longitude",
+                "signIndex",
+                "sign",
+                "degreeInSign",
+                "widthDegrees"
+              ],
+              "properties": {
+                "id": {
+                  "enum": [
+                    "H1",
+                    "H2",
+                    "H3",
+                    "H4",
+                    "H5",
+                    "H6",
+                    "H7",
+                    "H8",
+                    "H9",
+                    "H10",
+                    "H11",
+                    "H12"
+                  ]
+                },
+                "number": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "longitude": {
+                  "type": "number",
+                  "minimum": 0,
+                  "exclusiveMaximum": 360
+                },
+                "signIndex": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 11
+                },
+                "sign": {
+                  "enum": [
+                    "Aries",
+                    "Taurus",
+                    "Gemini",
+                    "Cancer",
+                    "Leo",
+                    "Virgo",
+                    "Libra",
+                    "Scorpio",
+                    "Sagittarius",
+                    "Capricorn",
+                    "Aquarius",
+                    "Pisces"
+                  ]
+                },
+                "degreeInSign": {
+                  "type": "number",
+                  "minimum": 0,
+                  "exclusiveMaximum": 30
+                },
+                "widthDegrees": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 360
+                }
+              }
+            },
+            "boundaryRule": {
+              "const": "cuspInclusiveNextCuspExclusive"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "chartKind",
+            "selection",
+            "primaryPointIds",
+            "primaryHouseIds",
+            "points",
+            "houses",
+            "relations",
+            "aspects",
+            "coverage"
+          ],
+          "properties": {
+            "group": {
+              "const": "aspects"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "chartKind": {
+              "const": "individualNatal"
+            },
+            "selection": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pointIds",
+                "houseNumbers",
+                "aspectSelection"
+              ],
+              "properties": {
+                "pointIds": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "enum": [
+                      "sun",
+                      "moon",
+                      "mercury",
+                      "venus",
+                      "mars",
+                      "jupiter",
+                      "saturn",
+                      "uranus",
+                      "neptune",
+                      "pluto",
+                      "ascendant",
+                      "midheaven",
+                      "descendant",
+                      "imumCoeli",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "H7",
+                      "H8",
+                      "H9",
+                      "H10",
+                      "H11",
+                      "H12"
+                    ]
+                  },
+                  "maxItems": 26,
+                  "uniqueItems": true
+                },
+                "houseNumbers": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12
+                  },
+                  "maxItems": 0,
+                  "uniqueItems": true
+                },
+                "aspectSelection": {
+                  "const": "bothSelectedEndpoints"
+                }
+              }
+            },
+            "primaryPointIds": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "sun",
+                  "moon",
+                  "mercury",
+                  "venus",
+                  "mars",
+                  "jupiter",
+                  "saturn",
+                  "uranus",
+                  "neptune",
+                  "pluto",
+                  "ascendant",
+                  "midheaven",
+                  "descendant",
+                  "imumCoeli",
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 26,
+              "uniqueItems": true
+            },
+            "primaryHouseIds": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "enum": [
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 12,
+              "uniqueItems": true
+            },
+            "points": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/contextPoint"
+              },
+              "maxItems": 26
+            },
+            "houses": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/house"
+              },
+              "maxItems": 12
+            },
+            "relations": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/relation"
+              },
+              "maxItems": 325
+            },
+            "aspects": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspect"
+              },
+              "maxItems": 5200
+            },
+            "coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "primaryPoints",
+                "supportingPoints",
+                "selectedHouses",
+                "pointPairs",
+                "matchedAspects"
+              ],
+              "properties": {
+                "primaryPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "supportingPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "selectedHouses": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pointPairs": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "matchedAspects": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "chartKind",
+            "selection",
+            "primaryPointIds",
+            "primaryHouseIds",
+            "points",
+            "houses",
+            "relations",
+            "aspects",
+            "coverage"
+          ],
+          "properties": {
+            "group": {
+              "const": "points"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "chartKind": {
+              "const": "individualNatal"
+            },
+            "selection": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pointIds",
+                "houseNumbers",
+                "aspectSelection"
+              ],
+              "properties": {
+                "pointIds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "enum": [
+                      "sun",
+                      "moon",
+                      "mercury",
+                      "venus",
+                      "mars",
+                      "jupiter",
+                      "saturn",
+                      "uranus",
+                      "neptune",
+                      "pluto",
+                      "ascendant",
+                      "midheaven",
+                      "descendant",
+                      "imumCoeli",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "H7",
+                      "H8",
+                      "H9",
+                      "H10",
+                      "H11",
+                      "H12"
+                    ]
+                  },
+                  "maxItems": 26,
+                  "uniqueItems": true
+                },
+                "houseNumbers": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12
+                  },
+                  "maxItems": 0,
+                  "uniqueItems": true
+                },
+                "aspectSelection": {
+                  "const": "atLeastOneSelectedEndpoint"
+                }
+              }
+            },
+            "primaryPointIds": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "sun",
+                  "moon",
+                  "mercury",
+                  "venus",
+                  "mars",
+                  "jupiter",
+                  "saturn",
+                  "uranus",
+                  "neptune",
+                  "pluto",
+                  "ascendant",
+                  "midheaven",
+                  "descendant",
+                  "imumCoeli",
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 26,
+              "uniqueItems": true
+            },
+            "primaryHouseIds": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "enum": [
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 12,
+              "uniqueItems": true
+            },
+            "points": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/contextPoint"
+              },
+              "maxItems": 26
+            },
+            "houses": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/house"
+              },
+              "maxItems": 12
+            },
+            "relations": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/relation"
+              },
+              "maxItems": 325
+            },
+            "aspects": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspect"
+              },
+              "maxItems": 5200
+            },
+            "coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "primaryPoints",
+                "supportingPoints",
+                "selectedHouses",
+                "pointPairs",
+                "matchedAspects"
+              ],
+              "properties": {
+                "primaryPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "supportingPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "selectedHouses": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pointPairs": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "matchedAspects": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group",
+            "action",
+            "chartKind",
+            "selection",
+            "primaryPointIds",
+            "primaryHouseIds",
+            "points",
+            "houses",
+            "relations",
+            "aspects",
+            "coverage"
+          ],
+          "properties": {
+            "group": {
+              "const": "houses"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "chartKind": {
+              "const": "individualNatal"
+            },
+            "selection": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pointIds",
+                "houseNumbers",
+                "aspectSelection"
+              ],
+              "properties": {
+                "pointIds": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "enum": [
+                      "sun",
+                      "moon",
+                      "mercury",
+                      "venus",
+                      "mars",
+                      "jupiter",
+                      "saturn",
+                      "uranus",
+                      "neptune",
+                      "pluto",
+                      "ascendant",
+                      "midheaven",
+                      "descendant",
+                      "imumCoeli",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "H7",
+                      "H8",
+                      "H9",
+                      "H10",
+                      "H11",
+                      "H12"
+                    ]
+                  },
+                  "maxItems": 0,
+                  "uniqueItems": true
+                },
+                "houseNumbers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12
+                  },
+                  "maxItems": 12,
+                  "uniqueItems": true
+                },
+                "aspectSelection": {
+                  "const": "atLeastOneSelectedEndpoint"
+                }
+              }
+            },
+            "primaryPointIds": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "sun",
+                  "moon",
+                  "mercury",
+                  "venus",
+                  "mars",
+                  "jupiter",
+                  "saturn",
+                  "uranus",
+                  "neptune",
+                  "pluto",
+                  "ascendant",
+                  "midheaven",
+                  "descendant",
+                  "imumCoeli",
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 26,
+              "uniqueItems": true
+            },
+            "primaryHouseIds": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "enum": [
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "maxItems": 12,
+              "uniqueItems": true
+            },
+            "points": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/contextPoint"
+              },
+              "maxItems": 26
+            },
+            "houses": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/house"
+              },
+              "maxItems": 12
+            },
+            "relations": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/relation"
+              },
+              "maxItems": 325
+            },
+            "aspects": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspect"
+              },
+              "maxItems": 5200
+            },
+            "coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "primaryPoints",
+                "supportingPoints",
+                "selectedHouses",
+                "pointPairs",
+                "matchedAspects"
+              ],
+              "properties": {
+                "primaryPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "supportingPoints": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "selectedHouses": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pointPairs": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "matchedAspects": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "calculation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "computationalScope",
+            "group",
+            "action",
+            "provider",
+            "angleUnit"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "computationalScope": {
+              "const": "pureGeometry"
+            },
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "normalize"
+            },
+            "provider": {
+              "const": "supplied-positions"
+            },
+            "angleUnit": {
+              "const": "degrees"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "computationalScope",
+            "group",
+            "action",
+            "provider",
+            "angleUnit"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "computationalScope": {
+              "const": "pureGeometry"
+            },
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "separation"
+            },
+            "provider": {
+              "const": "supplied-positions"
+            },
+            "angleUnit": {
+              "const": "degrees"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "computationalScope",
+            "group",
+            "action",
+            "provider",
+            "angleUnit",
+            "antipodalPolicy",
+            "toleranceDegrees"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "computationalScope": {
+              "const": "pureGeometry"
+            },
+            "group": {
+              "const": "geometry"
+            },
+            "action": {
+              "const": "midpoint"
+            },
+            "provider": {
+              "const": "supplied-positions"
+            },
+            "angleUnit": {
+              "const": "degrees"
+            },
+            "antipodalPolicy": {
+              "enum": [
+                "error",
+                "lowerLongitude"
+              ]
+            },
+            "toleranceDegrees": {
+              "const": 1e-10
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "computationalScope",
+            "group",
+            "action",
+            "provider",
+            "angleUnit",
+            "speedUnit",
+            "motionMode"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "computationalScope": {
+              "const": "pureGeometry"
+            },
+            "group": {
+              "const": "aspects"
+            },
+            "action": {
+              "const": "between"
+            },
+            "provider": {
+              "const": "supplied-positions"
+            },
+            "angleUnit": {
+              "const": "degrees"
+            },
+            "speedUnit": {
+              "const": "degrees/day"
+            },
+            "motionMode": {
+              "enum": [
+                "none",
+                "relative",
+                "fixedSecond"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "computationalScope",
+            "group",
+            "action",
+            "provider",
+            "angleUnit"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "computationalScope": {
+              "const": "pureGeometry"
+            },
+            "group": {
+              "const": "houses"
+            },
+            "action": {
+              "const": "locate"
+            },
+            "provider": {
+              "const": "supplied-positions"
+            },
+            "angleUnit": {
+              "const": "degrees"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "scope",
+            "provider",
+            "providerVersion",
+            "ephemeris",
+            "zodiac",
+            "coordinates",
+            "positionType",
+            "referenceFrame",
+            "calendar",
+            "inputTimeScale",
+            "houseTimeScale",
+            "planetTimeScale",
+            "timeModel",
+            "julianDayTt",
+            "julianDayUt1",
+            "houseSystem",
+            "angleUnit",
+            "speedUnit",
+            "distanceUnit",
+            "aspectRules",
+            "sourceScope",
+            "computationalScope",
+            "group",
+            "action",
+            "rulership",
+            "aspectPreset",
+            "selectionPolicy"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "provider": {
+              "const": "swiss-ephemeris"
+            },
+            "providerVersion": {
+              "type": "string"
+            },
+            "ephemeris": {
+              "const": "moshier"
+            },
+            "zodiac": {
+              "const": "tropical"
+            },
+            "coordinates": {
+              "const": "geocentric"
+            },
+            "positionType": {
+              "const": "apparent"
+            },
+            "referenceFrame": {
+              "const": "ecliptic-of-date"
+            },
+            "calendar": {
+              "const": "gregorian"
+            },
+            "inputTimeScale": {
+              "const": "UTC"
+            },
+            "houseTimeScale": {
+              "const": "UT1"
+            },
+            "planetTimeScale": {
+              "const": "TT"
+            },
+            "timeModel": {
+              "type": "string"
+            },
+            "julianDayTt": {
+              "type": "number"
+            },
+            "julianDayUt1": {
+              "type": "number"
+            },
+            "houseSystem": {
+              "enum": [
+                "placidus",
+                "wholeSign"
+              ]
+            },
+            "angleUnit": {
+              "const": "degrees"
+            },
+            "speedUnit": {
+              "const": "degrees/day"
+            },
+            "distanceUnit": {
+              "const": "AU"
+            },
+            "aspectRules": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspectRule"
+              },
+              "maxItems": 16
+            },
+            "sourceScope": {
+              "const": "basic-natal"
+            },
+            "computationalScope": {
+              "const": "fullNatalThenSelection"
+            },
+            "group": {
+              "const": "aspects"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "rulership": {
+              "enum": [
+                "traditional",
+                "modern"
+              ]
+            },
+            "aspectPreset": {
+              "enum": [
+                "major",
+                "extended",
+                "custom"
+              ]
+            },
+            "selectionPolicy": {
+              "const": "bothSelectedEndpoints"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "scope",
+            "provider",
+            "providerVersion",
+            "ephemeris",
+            "zodiac",
+            "coordinates",
+            "positionType",
+            "referenceFrame",
+            "calendar",
+            "inputTimeScale",
+            "houseTimeScale",
+            "planetTimeScale",
+            "timeModel",
+            "julianDayTt",
+            "julianDayUt1",
+            "houseSystem",
+            "angleUnit",
+            "speedUnit",
+            "distanceUnit",
+            "aspectRules",
+            "sourceScope",
+            "computationalScope",
+            "group",
+            "action",
+            "rulership",
+            "aspectPreset",
+            "selectionPolicy"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "provider": {
+              "const": "swiss-ephemeris"
+            },
+            "providerVersion": {
+              "type": "string"
+            },
+            "ephemeris": {
+              "const": "moshier"
+            },
+            "zodiac": {
+              "const": "tropical"
+            },
+            "coordinates": {
+              "const": "geocentric"
+            },
+            "positionType": {
+              "const": "apparent"
+            },
+            "referenceFrame": {
+              "const": "ecliptic-of-date"
+            },
+            "calendar": {
+              "const": "gregorian"
+            },
+            "inputTimeScale": {
+              "const": "UTC"
+            },
+            "houseTimeScale": {
+              "const": "UT1"
+            },
+            "planetTimeScale": {
+              "const": "TT"
+            },
+            "timeModel": {
+              "type": "string"
+            },
+            "julianDayTt": {
+              "type": "number"
+            },
+            "julianDayUt1": {
+              "type": "number"
+            },
+            "houseSystem": {
+              "enum": [
+                "placidus",
+                "wholeSign"
+              ]
+            },
+            "angleUnit": {
+              "const": "degrees"
+            },
+            "speedUnit": {
+              "const": "degrees/day"
+            },
+            "distanceUnit": {
+              "const": "AU"
+            },
+            "aspectRules": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspectRule"
+              },
+              "maxItems": 16
+            },
+            "sourceScope": {
+              "const": "basic-natal"
+            },
+            "computationalScope": {
+              "const": "fullNatalThenSelection"
+            },
+            "group": {
+              "const": "points"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "rulership": {
+              "enum": [
+                "traditional",
+                "modern"
+              ]
+            },
+            "aspectPreset": {
+              "enum": [
+                "major",
+                "extended",
+                "custom"
+              ]
+            },
+            "selectionPolicy": {
+              "const": "atLeastOneSelectedEndpoint"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "scope",
+            "provider",
+            "providerVersion",
+            "ephemeris",
+            "zodiac",
+            "coordinates",
+            "positionType",
+            "referenceFrame",
+            "calendar",
+            "inputTimeScale",
+            "houseTimeScale",
+            "planetTimeScale",
+            "timeModel",
+            "julianDayTt",
+            "julianDayUt1",
+            "houseSystem",
+            "angleUnit",
+            "speedUnit",
+            "distanceUnit",
+            "aspectRules",
+            "sourceScope",
+            "computationalScope",
+            "group",
+            "action",
+            "rulership",
+            "aspectPreset",
+            "selectionPolicy"
+          ],
+          "properties": {
+            "scope": {
+              "const": "on-demand-query"
+            },
+            "provider": {
+              "const": "swiss-ephemeris"
+            },
+            "providerVersion": {
+              "type": "string"
+            },
+            "ephemeris": {
+              "const": "moshier"
+            },
+            "zodiac": {
+              "const": "tropical"
+            },
+            "coordinates": {
+              "const": "geocentric"
+            },
+            "positionType": {
+              "const": "apparent"
+            },
+            "referenceFrame": {
+              "const": "ecliptic-of-date"
+            },
+            "calendar": {
+              "const": "gregorian"
+            },
+            "inputTimeScale": {
+              "const": "UTC"
+            },
+            "houseTimeScale": {
+              "const": "UT1"
+            },
+            "planetTimeScale": {
+              "const": "TT"
+            },
+            "timeModel": {
+              "type": "string"
+            },
+            "julianDayTt": {
+              "type": "number"
+            },
+            "julianDayUt1": {
+              "type": "number"
+            },
+            "houseSystem": {
+              "enum": [
+                "placidus",
+                "wholeSign"
+              ]
+            },
+            "angleUnit": {
+              "const": "degrees"
+            },
+            "speedUnit": {
+              "const": "degrees/day"
+            },
+            "distanceUnit": {
+              "const": "AU"
+            },
+            "aspectRules": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "#/$defs/aspectRule"
+              },
+              "maxItems": 16
+            },
+            "sourceScope": {
+              "const": "basic-natal"
+            },
+            "computationalScope": {
+              "const": "fullNatalThenSelection"
+            },
+            "group": {
+              "const": "houses"
+            },
+            "action": {
+              "const": "inspect"
+            },
+            "rulership": {
+              "enum": [
+                "traditional",
+                "modern"
+              ]
+            },
+            "aspectPreset": {
+              "enum": [
+                "major",
+                "extended",
+                "custom"
+              ]
+            },
+            "selectionPolicy": {
+              "const": "atLeastOneSelectedEndpoint"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "calculation",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/data"
+        },
+        "calculation": {
+          "$ref": "#/$defs/calculation"
+        },
+        "errors": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/error"
+          },
+          "maxItems": 0
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "const": null
+        },
+        "errors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/error"
+          }
+        }
+      }
+    }
+  ]
+}

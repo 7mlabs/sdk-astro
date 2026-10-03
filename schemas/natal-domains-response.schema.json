@@ -1,0 +1,3350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:natal-domains-response:1.0",
+  "title": "Individual natal domain report response",
+  "description": "Response contract extended by engine 0.5.0-alpha.1. Success contains one individual natal, ten builtin profile definitions, selected builtin and custom domains, shared context, advanced facts and traceable reports with compact section references. An error response has data:null. Additional fields are allowed for additive evolution. ID/index joins and numeric cross-field consistency are verified by core and schema fixture tests.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "engineVersion",
+    "data",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "engineVersion": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/error"
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "calculation",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/data"
+        },
+        "calculation": {
+          "$ref": "#/$defs/calculation"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/error"
+          },
+          "maxItems": 0
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "data",
+        "errors"
+      ],
+      "properties": {
+        "data": {
+          "const": null
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/error"
+          },
+          "minItems": 1
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "aspectRule": {
+      "type": "object",
+      "required": [
+        "angle",
+        "maxOrb"
+      ],
+      "properties": {
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        }
+      }
+    },
+    "utc": {
+      "type": "object",
+      "required": [
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second"
+      ],
+      "properties": {
+        "year": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2399
+        },
+        "month": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "day": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31
+        },
+        "hour": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23
+        },
+        "minute": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 59
+        },
+        "second": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 60
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "exclusiveMinimum": -90,
+          "exclusiveMaximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "required": [
+        "id",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed",
+        "isRetrograde",
+        "house"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "isRetrograde": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "house": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "bodyPlacement": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/placement"
+        },
+        {
+          "type": "object",
+          "required": [
+            "latitude",
+            "distanceAu",
+            "speed",
+            "isRetrograde",
+            "house"
+          ],
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "distanceAu": {
+              "type": "number",
+              "minimum": 0
+            },
+            "speed": {
+              "type": "number"
+            },
+            "isRetrograde": {
+              "type": "boolean"
+            },
+            "house": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          }
+        }
+      ]
+    },
+    "anglePlacement": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/placement"
+        },
+        {
+          "type": "object",
+          "required": [
+            "speed",
+            "isRetrograde",
+            "house"
+          ],
+          "properties": {
+            "speed": {
+              "const": null
+            },
+            "isRetrograde": {
+              "const": null
+            },
+            "house": {
+              "const": null
+            }
+          }
+        }
+      ]
+    },
+    "house": {
+      "type": "object",
+      "required": [
+        "number",
+        "longitude",
+        "sign",
+        "degreeInSign"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        }
+      }
+    },
+    "domainHouse": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/house"
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "signIndex",
+            "occupants",
+            "rulerBodyId",
+            "rulerPlacement"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^H(?:[1-9]|1[0-2])$"
+            },
+            "signIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11
+            },
+            "occupants": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodyPlacement"
+              }
+            },
+            "rulerBodyId": {
+              "type": "string"
+            },
+            "rulerPlacement": {
+              "$ref": "#/$defs/bodyPlacement"
+            }
+          }
+        }
+      ]
+    },
+    "contextPoint": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "body",
+            "angle",
+            "houseCusp"
+          ]
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "house": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "houseNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "isRetrograde": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "const": "body"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/bodyPlacement"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "const": "angle"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/anglePlacement"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "const": "houseCusp"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "id",
+              "houseNumber",
+              "speed"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^H(?:[1-9]|1[0-2])$"
+              },
+              "houseNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "speed": {
+                "const": null
+              }
+            }
+          }
+        }
+      ]
+    },
+    "natalAspect": {
+      "type": "object",
+      "required": [
+        "body1",
+        "body2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying"
+      ],
+      "properties": {
+        "body1": {
+          "type": "string"
+        },
+        "body2": {
+          "type": "string"
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "contextAspect": {
+      "type": "object",
+      "required": [
+        "index",
+        "point1",
+        "point2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "point1": {
+          "type": "string"
+        },
+        "point2": {
+          "type": "string"
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "pointRelation": {
+      "type": "object",
+      "required": [
+        "id",
+        "point1",
+        "point2",
+        "signedDelta",
+        "separation",
+        "aspectIndexes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "point1": {
+          "type": "string"
+        },
+        "point2": {
+          "type": "string"
+        },
+        "signedDelta": {
+          "type": "number",
+          "minimum": -180,
+          "exclusiveMaximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "natal": {
+      "type": "object",
+      "required": [
+        "utc",
+        "location",
+        "placements",
+        "angles",
+        "houses",
+        "houseCusps",
+        "aspects"
+      ],
+      "properties": {
+        "utc": {
+          "$ref": "#/$defs/utc"
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "placements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bodyPlacement"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anglePlacement"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/house"
+          },
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "houseCusps": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMaximum": 360
+          },
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalAspect"
+          }
+        }
+      }
+    },
+    "dispositor": {
+      "type": "object",
+      "required": [
+        "bodyId",
+        "sign",
+        "dispositorBodyId",
+        "dispositorPlacement"
+      ],
+      "properties": {
+        "bodyId": {
+          "type": "string"
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "dispositorBodyId": {
+          "type": "string"
+        },
+        "dispositorPlacement": {
+          "$ref": "#/$defs/bodyPlacement"
+        }
+      }
+    },
+    "houseRulerRelation": {
+      "type": "object",
+      "required": [
+        "house1",
+        "house2",
+        "ruler1",
+        "ruler2",
+        "sameRuler",
+        "relationId",
+        "aspectIndexes"
+      ],
+      "properties": {
+        "house1": {
+          "type": "string",
+          "pattern": "^H(?:[1-9]|1[0-2])$"
+        },
+        "house2": {
+          "type": "string",
+          "pattern": "^H(?:[1-9]|1[0-2])$"
+        },
+        "ruler1": {
+          "type": "string"
+        },
+        "ruler2": {
+          "type": "string"
+        },
+        "sameRuler": {
+          "type": "boolean"
+        },
+        "relationId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "sameRuler"
+            ],
+            "properties": {
+              "sameRuler": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "relationId",
+              "aspectIndexes"
+            ],
+            "properties": {
+              "relationId": {
+                "const": null
+              },
+              "aspectIndexes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "sameRuler"
+            ],
+            "properties": {
+              "sameRuler": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "relationId"
+            ],
+            "properties": {
+              "relationId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dignity": {
+      "type": "object",
+      "required": [
+        "system",
+        "supported",
+        "domicile",
+        "detriment",
+        "exaltation",
+        "fall"
+      ],
+      "properties": {
+        "system": {
+          "const": "traditional"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "domicile": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "detriment": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "exaltation": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "fall": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "supported"
+            ],
+            "properties": {
+              "supported": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "domicile",
+              "detriment",
+              "exaltation",
+              "fall"
+            ],
+            "properties": {
+              "domicile": {
+                "type": "boolean"
+              },
+              "detriment": {
+                "type": "boolean"
+              },
+              "exaltation": {
+                "type": "boolean"
+              },
+              "fall": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "supported"
+            ],
+            "properties": {
+              "supported": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "domicile",
+              "detriment",
+              "exaltation",
+              "fall"
+            ],
+            "properties": {
+              "domicile": {
+                "const": null
+              },
+              "detriment": {
+                "const": null
+              },
+              "exaltation": {
+                "const": null
+              },
+              "fall": {
+                "const": null
+              }
+            }
+          }
+        }
+      ]
+    },
+    "solarCondition": {
+      "type": "object",
+      "required": [
+        "separation",
+        "condition"
+      ],
+      "properties": {
+        "separation": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 180
+        },
+        "condition": {
+          "enum": [
+            "notApplicable",
+            "cazimi",
+            "combust",
+            "underSunbeams",
+            "free"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "condition"
+            ],
+            "properties": {
+              "condition": {
+                "const": "notApplicable"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "separation"
+            ],
+            "properties": {
+              "separation": {
+                "const": null
+              }
+            }
+          },
+          "else": {
+            "type": "object",
+            "required": [
+              "separation"
+            ],
+            "properties": {
+              "separation": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 180
+              }
+            }
+          }
+        }
+      ]
+    },
+    "bodyState": {
+      "type": "object",
+      "required": [
+        "bodyId",
+        "element",
+        "modality",
+        "polarity",
+        "houseType",
+        "motion",
+        "dignity",
+        "solarCondition"
+      ],
+      "properties": {
+        "bodyId": {
+          "type": "string"
+        },
+        "element": {
+          "enum": [
+            "fire",
+            "earth",
+            "air",
+            "water"
+          ]
+        },
+        "modality": {
+          "enum": [
+            "cardinal",
+            "fixed",
+            "mutable"
+          ]
+        },
+        "polarity": {
+          "enum": [
+            "positive",
+            "negative"
+          ]
+        },
+        "houseType": {
+          "enum": [
+            "angular",
+            "succedent",
+            "cadent"
+          ]
+        },
+        "motion": {
+          "enum": [
+            "direct",
+            "retrograde",
+            "stationary"
+          ]
+        },
+        "dignity": {
+          "$ref": "#/$defs/dignity"
+        },
+        "solarCondition": {
+          "$ref": "#/$defs/solarCondition"
+        }
+      }
+    },
+    "distribution": {
+      "type": "object",
+      "required": [
+        "id",
+        "count",
+        "bodyIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "dispositorChain": {
+      "type": "object",
+      "required": [
+        "id",
+        "bodyId",
+        "path",
+        "termination",
+        "terminalBodyId",
+        "cycleBodyIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "bodyId": {
+          "type": "string"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "termination": {
+          "enum": [
+            "selfRuler",
+            "cycle"
+          ]
+        },
+        "terminalBodyId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cycleBodyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "termination"
+            ],
+            "properties": {
+              "termination": {
+                "const": "selfRuler"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "terminalBodyId",
+              "cycleBodyIds"
+            ],
+            "properties": {
+              "terminalBodyId": {
+                "type": "string"
+              },
+              "cycleBodyIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "termination"
+            ],
+            "properties": {
+              "termination": {
+                "const": "cycle"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "terminalBodyId",
+              "cycleBodyIds"
+            ],
+            "properties": {
+              "terminalBodyId": {
+                "const": null
+              },
+              "cycleBodyIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2,
+                "maxItems": 10,
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reception": {
+      "type": "object",
+      "required": [
+        "id",
+        "bodyIds",
+        "type",
+        "rulership"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "type": {
+          "const": "mutualDomicile"
+        },
+        "rulership": {
+          "enum": [
+            "traditional",
+            "modern"
+          ]
+        }
+      }
+    },
+    "aspectPattern": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "bodyIds",
+        "aspectIndexes",
+        "apexBodyId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "grandTrine",
+            "tSquare",
+            "yod",
+            "kite",
+            "grandCross"
+          ]
+        },
+        "bodyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 3,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 3,
+          "maxItems": 6,
+          "uniqueItems": true
+        },
+        "apexBodyId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "grandTrine",
+                  "tSquare",
+                  "yod"
+                ]
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "bodyIds",
+              "aspectIndexes"
+            ],
+            "properties": {
+              "bodyIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 3,
+                "maxItems": 3,
+                "uniqueItems": true
+              },
+              "aspectIndexes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 3,
+                "maxItems": 3,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "kite",
+                  "grandCross"
+                ]
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "bodyIds",
+              "aspectIndexes"
+            ],
+            "properties": {
+              "bodyIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 4,
+                "maxItems": 4,
+                "uniqueItems": true
+              },
+              "aspectIndexes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 6,
+                "maxItems": 6,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "grandTrine",
+                  "grandCross"
+                ]
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "apexBodyId"
+            ],
+            "properties": {
+              "apexBodyId": {
+                "const": null
+              }
+            }
+          },
+          "else": {
+            "type": "object",
+            "required": [
+              "apexBodyId"
+            ],
+            "properties": {
+              "apexBodyId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "advancedRules": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "dignity",
+        "motion",
+        "solarCondition",
+        "dispositors",
+        "receptions",
+        "aspectPatterns",
+        "distributions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "dignity": {
+          "type": "object",
+          "required": [
+            "system",
+            "scope",
+            "supportedBodyIds",
+            "excluded"
+          ],
+          "properties": {
+            "system": {
+              "const": "traditional"
+            },
+            "scope": {
+              "const": "signOnly"
+            },
+            "supportedBodyIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "excluded": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "motion": {
+          "type": "object",
+          "required": [
+            "source",
+            "stationary",
+            "predictsStation"
+          ],
+          "properties": {
+            "source": {
+              "const": "instantaneousLongitudeSpeed"
+            },
+            "stationary": {
+              "const": "exactZero"
+            },
+            "predictsStation": {
+              "const": false
+            }
+          }
+        },
+        "solarCondition": {
+          "type": "object",
+          "required": [
+            "distance",
+            "unit",
+            "inclusiveThresholds",
+            "boundaryToleranceDegrees",
+            "classification",
+            "exemptBodyIds"
+          ],
+          "properties": {
+            "distance": {
+              "const": "shortestEclipticLongitude"
+            },
+            "unit": {
+              "const": "degrees"
+            },
+            "inclusiveThresholds": {
+              "type": "object",
+              "required": [
+                "cazimi",
+                "combust",
+                "underSunbeams"
+              ],
+              "properties": {
+                "cazimi": {
+                  "type": "number"
+                },
+                "combust": {
+                  "type": "number"
+                },
+                "underSunbeams": {
+                  "type": "number"
+                }
+              }
+            },
+            "boundaryToleranceDegrees": {
+              "type": "number",
+              "minimum": 0
+            },
+            "classification": {
+              "const": "geometricOnly"
+            },
+            "exemptBodyIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "dispositors": {
+          "type": "object",
+          "required": [
+            "rulership",
+            "path",
+            "cycle"
+          ],
+          "properties": {
+            "rulership": {
+              "enum": [
+                "traditional",
+                "modern"
+              ]
+            },
+            "path": {
+              "const": "uniqueBodyIds"
+            },
+            "cycle": {
+              "const": "repeatWithoutAppendingRepeatedBody"
+            }
+          }
+        },
+        "receptions": {
+          "type": "object",
+          "required": [
+            "type",
+            "rulership"
+          ],
+          "properties": {
+            "type": {
+              "const": "mutualDomicile"
+            },
+            "rulership": {
+              "enum": [
+                "traditional",
+                "modern"
+              ]
+            }
+          }
+        },
+        "aspectPatterns": {
+          "type": "object",
+          "required": [
+            "points",
+            "edges",
+            "angles",
+            "orb",
+            "duplicateEdges",
+            "kiteApex",
+            "additionalMatchedEdges",
+            "uniqueBy"
+          ],
+          "properties": {
+            "points": {
+              "const": "bodiesOnly"
+            },
+            "edges": {
+              "const": "configuredMatchedAspects"
+            },
+            "angles": {
+              "const": "exactConfiguredAngle"
+            },
+            "orb": {
+              "const": "inheritedFromConfiguredAspectRules"
+            },
+            "duplicateEdges": {
+              "const": "lowestGlobalAspectIndex"
+            },
+            "kiteApex": {
+              "const": "additionalBodyOppositeOneGrandTrineBody"
+            },
+            "additionalMatchedEdges": {
+              "const": "allowed"
+            },
+            "uniqueBy": {
+              "const": "typeBodyIdsAndApex"
+            }
+          }
+        },
+        "distributions": {
+          "type": "object",
+          "required": [
+            "population",
+            "weights",
+            "emptyGroups"
+          ],
+          "properties": {
+            "population": {
+              "const": "allNatalBodies"
+            },
+            "weights": {
+              "const": "onePerBody"
+            },
+            "emptyGroups": {
+              "const": "retained"
+            }
+          }
+        }
+      }
+    },
+    "advanced": {
+      "type": "object",
+      "required": [
+        "rules",
+        "bodyStates",
+        "distributions",
+        "dispositorChains",
+        "receptions",
+        "aspectPatterns"
+      ],
+      "properties": {
+        "rules": {
+          "$ref": "#/$defs/advancedRules"
+        },
+        "bodyStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bodyState"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "distributions": {
+          "type": "object",
+          "required": [
+            "elements",
+            "modalities",
+            "polarities",
+            "houseTypes"
+          ],
+          "properties": {
+            "elements": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/distribution"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "modalities": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/distribution"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "polarities": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/distribution"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "houseTypes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/distribution"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          }
+        },
+        "dispositorChains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dispositorChain"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "receptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reception"
+          }
+        },
+        "aspectPatterns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspectPattern"
+          }
+        }
+      }
+    },
+    "houseEvidence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "houseId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "profileHouse"
+            },
+            "houseId": {
+              "type": "string",
+              "pattern": "^H(?:[1-9]|1[0-2])$"
+            },
+            "sectionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+              "not": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  },
+                  {
+                    "pattern": "[^a-zA-Z0-9_-]"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "bodyId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "selectedBody"
+            },
+            "bodyId": {
+              "type": "string"
+            },
+            "sectionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+              "not": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  },
+                  {
+                    "pattern": "[^a-zA-Z0-9_-]"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "bodyId",
+            "sourceBodyId",
+            "chainId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "dispositorChain"
+            },
+            "bodyId": {
+              "type": "string"
+            },
+            "sourceBodyId": {
+              "type": "string"
+            },
+            "chainId": {
+              "type": "string"
+            },
+            "sectionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+              "not": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  },
+                  {
+                    "pattern": "[^a-zA-Z0-9_-]"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "pointId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "focusAngle"
+            },
+            "pointId": {
+              "type": "string"
+            },
+            "sectionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+              "not": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  },
+                  {
+                    "pattern": "[^a-zA-Z0-9_-]"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "pointId",
+            "aspectIndex"
+          ],
+          "properties": {
+            "rule": {
+              "const": "aspectEndpoint"
+            },
+            "pointId": {
+              "type": "string"
+            },
+            "aspectIndex": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "sectionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+              "not": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  },
+                  {
+                    "pattern": "[^a-zA-Z0-9_-]"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reportHouse": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/domainHouse"
+        },
+        {
+          "type": "object",
+          "required": [
+            "roles",
+            "evidence",
+            "aspectIndexes",
+            "rulerPlacementHouseId",
+            "rulerDispositorChainId"
+          ],
+          "properties": {
+            "roles": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "focus",
+                  "selectedBodyPlacement",
+                  "selectedBodyRulership",
+                  "dispositorPlacement",
+                  "dispositorRulership",
+                  "focusAnglePlacement",
+                  "aspectEndpointPlacement",
+                  "aspectEndpointRulership",
+                  "sectionFocus",
+                  "sectionSupport"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/houseEvidence"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "aspectIndexes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "uniqueItems": true
+            },
+            "rulerPlacementHouseId": {
+              "type": "string",
+              "pattern": "^H(?:[1-9]|1[0-2])$"
+            },
+            "rulerDispositorChainId": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "reportAspect": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/contextAspect"
+        },
+        {
+          "type": "object",
+          "required": [
+            "primaryContact",
+            "relatedHouseIds",
+            "sectionIds"
+          ],
+          "properties": {
+            "primaryContact": {
+              "type": "boolean"
+            },
+            "relatedHouseIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^H(?:[1-9]|1[0-2])$"
+              },
+              "uniqueItems": true
+            },
+            "sectionIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+                "not": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "constructor",
+                        "prototype",
+                        "__proto__"
+                      ]
+                    },
+                    {
+                      "pattern": "[^a-zA-Z0-9_-]"
+                    }
+                  ]
+                }
+              },
+              "maxItems": 8,
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    },
+    "report": {
+      "type": "object",
+      "required": [
+        "version",
+        "chartKind",
+        "selectionPolicy",
+        "focusHouseIds",
+        "houseIds",
+        "pointIds",
+        "houses",
+        "points",
+        "aspects",
+        "bodyFacts",
+        "dispositorChains",
+        "receptions",
+        "aspectPatterns",
+        "coverage",
+        "sections"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "chartKind": {
+          "const": "individualNatal"
+        },
+        "selectionPolicy": {
+          "const": "primaryProfileWithTraceableSupport"
+        },
+        "focusHouseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^H(?:[1-9]|1[0-2])$"
+          },
+          "uniqueItems": true
+        },
+        "houseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^H(?:[1-9]|1[0-2])$"
+          },
+          "minItems": 1,
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "pointIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportHouse"
+          },
+          "minItems": 1,
+          "maxItems": 12
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contextPoint"
+          },
+          "minItems": 1,
+          "maxItems": 26
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportAspect"
+          }
+        },
+        "bodyFacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bodyState"
+          }
+        },
+        "dispositorChains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dispositorChain"
+          }
+        },
+        "receptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reception"
+          }
+        },
+        "aspectPatterns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspectPattern"
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "primaryAspectCount",
+            "reportAspectCount",
+            "relatedHouseCount",
+            "supportSelection",
+            "houseContacts",
+            "patternSelection",
+            "recursiveHouseExpansion",
+            "sectionCount",
+            "sectionSelection"
+          ],
+          "properties": {
+            "primaryAspectCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reportAspectCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "relatedHouseCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "supportSelection": {
+              "const": "primaryBodiesDispositorChainsAndPrimaryAspectEndpoints"
+            },
+            "houseContacts": {
+              "const": "cuspOccupantsAndRuler"
+            },
+            "patternSelection": {
+              "const": "atLeastOnePrimaryBody"
+            },
+            "recursiveHouseExpansion": {
+              "const": false
+            },
+            "sectionCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8
+            },
+            "sectionSelection": {
+              "const": "independentSelectorsSharedNatal"
+            }
+          }
+        },
+        "sections": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/reportSection"
+          }
+        }
+      }
+    },
+    "selectionReason": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "rule"
+          ],
+          "properties": {
+            "rule": {
+              "const": "profileBody"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "houseId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "houseOccupant"
+            },
+            "houseId": {
+              "type": "string",
+              "pattern": "^H(?:[1-9]|1[0-2])$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "rule",
+            "houseId"
+          ],
+          "properties": {
+            "rule": {
+              "const": "houseRuler"
+            },
+            "houseId": {
+              "type": "string",
+              "pattern": "^H(?:[1-9]|1[0-2])$"
+            }
+          }
+        }
+      ]
+    },
+    "domainAspect": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/contextAspect"
+        },
+        {
+          "type": "object",
+          "required": [
+            "selectedEndpoints"
+          ],
+          "properties": {
+            "selectedEndpoints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 2,
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    },
+    "domain": {
+      "type": "object",
+      "required": [
+        "profileId",
+        "profileVersion",
+        "selectionRules",
+        "houses",
+        "bodies",
+        "angles",
+        "pointIds",
+        "relationIds",
+        "aspects",
+        "report",
+        "origin",
+        "definition"
+      ],
+      "properties": {
+        "profileId": {
+          "type": "string"
+        },
+        "profileVersion": {
+          "type": "string"
+        },
+        "selectionRules": {
+          "$ref": "#/$defs/profileSelectionRules"
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainHouse"
+          },
+          "maxItems": 12
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "placement",
+              "selectionReasons"
+            ],
+            "properties": {
+              "placement": {
+                "$ref": "#/$defs/bodyPlacement"
+              },
+              "selectionReasons": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/selectionReason"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anglePlacement"
+          }
+        },
+        "pointIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "relationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainAspect"
+          }
+        },
+        "report": {
+          "$ref": "#/$defs/report"
+        },
+        "origin": {
+          "enum": [
+            "builtin",
+            "custom"
+          ]
+        },
+        "definition": {
+          "$ref": "#/$defs/profileDefinition"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "rulership",
+        "rulershipRulesVersion",
+        "houseAssignment",
+        "points",
+        "houses",
+        "dispositors",
+        "relations",
+        "aspects",
+        "houseRulerRelations",
+        "advanced",
+        "coverage"
+      ],
+      "properties": {
+        "rulership": {
+          "enum": [
+            "traditional",
+            "modern"
+          ]
+        },
+        "rulershipRulesVersion": {
+          "type": "string"
+        },
+        "houseAssignment": {
+          "const": "eclipticLongitude"
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contextPoint"
+          },
+          "minItems": 26,
+          "maxItems": 26
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainHouse"
+          },
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "dispositors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dispositor"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointRelation"
+          },
+          "minItems": 325,
+          "maxItems": 325
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contextAspect"
+          }
+        },
+        "houseRulerRelations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/houseRulerRelation"
+          },
+          "minItems": 66,
+          "maxItems": 66
+        },
+        "advanced": {
+          "$ref": "#/$defs/advanced"
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "bodies",
+            "angles",
+            "houseCusps",
+            "pointPairs",
+            "aspectMatching"
+          ],
+          "properties": {
+            "bodies": {
+              "const": 10
+            },
+            "angles": {
+              "const": 4
+            },
+            "houseCusps": {
+              "const": 12
+            },
+            "pointPairs": {
+              "const": 325
+            },
+            "aspectMatching": {
+              "const": "configuredRulesOnly"
+            }
+          }
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "chartKind",
+        "subjectCount",
+        "natal",
+        "context",
+        "domains",
+        "customDomains",
+        "profileCatalog"
+      ],
+      "properties": {
+        "chartKind": {
+          "const": "individualNatal"
+        },
+        "subjectCount": {
+          "const": 1
+        },
+        "natal": {
+          "$ref": "#/$defs/natal"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "domains": {
+          "type": "object",
+          "maxProperties": 10,
+          "properties": {
+            "career": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "love": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "relationships": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "family": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "finance": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "identity": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "learning": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "creativity": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "innerLife": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "dailyLife": {
+              "$ref": "#/$defs/builtinDomain"
+            }
+          },
+          "additionalProperties": false
+        },
+        "customDomains": {
+          "type": "object",
+          "maxProperties": 8,
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+            "not": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "career",
+                    "love",
+                    "relationships",
+                    "family",
+                    "finance",
+                    "identity",
+                    "learning",
+                    "creativity",
+                    "innerLife",
+                    "dailyLife",
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                },
+                {
+                  "pattern": "[^a-zA-Z0-9_-]"
+                }
+              ]
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/customDomain"
+          }
+        },
+        "profileCatalog": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/profileDefinition"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "career",
+                      "love",
+                      "relationships",
+                      "family",
+                      "finance",
+                      "identity",
+                      "learning",
+                      "creativity",
+                      "innerLife",
+                      "dailyLife"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "domains"
+          ],
+          "properties": {
+            "domains": {
+              "type": "object",
+              "minProperties": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "customDomains"
+          ],
+          "properties": {
+            "customDomains": {
+              "type": "object",
+              "minProperties": 1
+            }
+          }
+        }
+      ]
+    },
+    "calculation": {
+      "type": "object",
+      "required": [
+        "scope",
+        "provider",
+        "providerVersion",
+        "ephemeris",
+        "zodiac",
+        "coordinates",
+        "positionType",
+        "referenceFrame",
+        "calendar",
+        "inputTimeScale",
+        "houseTimeScale",
+        "planetTimeScale",
+        "timeModel",
+        "julianDayTt",
+        "julianDayUt1",
+        "houseSystem",
+        "angleUnit",
+        "speedUnit",
+        "distanceUnit",
+        "aspectRules",
+        "aspectPreset",
+        "rulership",
+        "domainProfile",
+        "chartKind",
+        "reportProfile",
+        "customProfileCount"
+      ],
+      "properties": {
+        "scope": {
+          "const": "natal-domain-data"
+        },
+        "provider": {
+          "const": "swiss-ephemeris"
+        },
+        "providerVersion": {
+          "type": "string"
+        },
+        "ephemeris": {
+          "const": "moshier"
+        },
+        "zodiac": {
+          "const": "tropical"
+        },
+        "coordinates": {
+          "const": "geocentric"
+        },
+        "positionType": {
+          "const": "apparent"
+        },
+        "referenceFrame": {
+          "const": "ecliptic-of-date"
+        },
+        "calendar": {
+          "const": "gregorian"
+        },
+        "inputTimeScale": {
+          "const": "UTC"
+        },
+        "houseTimeScale": {
+          "const": "UT1"
+        },
+        "planetTimeScale": {
+          "const": "TT"
+        },
+        "timeModel": {
+          "type": "string"
+        },
+        "julianDayTt": {
+          "type": "number"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "houseSystem": {
+          "enum": [
+            "placidus",
+            "wholeSign"
+          ]
+        },
+        "angleUnit": {
+          "const": "degrees"
+        },
+        "speedUnit": {
+          "const": "degrees/day"
+        },
+        "distanceUnit": {
+          "const": "AU"
+        },
+        "aspectRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspectRule"
+          },
+          "maxItems": 16
+        },
+        "aspectPreset": {
+          "enum": [
+            "major",
+            "extended",
+            "custom"
+          ]
+        },
+        "rulership": {
+          "enum": [
+            "traditional",
+            "modern"
+          ]
+        },
+        "domainProfile": {
+          "$ref": "#/$defs/profile"
+        },
+        "chartKind": {
+          "const": "individualNatal"
+        },
+        "reportProfile": {
+          "$ref": "#/$defs/profile"
+        },
+        "customProfileCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "profileSectionDefinition": {
+      "type": "object",
+      "required": [
+        "id",
+        "houses",
+        "bodies",
+        "angles"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ascendant",
+              "midheaven",
+              "descendant",
+              "imumCoeli"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true
+        }
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "houses"
+          ],
+          "properties": {
+            "houses": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "bodies"
+          ],
+          "properties": {
+            "bodies": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "angles"
+          ],
+          "properties": {
+            "angles": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "profileDefinition": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "houses",
+        "bodies",
+        "angles",
+        "sections"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,31}$",
+          "not": {
+            "pattern": "[^a-zA-Z0-9._-]"
+          }
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ascendant",
+              "midheaven",
+              "descendant",
+              "imumCoeli"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "sections": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/profileSectionDefinition"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "houses"
+          ],
+          "properties": {
+            "houses": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "bodies"
+          ],
+          "properties": {
+            "bodies": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "angles"
+          ],
+          "properties": {
+            "angles": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "profileSelectionRules": {
+      "type": "object",
+      "required": [
+        "houses",
+        "bodies",
+        "angles",
+        "aspectSelection"
+      ],
+      "properties": {
+        "houses": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ascendant",
+              "midheaven",
+              "descendant",
+              "imumCoeli"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "aspectSelection": {
+          "const": "atLeastOneSelectedEndpoint"
+        }
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "houses"
+          ],
+          "properties": {
+            "houses": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "bodies"
+          ],
+          "properties": {
+            "bodies": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "angles"
+          ],
+          "properties": {
+            "angles": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "reportSection": {
+      "type": "object",
+      "required": [
+        "id",
+        "selectionRules",
+        "primaryPointIds",
+        "focusHouseIds",
+        "relatedHouseIds",
+        "aspectIndexes",
+        "bodyFactIds",
+        "dispositorChainIds",
+        "receptionIds",
+        "aspectPatternIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "selectionRules": {
+          "$ref": "#/$defs/profileSelectionRules"
+        },
+        "primaryPointIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "focusHouseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^H(?:[1-9]|1[0-2])$"
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "relatedHouseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^H(?:[1-9]|1[0-2])$"
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        },
+        "bodyFactIds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "dispositorChainIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "receptionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "aspectPatternIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "builtinDomain": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/domain"
+        },
+        {
+          "type": "object",
+          "required": [
+            "origin",
+            "definition"
+          ],
+          "properties": {
+            "origin": {
+              "const": "builtin"
+            },
+            "definition": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "enum": [
+                    "career",
+                    "love",
+                    "relationships",
+                    "family",
+                    "finance",
+                    "identity",
+                    "learning",
+                    "creativity",
+                    "innerLife",
+                    "dailyLife"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "customDomain": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/domain"
+        },
+        {
+          "type": "object",
+          "required": [
+            "origin",
+            "definition"
+          ],
+          "properties": {
+            "origin": {
+              "const": "custom"
+            },
+            "definition": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "not": {
+                    "enum": [
+                      "career",
+                      "love",
+                      "relationships",
+                      "family",
+                      "finance",
+                      "identity",
+                      "learning",
+                      "creativity",
+                      "innerLife",
+                      "dailyLife"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

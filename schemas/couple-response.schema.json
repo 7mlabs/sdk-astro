@@ -1,0 +1,3530 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:couple-response:1.0",
+  "title": "Two-person natal synastry and traceable pair reports",
+  "description": "Engine 0.7.0-alpha.1. Optional composite adds chart C and symbolic calculation metadata; omitted preserves the previous synastry shape. Two independent natal charts with subject-local advanced facts, a qualified shared cross context and six builtin pair profiles. New pair objects reject unknown fields. Subject natal/context facts reuse the individual contract. ID/index joins and cross-field consistency are checked by the development validator. Error responses have data:null. External urn references are registered from local repository schemas, never downloaded.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "engineVersion",
+    "data",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "engineVersion": {
+      "type": "string"
+    },
+    "data": {},
+    "calculation": {},
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/data"
+        },
+        "calculation": {
+          "$ref": "#/$defs/calculation"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+          },
+          "maxItems": 0
+        }
+      },
+      "required": [
+        "data",
+        "calculation",
+        "errors"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "composite"
+                ],
+                "properties": {
+                  "composite": {}
+                }
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "calculation"
+            ],
+            "properties": {
+              "calculation": {
+                "type": "object",
+                "required": [
+                  "composite"
+                ],
+                "properties": {
+                  "composite": {}
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "calculation"
+            ],
+            "properties": {
+              "calculation": {
+                "type": "object",
+                "required": [
+                  "composite"
+                ],
+                "properties": {
+                  "composite": {}
+                }
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "composite"
+                ],
+                "properties": {
+                  "composite": {}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data": {
+          "const": null
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/error"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "data",
+        "errors"
+      ]
+    }
+  ],
+  "$defs": {
+    "point": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "body",
+            "angle",
+            "houseCusp"
+          ]
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "house": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "houseNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "isRetrograde": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "localId": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto",
+            "ascendant",
+            "midheaven",
+            "descendant",
+            "imumCoeli",
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed",
+        "chartId",
+        "localId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "body"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "sun",
+                  "moon",
+                  "mercury",
+                  "venus",
+                  "mars",
+                  "jupiter",
+                  "saturn",
+                  "uranus",
+                  "neptune",
+                  "pluto"
+                ]
+              },
+              "house": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 12
+              },
+              "isRetrograde": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "latitude": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "distanceAu": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "localId",
+              "house",
+              "isRetrograde",
+              "latitude",
+              "distanceAu"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "angle"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "ascendant",
+                  "midheaven",
+                  "descendant",
+                  "imumCoeli"
+                ]
+              },
+              "house": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 12
+              },
+              "isRetrograde": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "localId",
+              "house",
+              "isRetrograde"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "houseCusp"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "houseNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              }
+            },
+            "required": [
+              "localId",
+              "houseNumber"
+            ]
+          }
+        }
+      ]
+    },
+    "relation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "point1": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "point2": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "signedDelta": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "point1",
+        "point2",
+        "signedDelta",
+        "separation",
+        "aspectIndexes"
+      ],
+      "additionalProperties": false
+    },
+    "aspect": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "point1": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "point2": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "const": null
+        },
+        "relationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "point1",
+        "point2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying",
+        "relationId"
+      ],
+      "additionalProperties": false
+    },
+    "overlay": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sourceChartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "targetChartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "pointId": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto"
+          ]
+        },
+        "localBodyId": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto"
+          ]
+        },
+        "sourceHouseId": {
+          "type": "string",
+          "enum": [
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "targetHouseId": {
+          "type": "string",
+          "enum": [
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "targetHouseNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "targetRulerPointId": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto"
+          ]
+        },
+        "targetCuspRelationId": {
+          "type": "string"
+        },
+        "targetRulerRelationId": {
+          "type": "string"
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "sourceChartId",
+        "targetChartId",
+        "pointId",
+        "localBodyId",
+        "sourceHouseId",
+        "targetHouseId",
+        "targetHouseNumber",
+        "targetRulerPointId",
+        "targetCuspRelationId",
+        "targetRulerRelationId",
+        "aspectIndexes"
+      ],
+      "additionalProperties": false
+    },
+    "houseRulerRelation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "house1": {
+          "type": "string",
+          "enum": [
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "house2": {
+          "type": "string",
+          "enum": [
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "ruler1": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto"
+          ]
+        },
+        "ruler2": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto"
+          ]
+        },
+        "sameBodyId": {
+          "type": "boolean"
+        },
+        "relationId": {
+          "type": "string"
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "house1",
+        "house2",
+        "ruler1",
+        "ruler2",
+        "sameBodyId",
+        "relationId",
+        "aspectIndexes"
+      ],
+      "additionalProperties": false
+    },
+    "selectionRules": {
+      "type": "object",
+      "required": [
+        "houses",
+        "bodies",
+        "angles",
+        "aspectSelection",
+        "overlaySelection",
+        "houseRulerSelection"
+      ],
+      "properties": {
+        "houses": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "sun",
+              "moon",
+              "mercury",
+              "venus",
+              "mars",
+              "jupiter",
+              "saturn",
+              "uranus",
+              "neptune",
+              "pluto"
+            ]
+          },
+          "maxItems": 10,
+          "uniqueItems": true
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ascendant",
+              "midheaven",
+              "descendant",
+              "imumCoeli"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "aspectSelection": {
+          "const": "atLeastOneSelectedEndpoint"
+        },
+        "overlaySelection": {
+          "const": "selectedSourceBodyOrTargetFocusHouse"
+        },
+        "houseRulerSelection": {
+          "const": "selectedHouseOrRulerEndpoint"
+        }
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "houses"
+          ],
+          "properties": {
+            "houses": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "bodies"
+          ],
+          "properties": {
+            "bodies": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "angles"
+          ],
+          "properties": {
+            "angles": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "localSelection": {
+      "type": "object",
+      "properties": {
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "referenceScope": {
+          "const": "subjectLocalNatal"
+        },
+        "selectionRules": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/profileSelectionRules"
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/domainHouse"
+          },
+          "maxItems": 12
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "placement",
+              "selectionReasons"
+            ],
+            "properties": {
+              "placement": {
+                "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/bodyPlacement"
+              },
+              "selectionReasons": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/selectionReason"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/anglePlacement"
+          }
+        },
+        "pointIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 26,
+          "uniqueItems": true
+        },
+        "relationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/domainAspect"
+          }
+        }
+      },
+      "required": [
+        "chartId",
+        "referenceScope",
+        "selectionRules",
+        "houses",
+        "bodies",
+        "angles",
+        "pointIds",
+        "relationIds",
+        "aspects"
+      ],
+      "additionalProperties": false
+    },
+    "natalFactRef": {
+      "type": "object",
+      "properties": {
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chartId",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "reportSection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+          "not": {
+            "anyOf": [
+              {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              },
+              {
+                "pattern": "[^a-zA-Z0-9_-]"
+              }
+            ]
+          }
+        },
+        "selectionRules": {
+          "$ref": "#/$defs/selectionRules"
+        },
+        "primaryPointIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "focusHouseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "pointIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "houseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "bodyFactIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "aspectIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        },
+        "overlayIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "houseRulerRelationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "dispositorChainRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        },
+        "natalReceptionRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        },
+        "natalAspectPatternRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "selectionRules",
+        "primaryPointIds",
+        "focusHouseIds",
+        "pointIds",
+        "houseIds",
+        "bodyFactIds",
+        "aspectIndexes",
+        "overlayIds",
+        "houseRulerRelationIds",
+        "dispositorChainRefs",
+        "natalReceptionRefs",
+        "natalAspectPatternRefs"
+      ],
+      "additionalProperties": false
+    },
+    "reportPoint": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "body",
+            "angle",
+            "houseCusp"
+          ]
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "signIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "sign": {
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "degreeInSign": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 30
+        },
+        "speed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "house": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "houseNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "isRetrograde": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "distanceAu": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "localId": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto",
+            "ascendant",
+            "midheaven",
+            "descendant",
+            "imumCoeli",
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "longitude",
+        "signIndex",
+        "sign",
+        "degreeInSign",
+        "speed",
+        "chartId",
+        "localId",
+        "primary",
+        "sectionIds"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "body"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "sun",
+                  "moon",
+                  "mercury",
+                  "venus",
+                  "mars",
+                  "jupiter",
+                  "saturn",
+                  "uranus",
+                  "neptune",
+                  "pluto"
+                ]
+              },
+              "house": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 12
+              },
+              "isRetrograde": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "latitude": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "distanceAu": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "localId",
+              "house",
+              "isRetrograde",
+              "latitude",
+              "distanceAu"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "angle"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "ascendant",
+                  "midheaven",
+                  "descendant",
+                  "imumCoeli"
+                ]
+              },
+              "house": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 12
+              },
+              "isRetrograde": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "localId",
+              "house",
+              "isRetrograde"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "houseCusp"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "localId": {
+                "enum": [
+                  "H1",
+                  "H2",
+                  "H3",
+                  "H4",
+                  "H5",
+                  "H6",
+                  "H7",
+                  "H8",
+                  "H9",
+                  "H10",
+                  "H11",
+                  "H12"
+                ]
+              },
+              "houseNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              }
+            },
+            "required": [
+              "localId",
+              "houseNumber"
+            ]
+          }
+        }
+      ]
+    },
+    "reportHouse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "localId": {
+          "enum": [
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+            "H7",
+            "H8",
+            "H9",
+            "H10",
+            "H11",
+            "H12"
+          ]
+        },
+        "house": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/domainHouse"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "chartId",
+        "localId",
+        "house",
+        "primary",
+        "sectionIds"
+      ],
+      "additionalProperties": false
+    },
+    "reportBodyFact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto"
+          ]
+        },
+        "chartId": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "localId": {
+          "enum": [
+            "sun",
+            "moon",
+            "mercury",
+            "venus",
+            "mars",
+            "jupiter",
+            "saturn",
+            "uranus",
+            "neptune",
+            "pluto"
+          ]
+        },
+        "facts": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/bodyState"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "chartId",
+        "localId",
+        "facts",
+        "primary",
+        "sectionIds"
+      ],
+      "additionalProperties": false
+    },
+    "domainAspect": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "point1": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "point2": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "const": null
+        },
+        "relationId": {
+          "type": "string"
+        },
+        "selectedEndpoints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "index",
+        "point1",
+        "point2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying",
+        "relationId",
+        "selectedEndpoints"
+      ],
+      "additionalProperties": false
+    },
+    "reportAspect": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "point1": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "point2": {
+          "type": "string",
+          "enum": [
+            "A:sun",
+            "A:moon",
+            "A:mercury",
+            "A:venus",
+            "A:mars",
+            "A:jupiter",
+            "A:saturn",
+            "A:uranus",
+            "A:neptune",
+            "A:pluto",
+            "A:ascendant",
+            "A:midheaven",
+            "A:descendant",
+            "A:imumCoeli",
+            "A:H1",
+            "A:H2",
+            "A:H3",
+            "A:H4",
+            "A:H5",
+            "A:H6",
+            "A:H7",
+            "A:H8",
+            "A:H9",
+            "A:H10",
+            "A:H11",
+            "A:H12",
+            "B:sun",
+            "B:moon",
+            "B:mercury",
+            "B:venus",
+            "B:mars",
+            "B:jupiter",
+            "B:saturn",
+            "B:uranus",
+            "B:neptune",
+            "B:pluto",
+            "B:ascendant",
+            "B:midheaven",
+            "B:descendant",
+            "B:imumCoeli",
+            "B:H1",
+            "B:H2",
+            "B:H3",
+            "B:H4",
+            "B:H5",
+            "B:H6",
+            "B:H7",
+            "B:H8",
+            "B:H9",
+            "B:H10",
+            "B:H11",
+            "B:H12"
+          ]
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "separation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "orb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxOrb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "applying": {
+          "const": null
+        },
+        "relationId": {
+          "type": "string"
+        },
+        "selectedEndpoints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "primaryContact": {
+          "type": "boolean"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "index",
+        "point1",
+        "point2",
+        "angle",
+        "separation",
+        "orb",
+        "maxOrb",
+        "applying",
+        "relationId",
+        "selectedEndpoints",
+        "primaryContact",
+        "sectionIds"
+      ],
+      "additionalProperties": false
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "profileId": {
+          "const": "sevenmlabs-couple-report"
+        },
+        "profileVersion": {
+          "const": "1.0"
+        },
+        "primaryPointIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportPoint"
+          }
+        },
+        "houses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportHouse"
+          }
+        },
+        "bodyFacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportBodyFact"
+          }
+        },
+        "dispositorChainRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        },
+        "natalReceptionRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        },
+        "natalAspectPatternRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/natalFactRef"
+          },
+          "uniqueItems": true
+        },
+        "aspectFacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportAspect"
+          }
+        },
+        "overlayIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "houseRulerRelationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportSection"
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "pointCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "houseCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bodyFactCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "primaryAspectCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "aspectCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "sectionCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "localAdvancedScope": {
+              "const": "subjectNatalOnly"
+            },
+            "sectionSelection": {
+              "const": "independentSymmetricSelectorsSharedNatals"
+            }
+          },
+          "required": [
+            "pointCount",
+            "houseCount",
+            "bodyFactCount",
+            "primaryAspectCount",
+            "aspectCount",
+            "sectionCount",
+            "localAdvancedScope",
+            "sectionSelection"
+          ],
+          "additionalProperties": false
+        },
+        "chartKind": {
+          "const": "coupleSynastry"
+        },
+        "selectionPolicy": {
+          "const": "primaryProfileWithTraceableSupport"
+        }
+      },
+      "required": [
+        "profileId",
+        "profileVersion",
+        "primaryPointIds",
+        "points",
+        "houses",
+        "bodyFacts",
+        "dispositorChainRefs",
+        "natalReceptionRefs",
+        "natalAspectPatternRefs",
+        "aspectFacts",
+        "overlayIds",
+        "houseRulerRelationIds",
+        "sections",
+        "coverage",
+        "chartKind",
+        "selectionPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "domain": {
+      "type": "object",
+      "properties": {
+        "profileId": {
+          "type": "string"
+        },
+        "profileVersion": {
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "builtin",
+            "custom"
+          ]
+        },
+        "definition": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/profileDefinition"
+        },
+        "selectionRules": {
+          "$ref": "#/$defs/selectionRules"
+        },
+        "selections": {
+          "type": "object",
+          "properties": {
+            "A": {
+              "$ref": "#/$defs/localSelection"
+            },
+            "B": {
+              "$ref": "#/$defs/localSelection"
+            }
+          },
+          "required": [
+            "A",
+            "B"
+          ],
+          "additionalProperties": false
+        },
+        "pointIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A:sun",
+              "A:moon",
+              "A:mercury",
+              "A:venus",
+              "A:mars",
+              "A:jupiter",
+              "A:saturn",
+              "A:uranus",
+              "A:neptune",
+              "A:pluto",
+              "A:ascendant",
+              "A:midheaven",
+              "A:descendant",
+              "A:imumCoeli",
+              "A:H1",
+              "A:H2",
+              "A:H3",
+              "A:H4",
+              "A:H5",
+              "A:H6",
+              "A:H7",
+              "A:H8",
+              "A:H9",
+              "A:H10",
+              "A:H11",
+              "A:H12",
+              "B:sun",
+              "B:moon",
+              "B:mercury",
+              "B:venus",
+              "B:mars",
+              "B:jupiter",
+              "B:saturn",
+              "B:uranus",
+              "B:neptune",
+              "B:pluto",
+              "B:ascendant",
+              "B:midheaven",
+              "B:descendant",
+              "B:imumCoeli",
+              "B:H1",
+              "B:H2",
+              "B:H3",
+              "B:H4",
+              "B:H5",
+              "B:H6",
+              "B:H7",
+              "B:H8",
+              "B:H9",
+              "B:H10",
+              "B:H11",
+              "B:H12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "relationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainAspect"
+          }
+        },
+        "overlayIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "houseRulerRelationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "report": {
+          "$ref": "#/$defs/report"
+        }
+      },
+      "required": [
+        "profileId",
+        "profileVersion",
+        "origin",
+        "definition",
+        "selectionRules",
+        "selections",
+        "pointIds",
+        "relationIds",
+        "aspects",
+        "overlayIds",
+        "houseRulerRelationIds",
+        "report"
+      ],
+      "additionalProperties": false
+    },
+    "builtinDomain": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/domain"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "const": "builtin"
+            },
+            "profileId": {
+              "const": "sevenmlabs-couple-selection"
+            },
+            "profileVersion": {
+              "const": "1.0"
+            }
+          },
+          "required": [
+            "origin",
+            "profileId",
+            "profileVersion"
+          ]
+        }
+      ]
+    },
+    "customDomain": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/domain"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "const": "custom"
+            }
+          },
+          "required": [
+            "origin"
+          ]
+        }
+      ]
+    },
+    "basicNatalCalculation": {
+      "type": "object",
+      "required": [
+        "scope",
+        "provider",
+        "providerVersion",
+        "ephemeris",
+        "zodiac",
+        "coordinates",
+        "positionType",
+        "referenceFrame",
+        "calendar",
+        "inputTimeScale",
+        "houseTimeScale",
+        "planetTimeScale",
+        "timeModel",
+        "julianDayTt",
+        "julianDayUt1",
+        "houseSystem",
+        "angleUnit",
+        "speedUnit",
+        "distanceUnit",
+        "aspectRules"
+      ],
+      "properties": {
+        "scope": {
+          "const": "basic-natal"
+        },
+        "provider": {
+          "const": "swiss-ephemeris"
+        },
+        "providerVersion": {
+          "type": "string"
+        },
+        "ephemeris": {
+          "const": "moshier"
+        },
+        "zodiac": {
+          "const": "tropical"
+        },
+        "coordinates": {
+          "const": "geocentric"
+        },
+        "positionType": {
+          "const": "apparent"
+        },
+        "referenceFrame": {
+          "const": "ecliptic-of-date"
+        },
+        "calendar": {
+          "const": "gregorian"
+        },
+        "inputTimeScale": {
+          "const": "UTC"
+        },
+        "houseTimeScale": {
+          "const": "UT1"
+        },
+        "planetTimeScale": {
+          "const": "TT"
+        },
+        "timeModel": {
+          "type": "string"
+        },
+        "julianDayTt": {
+          "type": "number"
+        },
+        "julianDayUt1": {
+          "type": "number"
+        },
+        "houseSystem": {
+          "enum": [
+            "placidus",
+            "wholeSign"
+          ]
+        },
+        "angleUnit": {
+          "const": "degrees"
+        },
+        "speedUnit": {
+          "const": "degrees/day"
+        },
+        "distanceUnit": {
+          "const": "AU"
+        },
+        "aspectRules": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/aspectRule"
+          },
+          "maxItems": 16
+        }
+      },
+      "additionalProperties": false
+    },
+    "calculation": {
+      "type": "object",
+      "required": [
+        "scope",
+        "provider",
+        "providerVersion",
+        "ephemeris",
+        "zodiac",
+        "coordinates",
+        "positionType",
+        "referenceFrame",
+        "calendar",
+        "inputTimeScale",
+        "houseTimeScale",
+        "planetTimeScale",
+        "timeModel",
+        "angleUnit",
+        "speedUnit",
+        "distanceUnit",
+        "aspectRules",
+        "chartKind",
+        "aspectPreset",
+        "rulership",
+        "domainProfile",
+        "reportProfile",
+        "customProfileCount",
+        "subjectCalculations"
+      ],
+      "properties": {
+        "scope": {
+          "const": "couple-synastry-data"
+        },
+        "provider": {
+          "const": "swiss-ephemeris"
+        },
+        "providerVersion": {
+          "type": "string"
+        },
+        "ephemeris": {
+          "const": "moshier"
+        },
+        "zodiac": {
+          "const": "tropical"
+        },
+        "coordinates": {
+          "const": "geocentric"
+        },
+        "positionType": {
+          "const": "apparent"
+        },
+        "referenceFrame": {
+          "const": "ecliptic-of-date"
+        },
+        "calendar": {
+          "const": "gregorian"
+        },
+        "inputTimeScale": {
+          "const": "UTC"
+        },
+        "houseTimeScale": {
+          "const": "UT1"
+        },
+        "planetTimeScale": {
+          "const": "TT"
+        },
+        "timeModel": {
+          "type": "string"
+        },
+        "angleUnit": {
+          "const": "degrees"
+        },
+        "speedUnit": {
+          "const": "degrees/day"
+        },
+        "distanceUnit": {
+          "const": "AU"
+        },
+        "aspectRules": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/aspectRule"
+          },
+          "maxItems": 16
+        },
+        "chartKind": {
+          "const": "coupleSynastry"
+        },
+        "aspectPreset": {
+          "enum": [
+            "major",
+            "extended",
+            "custom"
+          ]
+        },
+        "rulership": {
+          "enum": [
+            "traditional",
+            "modern"
+          ]
+        },
+        "domainProfile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "sevenmlabs-couple-selection"
+            },
+            "version": {
+              "const": "1.0"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "reportProfile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "sevenmlabs-couple-report"
+            },
+            "version": {
+              "const": "1.0"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "customProfileCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "subjectCalculations": {
+          "type": "object",
+          "properties": {
+            "A": {
+              "type": "object",
+              "properties": {
+                "julianDayTt": {
+                  "type": "number"
+                },
+                "julianDayUt1": {
+                  "type": "number"
+                },
+                "houseSystem": {
+                  "enum": [
+                    "placidus",
+                    "wholeSign"
+                  ]
+                }
+              },
+              "required": [
+                "julianDayTt",
+                "julianDayUt1",
+                "houseSystem"
+              ],
+              "additionalProperties": false
+            },
+            "B": {
+              "type": "object",
+              "properties": {
+                "julianDayTt": {
+                  "type": "number"
+                },
+                "julianDayUt1": {
+                  "type": "number"
+                },
+                "houseSystem": {
+                  "enum": [
+                    "placidus",
+                    "wholeSign"
+                  ]
+                }
+              },
+              "required": [
+                "julianDayTt",
+                "julianDayUt1",
+                "houseSystem"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "A",
+            "B"
+          ],
+          "additionalProperties": false
+        },
+        "composite": {
+          "$ref": "urn:7mlabs:astrology:composite-response:1.0#/$defs/calculation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "natal": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/natal"
+        },
+        "context": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/context"
+        },
+        "calculation": {
+          "$ref": "#/$defs/basicNatalCalculation"
+        }
+      },
+      "required": [
+        "id",
+        "natal",
+        "context",
+        "calculation"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/point"
+          },
+          "minItems": 52,
+          "maxItems": 52
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relation"
+          },
+          "minItems": 676,
+          "maxItems": 676
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aspect"
+          }
+        },
+        "overlaysAtoB": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/overlay"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "overlaysBtoA": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/overlay"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "houseRulerRelations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/houseRulerRelation"
+          },
+          "minItems": 144,
+          "maxItems": 144
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "subjects": {
+              "const": 2
+            },
+            "points": {
+              "const": 52
+            },
+            "pointPairs": {
+              "const": 676
+            },
+            "bodyBodyPairs": {
+              "const": 100
+            },
+            "overlays": {
+              "const": 20
+            },
+            "houseRulerRelations": {
+              "const": 144
+            },
+            "aspectMatching": {
+              "const": "configuredRulesOnly"
+            },
+            "houseAssignment": {
+              "const": "eclipticLongitude"
+            },
+            "crossApplying": {
+              "const": "undefinedForDifferentBirthInstants"
+            }
+          },
+          "required": [
+            "subjects",
+            "points",
+            "pointPairs",
+            "bodyBodyPairs",
+            "overlays",
+            "houseRulerRelations",
+            "aspectMatching",
+            "houseAssignment",
+            "crossApplying"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "points",
+        "relations",
+        "aspects",
+        "overlaysAtoB",
+        "overlaysBtoA",
+        "houseRulerRelations",
+        "coverage"
+      ],
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "chartKind": {
+          "const": "coupleSynastry"
+        },
+        "subjectCount": {
+          "const": 2
+        },
+        "subjects": {
+          "type": "object",
+          "properties": {
+            "A": {
+              "$ref": "#/$defs/subject"
+            },
+            "B": {
+              "$ref": "#/$defs/subject"
+            }
+          },
+          "required": [
+            "A",
+            "B"
+          ],
+          "additionalProperties": false
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "domains": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attraction": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "communication": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "emotionalConnection": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "longTerm": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "sharedResources": {
+              "$ref": "#/$defs/builtinDomain"
+            },
+            "homeFamily": {
+              "$ref": "#/$defs/builtinDomain"
+            }
+          }
+        },
+        "customDomains": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_-]{0,63}$",
+            "not": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__",
+                    "attraction",
+                    "communication",
+                    "emotionalConnection",
+                    "longTerm",
+                    "sharedResources",
+                    "homeFamily",
+                    "career",
+                    "love",
+                    "relationships",
+                    "family",
+                    "finance",
+                    "identity",
+                    "learning",
+                    "creativity",
+                    "innerLife",
+                    "dailyLife"
+                  ]
+                },
+                {
+                  "pattern": "[^a-zA-Z0-9_-]"
+                }
+              ]
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/customDomain"
+          },
+          "maxProperties": 8
+        },
+        "profileCatalog": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:7mlabs:astrology:natal-domains-response:1.0#/$defs/profileDefinition"
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "composite": {
+          "$ref": "urn:7mlabs:astrology:composite-response:1.0#/$defs/composite"
+        },
+        "chartCount": {
+          "const": 3
+        }
+      },
+      "required": [
+        "chartKind",
+        "subjectCount",
+        "subjects",
+        "context",
+        "domains",
+        "customDomains",
+        "profileCatalog"
+      ],
+      "additionalProperties": false,
+      "dependentRequired": {
+        "composite": [
+          "chartCount"
+        ],
+        "chartCount": [
+          "composite"
+        ]
+      }
+    }
+  }
+}

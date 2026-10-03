@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sevenmlabs-astrology"
+version = "0.10.0a1"
+description = "Offline natal, synastry, composite, forecasts and astronomical event data using a shared native engine"
+requires-python = ">=3.10"
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/7mlabs/sdk-astro"
+Documentation = "https://sevenmlabs-packages.velikho.chatgpt.site/docs/astro/"
+Issues = "https://github.com/7mlabs/sdk-astro/issues"
+
+[tool.setuptools.package-data]
+sevenmlabs_astrology = ["native/*/*", "third-party/*"]

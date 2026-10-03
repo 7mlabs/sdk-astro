@@ -1,0 +1,105 @@
+.astro-result {
+  --astro-text:var(--text,#e7e9ef);--astro-muted:var(--muted,#98a4b2);
+  --astro-line:var(--line,#26343d);--astro-tick:#435864;--astro-accent:var(--accent,#b6f4d0);
+  --astro-bg:var(--bg,#090c10);--astro-surface:var(--surface,#0e141a);
+  color:var(--astro-text);font-family:var(--font,'Be Vietnam Pro',Arial,sans-serif);font-size:14px;line-height:1.6;min-width:0;
+}
+.astro-result *, .astro-result *::before,.astro-result *::after {box-sizing:border-box}
+.astro-result button,.astro-result select {font:inherit}
+.astro-result button {cursor:pointer}
+.astro-result :focus-visible {outline:2px solid var(--astro-accent);outline-offset:4px}
+.astro-tabs {display:flex;gap:27px;border-bottom:1px solid var(--astro-line);overflow-x:auto;scrollbar-width:thin;padding:0 22px}
+.astro-tab {position:relative;flex-shrink:0;padding:20px 0 15px;border:0;background:none;color:var(--astro-muted);font-size:14px!important;white-space:nowrap}
+.astro-tab.is-active {color:var(--astro-accent)}
+.astro-tab.is-active::after {position:absolute;content:'';bottom:-1px;left:0;right:0;height:2px;background:var(--astro-accent)}
+.astro-tab:hover,.astro-chart-choice:hover {color:var(--astro-text)}
+.astro-tab-panel {padding:22px;min-width:0}
+.astro-tab-panel:has(.astro-chart-surface) {padding:12px 22px 0}
+.astro-chart-choices {display:flex;flex-wrap:wrap;gap:9px;padding:17px 22px 0}
+.astro-chart-choice {padding:5px 10px;color:var(--astro-muted);border:1px solid var(--astro-line);border-radius:4px;background:transparent;font-size:12px!important}
+.astro-chart-choice.is-active {border-color:#4b7b66;color:var(--astro-accent);background:#102019}
+.astro-chart-layout {display:grid;grid-template-columns:minmax(0,1fr) 290px;align-items:center;gap:16px;min-height:530px}
+.astro-wheel-area {min-width:0;text-align:center}
+.astro-result .astro-wheel {display:block;width:100%;max-width:640px;height:auto;margin:0 auto;overflow:visible;flex-shrink:1}
+.astro-wheel-sign {font-family:'Arial Unicode MS','Segoe UI Symbol',sans-serif;font-size:28px;font-weight:400}
+.astro-wheel-body {font-family:'Arial Unicode MS','Segoe UI Symbol',sans-serif;font-size:25px;font-weight:400}
+.astro-wheel-house {font-family:var(--mono,monospace);font-size:10px}
+.astro-wheel-angle {font-family:var(--mono,monospace);font-size:11px;letter-spacing:.7px}
+.astro-wheel-chart-label {font-family:var(--mono,monospace);font-size:7px}
+.astro-wheel-note {font-size:12px;color:var(--astro-muted);margin:0 10px 10px;line-height:1.5}
+.astro-planet-rail {border-left:1px solid var(--astro-line);padding-left:20px;align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;margin:20px 0}
+.astro-planet-highlight {padding:13px 0;display:grid;grid-template-columns:minmax(100px,1fr) minmax(75px,1fr) auto;align-items:center;gap:7px}
+.astro-planet-highlight:first-child {padding-top:0}
+.astro-planet-highlight:nth-child(4) {border-bottom:1px solid var(--astro-line);padding-bottom:18px;margin-bottom:4px}
+.astro-point-name {display:inline-flex;gap:9px;align-items:center;white-space:nowrap}
+.astro-glyph {font-family:'Arial Unicode MS','Segoe UI Symbol',sans-serif;font-size:21px;line-height:1.1;min-width:18px;text-align:center}
+.astro-planet-position {display:contents;font-size:14px}
+.astro-planet-position strong {font-weight:500}
+.astro-planet-position .astro-numeric {font-size:12px}
+.astro-planet-highlight small {display:block;padding-left:27px;font-size:12px}
+.astro-planet-compact {display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:16px;font-size:14px}
+.astro-planet-compact .astro-glyph {font-size:18px}
+.astro-planet-compact .astro-point-name {gap:9px}
+.astro-planet-compact .astro-numeric {font-size:12px;color:var(--astro-muted)}
+.astro-chart-metrics {display:flex;align-items:center;flex-wrap:wrap;gap:18px;border-top:1px solid var(--astro-line);padding:16px 0;font-size:12px}
+.astro-metric {color:var(--astro-muted);white-space:nowrap}.astro-metric strong {color:var(--astro-text);font-weight:500}
+.astro-chart-metrics>.astro-muted {margin-left:auto;font-size:12px}
+.astro-muted {color:var(--astro-muted)}
+.astro-numeric {font-family:var(--mono,'JetBrains Mono',monospace);font-variant-numeric:tabular-nums;white-space:nowrap}
+.astro-section-heading {margin:0 0 17px}.astro-section-heading h3 {font-size:16px;line-height:1.4;font-weight:500;margin:0}
+.astro-section-heading p {font-size:12px;line-height:1.7;margin:7px 0 0}
+.astro-table-wrap {max-width:100%;overflow-x:auto;scrollbar-width:thin;margin-bottom:26px}
+.astro-table {border-collapse:collapse;width:100%;text-align:left;white-space:nowrap;font-size:14px}
+.astro-table th {color:var(--astro-muted);font-size:12px;font-weight:400;letter-spacing:.2px;padding:10px 12px;border-bottom:1px solid var(--astro-line)}
+.astro-table td {padding:13px 12px;border-bottom:1px solid var(--astro-line);vertical-align:top}
+.astro-table th:first-child,.astro-table td:first-child {padding-left:0}
+.astro-table tbody tr:hover {background:color-mix(in srgb,var(--astro-surface),transparent 25%)}
+.astro-table .astro-point-name {gap:8px}.astro-table .astro-glyph {font-size:18px}
+.astro-table-more {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+.astro-small-button {border:1px solid var(--astro-line);border-radius:4px;color:var(--astro-accent);background:transparent;padding:6px 11px;font-size:12px!important}
+.astro-small-button:hover {border-color:var(--astro-accent)}
+.astro-empty {font-size:12px;color:var(--astro-muted);padding:25px 0;margin:0}
+.astro-filter-row {display:flex;flex-wrap:wrap;gap:18px;margin:0 0 28px}
+.astro-select-label {display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--astro-muted);min-width:190px;max-width:100%}
+.astro-select {padding:9px 35px 9px 12px;border:1px solid var(--astro-line);border-radius:4px;color:var(--astro-text);background:var(--astro-surface);max-width:100%;font-size:14px!important}
+.astro-domain-summary {border-left:2px solid #527869;padding:1px 0 1px 15px;margin:0 0 27px;font-size:12px;color:var(--astro-muted)}
+.astro-domain-summary p {margin:7px 0;overflow-wrap:anywhere}
+.astro-advanced {margin-bottom:27px}
+.astro-evidence {border-bottom:1px solid var(--astro-line);padding:12px 0;font-size:12px;max-width:100%;white-space:normal}
+.astro-evidence summary {color:var(--astro-muted);cursor:pointer;overflow-wrap:anywhere}
+.astro-evidence[open] summary {color:var(--astro-accent)}
+.astro-table .astro-evidence {border:0;padding:0;min-width:50px}
+.astro-json {background:var(--astro-surface);color:#bdcbd6;border:1px solid var(--astro-line);border-radius:4px;padding:18px;font-family:var(--mono,monospace);font-size:11px;line-height:1.65;max-height:540px;max-width:100%;overflow:auto;tab-size:2}
+.astro-json-note {font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+.astro-value-list {display:grid;grid-template-columns:1fr 1fr;max-width:600px;font-size:13px;margin:20px 0 30px}
+.astro-value-list dt,.astro-value-list dd {padding:12px 0;border-bottom:1px solid var(--astro-line);margin:0;overflow-wrap:anywhere}
+.astro-value-list dt {color:var(--astro-muted)}
+.astro-value {display:block;color:var(--astro-accent);font-family:var(--mono,monospace);font-size:30px;padding:24px 0}
+.astro-event-counts {display:flex;flex-wrap:wrap;gap:12px 20px;padding-bottom:25px;font-size:11px}
+.astro-engine-error {padding:20px;color:#f0a6a0;border-left:2px solid #b66561;background:#241715;font-size:12px;overflow-wrap:anywhere}
+.astro-engine-error p {margin:7px 0}
+.astro-warning {padding:8px 22px;color:#d9cfa0;font-size:11px}
+.astro-calculation-notes {margin:0 22px;border-top:1px solid var(--astro-line);font-size:12px;padding:13px 0}
+.astro-calculation-notes summary {color:var(--astro-muted);cursor:pointer}.astro-calculation-notes .astro-warning {padding:4px 0;font-size:12px}
+.astro-loading {padding:30px;color:var(--muted,#98a4b2);font-size:13px}
+@media(max-width:1000px) {
+  .astro-chart-layout {grid-template-columns:minmax(0,1fr) 265px;gap:8px;min-height:470px}
+  .astro-planet-rail {padding-left:17px}.astro-planet-highlight {grid-template-columns:minmax(95px,1fr) minmax(66px,1fr) auto;gap:5px}
+  .astro-planet-compact .astro-numeric {font-size:12px}
+}
+@media(max-width:720px) {
+  .astro-tabs {gap:20px;padding:0 14px}.astro-tab {padding:16px 0 13px}
+  .astro-tab-panel {padding:20px 14px}.astro-tab-panel:has(.astro-chart-surface){padding:10px 10px 0}
+  .astro-chart-choices {padding:14px 14px 0}
+  .astro-chart-layout {display:block;min-height:0}
+  .astro-planet-rail {display:grid;grid-template-columns:1fr 1fr;gap:0 18px;border-left:0;border-top:1px solid var(--astro-line);padding:10px 4px;margin:0}
+  .astro-planet-highlight:first-child {padding-top:13px}.astro-planet-highlight {display:flex;flex-direction:column;align-items:start;padding:13px 0;border-bottom:1px solid var(--astro-line);gap:6px}
+  .astro-planet-highlight:nth-child(4) {padding-bottom:13px;margin-bottom:0}
+  .astro-planet-highlight .astro-point-name {font-size:14px}
+  .astro-planet-position {display:flex;flex-wrap:wrap;font-size:14px;padding-left:0;gap:6px}.astro-planet-position .astro-numeric {font-size:12px}
+  .astro-planet-compact {flex-wrap:wrap;justify-content:start;align-content:start;padding:10px 0;gap:5px}
+  .astro-planet-compact .astro-numeric {width:100%;font-size:12px;padding-left:27px}
+  .astro-chart-metrics {gap:12px;padding:14px 4px}.astro-chart-metrics>.astro-muted {margin-left:0;width:100%;line-height:1.7}
+  .astro-filter-row {gap:14px}.astro-select-label {min-width:0;flex:1 1 160px}
+  .astro-json {padding:12px;font-size:10px}.astro-value-list {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px}
+}

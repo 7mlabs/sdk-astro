@@ -1,0 +1,33 @@
+{
+  "name": "@7mlabs/astrology",
+  "version": "0.10.0-alpha.1",
+  "description": "Offline natal, synastry, composite, forecasts and astronomical event data using a shared native engine",
+  "main": "index.cjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.cjs"
+    }
+  },
+  "files": [
+    "index.cjs",
+    "index.d.ts",
+    "native",
+    "README.md",
+    "third-party"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7mlabs/sdk-astro.git",
+    "directory": "bindings/node"
+  },
+  "homepage": "https://sevenmlabs-packages.velikho.chatgpt.site/docs/astro/",
+  "bugs": {
+    "url": "https://github.com/7mlabs/sdk-astro/issues"
+  }
+}

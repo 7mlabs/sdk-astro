@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:forecast-request:1.0",
+  "title": "Individual natal forecast raw data for a day, month or year",
+  "description": "One strict UTC birth input, a fixed-offset civil period and bounded event search. Snapshot targets use fixed natal points. Calendar and UTC-window limits, unique profile/section IDs and event/contact search budgets are verified by core.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operation",
+    "birth",
+    "period"
+  ],
+  "properties": {
+    "operation": {
+      "const": "forecast"
+    },
+    "period": {
+      "$ref": "#/$defs/period"
+    },
+    "bodies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "sun",
+          "moon",
+          "mercury",
+          "venus",
+          "mars",
+          "jupiter",
+          "saturn",
+          "uranus",
+          "neptune",
+          "pluto"
+        ]
+      }
+    },
+    "eventTypes": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ingress",
+          "station",
+          "lunarPhase",
+          "planetaryAspect",
+          "solarEclipse",
+          "lunarEclipse"
+        ]
+      }
+    },
+    "aspectPreset": {
+      "enum": [
+        "major",
+        "extended"
+      ],
+      "default": "major"
+    },
+    "aspectRules": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/aspectRules"
+    },
+    "birth": {
+      "$ref": "#/$defs/birthInput"
+    },
+    "includeNatalTransits": {
+      "type": "boolean",
+      "default": true
+    },
+    "domains": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/domains"
+    },
+    "rulership": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/rulership"
+    },
+    "customProfiles": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/customProfiles"
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "required": [
+          "aspectRules",
+          "aspectPreset"
+        ],
+        "type": "object",
+        "properties": {
+          "aspectRules": {},
+          "aspectPreset": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": [
+          "domains"
+        ],
+        "properties": {
+          "domains": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "required": [
+          "customProfiles"
+        ],
+        "properties": {
+          "customProfiles": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "period": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "day"
+            },
+            "year": {
+              "type": "integer",
+              "minimum": 1800,
+              "maximum": 2399
+            },
+            "utcOffsetMinutes": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "month": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "day": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            }
+          },
+          "required": [
+            "kind",
+            "year",
+            "month",
+            "day"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "month"
+            },
+            "year": {
+              "type": "integer",
+              "minimum": 1800,
+              "maximum": 2399
+            },
+            "utcOffsetMinutes": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "month": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          },
+          "required": [
+            "kind",
+            "year",
+            "month"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "year"
+            },
+            "year": {
+              "type": "integer",
+              "minimum": 1800,
+              "maximum": 2399
+            },
+            "utcOffsetMinutes": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            }
+          },
+          "required": [
+            "kind",
+            "year"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "birthInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "utc",
+        "location"
+      ],
+      "properties": {
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/utc"
+        },
+        "location": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/location"
+        },
+        "houseSystem": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/houseSystem"
+        }
+      }
+    }
+  }
+}

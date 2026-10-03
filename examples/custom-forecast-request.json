@@ -1,0 +1,56 @@
+{
+  "operation": "forecast",
+  "birth": {
+    "utc": {
+      "year": 2000,
+      "month": 1,
+      "day": 1,
+      "hour": 12,
+      "minute": 0
+    },
+    "location": {
+      "latitude": 10.8231,
+      "longitude": 106.6297
+    },
+    "houseSystem": "placidus"
+  },
+  "period": {
+    "kind": "month",
+    "year": 2026,
+    "month": 3,
+    "utcOffsetMinutes": 420
+  },
+  "bodies": [
+    "mercury",
+    "venus",
+    "mars"
+  ],
+  "domains": [],
+  "customProfiles": [
+    {
+      "id": "sharedLearning",
+      "houses": [
+        3,
+        9
+      ],
+      "bodies": [
+        "mercury",
+        "jupiter"
+      ],
+      "sections": [
+        {
+          "id": "resources",
+          "houses": [
+            2,
+            8
+          ],
+          "bodies": [
+            "venus",
+            "saturn"
+          ]
+        }
+      ]
+    }
+  ],
+  "rulership": "modern"
+}

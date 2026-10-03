@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:compression-request:1.0",
+  "title": "Offline engine payload context preparation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload"],
+  "properties": {
+    "payload": { "$ref": "#/$defs/engineEnvelope" },
+    "options": { "$ref": "#/$defs/options" }
+  },
+  "$defs": {
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "enum": ["compact", "focused", "budgeted"], "default": "compact" },
+        "domains": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "sections": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "maxBytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
+        "maxTokens": {
+          "type": "integer", "minimum": 1, "maximum": 268435456,
+          "description": "Budget against the declared conservative UTF-8 byte estimate; not an exact model tokenizer count."
+        }
+      },
+      "allOf": [{
+        "if": { "required": ["mode"], "properties": { "mode": { "enum": ["focused", "budgeted"] } } },
+        "then": {},
+        "else": { "properties": { "domains": { "type": "array", "maxItems": 0 }, "sections": { "type": "array", "maxItems": 0 } } }
+      }]
+    },
+    "engineEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "engineVersion", "data", "warnings", "errors"],
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "engineVersion": { "type": "string" },
+        "calculation": {},
+        "data": {},
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "errors": { "type": "array", "items": { "$ref": "#/$defs/error" } }
+      }
+    },
+    "error": {
+      "type": "object", "additionalProperties": false, "required": ["code", "message"],
+      "properties": { "code": { "type": "string" }, "message": { "type": "string" } }
+    }
+  }
+}

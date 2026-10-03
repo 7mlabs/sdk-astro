@@ -1,0 +1,12 @@
+{
+  "name": "sevenmlabs-astrology-frontend-host-example",
+  "version": "0.10.0-alpha.1",
+  "private": true,
+  "description": "Embeddable Astro UI and local native worker host; no browser WASM",
+  "main": "bridge.cjs",
+  "exports": { ".": "./bridge.cjs", "./http": "./local-http.cjs", "./host": "./host.cjs",
+    "./ui": "./ui/index.mjs", "./ui/styles.css": "./ui/styles.css" },
+  "scripts": { "start": "node host.cjs", "test": "node smoke.cjs && node http-smoke.cjs" },
+  "engines": { "node": ">=18" },
+  "peerDependencies": { "@7mlabs/astrology": "0.10.0-alpha.1" }
+}

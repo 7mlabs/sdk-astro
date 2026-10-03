@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:couple-request:1.0",
+  "title": "Two-person natal synastry report request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operation",
+    "personA",
+    "personB"
+  ],
+  "properties": {
+    "operation": {
+      "const": "couple"
+    },
+    "personA": {
+      "$ref": "#/$defs/birthInput"
+    },
+    "personB": {
+      "$ref": "#/$defs/birthInput"
+    },
+    "aspectRules": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/aspectRules"
+    },
+    "aspectPreset": {
+      "enum": [
+        "major",
+        "extended"
+      ],
+      "default": "extended"
+    },
+    "rulership": {
+      "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/rulership"
+    },
+    "domains": {
+      "type": "array",
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "attraction",
+          "communication",
+          "emotionalConnection",
+          "longTerm",
+          "sharedResources",
+          "homeFamily"
+        ]
+      },
+      "description": "Absent selects all six builtin pair profiles. Empty requires nonempty customProfiles."
+    },
+    "customProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/customProfile"
+      }
+    },
+    "composite": {
+      "$ref": "#/$defs/compositeOptions"
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "required": [
+          "aspectRules",
+          "aspectPreset"
+        ],
+        "type": "object",
+        "properties": {
+          "aspectRules": {},
+          "aspectPreset": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": [
+          "domains"
+        ],
+        "properties": {
+          "domains": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "required": [
+          "customProfiles"
+        ],
+        "properties": {
+          "customProfiles": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "birthInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "utc",
+        "location"
+      ],
+      "properties": {
+        "utc": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/utc"
+        },
+        "location": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/location"
+        },
+        "houseSystem": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/houseSystem"
+        }
+      }
+    },
+    "customProfile": {
+      "allOf": [
+        {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/$defs/customProfile"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "not": {
+                "enum": [
+                  "attraction",
+                  "communication",
+                  "emotionalConnection",
+                  "longTerm",
+                  "sharedResources",
+                  "homeFamily"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "compositeOptions": {
+      "type": "object",
+      "properties": {
+        "houseMethod": {
+          "enum": [
+            "midpoint",
+            "wholeSignFromMidpointAscendant"
+          ],
+          "default": "midpoint"
+        },
+        "antipodalPolicy": {
+          "enum": [
+            "error",
+            "lowerLongitude"
+          ],
+          "default": "error"
+        },
+        "domains": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/domains"
+        },
+        "customProfiles": {
+          "$ref": "urn:7mlabs:astrology:natal-domains-request:1.0#/properties/customProfiles"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "domains"
+            ],
+            "properties": {
+              "domains": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "customProfiles"
+            ],
+            "properties": {
+              "customProfiles": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "Birth inputs are Gregorian UTC with exact integer-valued calendar components. The same profile selectors are applied independently to both people. Calendar validity, unique custom/section IDs, and unique aspect angles are enforced by core. IDs from all individual and pair builtin profiles are reserved. All $refs resolve through local schema IDs; no network resolution is required."
+}

@@ -1,0 +1,10 @@
+[package]
+name = "astro-provider-swiss"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+repository.workspace = true
+
+[build-dependencies]
+cc = "=1.0.79"

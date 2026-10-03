@@ -1,0 +1,13 @@
+[package]
+name = "astro-ffi"
+version.workspace = true
+edition.workspace = true
+publish = false
+repository.workspace = true
+
+[lib]
+name = "astro_engine"
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+astro-core.workspace = true

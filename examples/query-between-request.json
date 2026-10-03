@@ -1,0 +1,22 @@
+{
+  "operation": "query",
+  "group": "aspects",
+  "action": "between",
+  "positions": [
+    {
+      "id": "moving",
+      "longitude": 350,
+      "speed": 1
+    },
+    {
+      "id": "fixed",
+      "longitude": 28,
+      "speed": 4
+    }
+  ],
+  "rule": {
+    "angle": 37.5,
+    "maxOrb": 1
+  },
+  "motionMode": "fixedSecond"
+}

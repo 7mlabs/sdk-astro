@@ -1,0 +1,14 @@
+[package]
+name = "astro-node"
+version.workspace = true
+edition.workspace = true
+publish = false
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+test = false
+doctest = false
+
+[dependencies]
+astro-core.workspace = true

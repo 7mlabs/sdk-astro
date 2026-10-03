@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>SevenMLabs.Astrology</PackageId>
+    <Version>0.10.0-alpha.1</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/7mlabs/sdk-astro</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://sevenmlabs-packages.velikho.chatgpt.site/docs/astro/</PackageProjectUrl>
+    <Description>Offline natal, synastry, composite, forecasts and astronomical event data using the shared native engine.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="third-party/*" Pack="true" PackagePath="third-party/" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="native/**/*" Pack="true" PackagePath="runtimes/%(RecursiveDir)native/%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,360 @@
+{
+  "source": "https://aa.usno.navy.mil/api/moon/phases/year?year=2026",
+  "retrieved": "2026-10-03",
+  "sourceTimeScale": "Universal Time",
+  "sourcePrecision": "minute",
+  "toleranceSeconds": 90,
+  "year": 2026,
+  "phases": [
+    {
+      "month": 1,
+      "day": 3,
+      "phase": "fullMoon",
+      "hour": 10,
+      "minute": 3
+    },
+    {
+      "month": 1,
+      "day": 10,
+      "phase": "lastQuarter",
+      "hour": 15,
+      "minute": 48
+    },
+    {
+      "month": 1,
+      "day": 18,
+      "phase": "newMoon",
+      "hour": 19,
+      "minute": 52
+    },
+    {
+      "month": 1,
+      "day": 26,
+      "phase": "firstQuarter",
+      "hour": 4,
+      "minute": 47
+    },
+    {
+      "month": 2,
+      "day": 1,
+      "phase": "fullMoon",
+      "hour": 22,
+      "minute": 9
+    },
+    {
+      "month": 2,
+      "day": 9,
+      "phase": "lastQuarter",
+      "hour": 12,
+      "minute": 43
+    },
+    {
+      "month": 2,
+      "day": 17,
+      "phase": "newMoon",
+      "hour": 12,
+      "minute": 1
+    },
+    {
+      "month": 2,
+      "day": 24,
+      "phase": "firstQuarter",
+      "hour": 12,
+      "minute": 27
+    },
+    {
+      "month": 3,
+      "day": 3,
+      "phase": "fullMoon",
+      "hour": 11,
+      "minute": 38
+    },
+    {
+      "month": 3,
+      "day": 11,
+      "phase": "lastQuarter",
+      "hour": 9,
+      "minute": 38
+    },
+    {
+      "month": 3,
+      "day": 19,
+      "phase": "newMoon",
+      "hour": 1,
+      "minute": 23
+    },
+    {
+      "month": 3,
+      "day": 25,
+      "phase": "firstQuarter",
+      "hour": 19,
+      "minute": 18
+    },
+    {
+      "month": 4,
+      "day": 2,
+      "phase": "fullMoon",
+      "hour": 2,
+      "minute": 12
+    },
+    {
+      "month": 4,
+      "day": 10,
+      "phase": "lastQuarter",
+      "hour": 4,
+      "minute": 51
+    },
+    {
+      "month": 4,
+      "day": 17,
+      "phase": "newMoon",
+      "hour": 11,
+      "minute": 52
+    },
+    {
+      "month": 4,
+      "day": 24,
+      "phase": "firstQuarter",
+      "hour": 2,
+      "minute": 32
+    },
+    {
+      "month": 5,
+      "day": 1,
+      "phase": "fullMoon",
+      "hour": 17,
+      "minute": 23
+    },
+    {
+      "month": 5,
+      "day": 9,
+      "phase": "lastQuarter",
+      "hour": 21,
+      "minute": 10
+    },
+    {
+      "month": 5,
+      "day": 16,
+      "phase": "newMoon",
+      "hour": 20,
+      "minute": 1
+    },
+    {
+      "month": 5,
+      "day": 23,
+      "phase": "firstQuarter",
+      "hour": 11,
+      "minute": 11
+    },
+    {
+      "month": 5,
+      "day": 31,
+      "phase": "fullMoon",
+      "hour": 8,
+      "minute": 45
+    },
+    {
+      "month": 6,
+      "day": 8,
+      "phase": "lastQuarter",
+      "hour": 10,
+      "minute": 0
+    },
+    {
+      "month": 6,
+      "day": 15,
+      "phase": "newMoon",
+      "hour": 2,
+      "minute": 54
+    },
+    {
+      "month": 6,
+      "day": 21,
+      "phase": "firstQuarter",
+      "hour": 21,
+      "minute": 55
+    },
+    {
+      "month": 6,
+      "day": 29,
+      "phase": "fullMoon",
+      "hour": 23,
+      "minute": 56
+    },
+    {
+      "month": 7,
+      "day": 7,
+      "phase": "lastQuarter",
+      "hour": 19,
+      "minute": 29
+    },
+    {
+      "month": 7,
+      "day": 14,
+      "phase": "newMoon",
+      "hour": 9,
+      "minute": 43
+    },
+    {
+      "month": 7,
+      "day": 21,
+      "phase": "firstQuarter",
+      "hour": 11,
+      "minute": 5
+    },
+    {
+      "month": 7,
+      "day": 29,
+      "phase": "fullMoon",
+      "hour": 14,
+      "minute": 36
+    },
+    {
+      "month": 8,
+      "day": 6,
+      "phase": "lastQuarter",
+      "hour": 2,
+      "minute": 21
+    },
+    {
+      "month": 8,
+      "day": 12,
+      "phase": "newMoon",
+      "hour": 17,
+      "minute": 37
+    },
+    {
+      "month": 8,
+      "day": 20,
+      "phase": "firstQuarter",
+      "hour": 2,
+      "minute": 46
+    },
+    {
+      "month": 8,
+      "day": 28,
+      "phase": "fullMoon",
+      "hour": 4,
+      "minute": 18
+    },
+    {
+      "month": 9,
+      "day": 4,
+      "phase": "lastQuarter",
+      "hour": 7,
+      "minute": 51
+    },
+    {
+      "month": 9,
+      "day": 11,
+      "phase": "newMoon",
+      "hour": 3,
+      "minute": 27
+    },
+    {
+      "month": 9,
+      "day": 18,
+      "phase": "firstQuarter",
+      "hour": 20,
+      "minute": 44
+    },
+    {
+      "month": 9,
+      "day": 26,
+      "phase": "fullMoon",
+      "hour": 16,
+      "minute": 49
+    },
+    {
+      "month": 10,
+      "day": 3,
+      "phase": "lastQuarter",
+      "hour": 13,
+      "minute": 25
+    },
+    {
+      "month": 10,
+      "day": 10,
+      "phase": "newMoon",
+      "hour": 15,
+      "minute": 50
+    },
+    {
+      "month": 10,
+      "day": 18,
+      "phase": "firstQuarter",
+      "hour": 16,
+      "minute": 12
+    },
+    {
+      "month": 10,
+      "day": 26,
+      "phase": "fullMoon",
+      "hour": 4,
+      "minute": 12
+    },
+    {
+      "month": 11,
+      "day": 1,
+      "phase": "lastQuarter",
+      "hour": 20,
+      "minute": 28
+    },
+    {
+      "month": 11,
+      "day": 9,
+      "phase": "newMoon",
+      "hour": 7,
+      "minute": 2
+    },
+    {
+      "month": 11,
+      "day": 17,
+      "phase": "firstQuarter",
+      "hour": 11,
+      "minute": 48
+    },
+    {
+      "month": 11,
+      "day": 24,
+      "phase": "fullMoon",
+      "hour": 14,
+      "minute": 53
+    },
+    {
+      "month": 12,
+      "day": 1,
+      "phase": "lastQuarter",
+      "hour": 6,
+      "minute": 8
+    },
+    {
+      "month": 12,
+      "day": 9,
+      "phase": "newMoon",
+      "hour": 0,
+      "minute": 52
+    },
+    {
+      "month": 12,
+      "day": 17,
+      "phase": "firstQuarter",
+      "hour": 5,
+      "minute": 42
+    },
+    {
+      "month": 12,
+      "day": 24,
+      "phase": "fullMoon",
+      "hour": 1,
+      "minute": 28
+    },
+    {
+      "month": 12,
+      "day": 30,
+      "phase": "lastQuarter",
+      "hour": 18,
+      "minute": 59
+    }
+  ]
+}

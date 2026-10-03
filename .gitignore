@@ -1,0 +1,34 @@
+# Generated build and installation outputs
+artifacts/
+**/target/
+**/node_modules/
+**/__pycache__/
+**/bin/
+**/obj/
+**/build/
+**/dist/
+**/*.egg-info/
+**/.venv/
+**/venv/
+bindings/node/native/
+bindings/python/sevenmlabs_astrology/native/
+bindings/dotnet/native/
+
+# Local configuration, credentials and logs
+.env
+.env.*
+.npmrc
+.pypirc
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+*.pyc
+.DS_Store
+.idea/
+.vscode/
+
+# External ephemeris data is not part of the Moshier build
+*.bsp
+*.se1

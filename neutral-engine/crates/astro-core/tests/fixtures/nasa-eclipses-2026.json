@@ -1,0 +1,42 @@
+{
+  "source": "https://eclipse.gsfc.nasa.gov/OH/OH2026.html",
+  "retrieved": "2026-10-03",
+  "sourceTimeScale": "UT",
+  "sourcePrecision": "minute",
+  "toleranceSeconds": 120,
+  "year": 2026,
+  "eclipses": [
+    {
+      "month": 2,
+      "day": 17,
+      "type": "solarEclipse",
+      "eclipseType": "annular",
+      "hour": 12,
+      "minute": 12
+    },
+    {
+      "month": 3,
+      "day": 3,
+      "type": "lunarEclipse",
+      "eclipseType": "total",
+      "hour": 11,
+      "minute": 34
+    },
+    {
+      "month": 8,
+      "day": 12,
+      "type": "solarEclipse",
+      "eclipseType": "total",
+      "hour": 17,
+      "minute": 46
+    },
+    {
+      "month": 8,
+      "day": 28,
+      "type": "lunarEclipse",
+      "eclipseType": "partial",
+      "hour": 4,
+      "minute": 13
+    }
+  ]
+}

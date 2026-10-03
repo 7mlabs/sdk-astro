@@ -1,0 +1,14 @@
+[workspace]
+members = ["crates/astro-core", "crates/astro-ffi", "crates/astro-node", "crates/astro-provider-swiss"]
+resolver = "2"
+
+[workspace.package]
+version = "0.10.0-alpha.1"
+edition = "2021"
+rust-version = "1.83"
+repository = "https://github.com/7mlabs/sdk-astro"
+
+[workspace.dependencies]
+serde = { version = "=1.0.195", features = ["derive"] }
+serde_json = { version = "=1.0.109", features = ["raw_value", "float_roundtrip"] }
+astro-core = { path = "crates/astro-core" }

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:7mlabs:astrology:compression-response:1.0",
+  "title": "Versioned astro context envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineVersion", "data", "warnings", "errors"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "engineVersion": { "type": "string" },
+    "calculation": {},
+    "data": { "oneOf": [ { "type": "null" }, { "$ref": "#/$defs/context" } ] },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "errors": { "type": "array", "items": { "$ref": "#/$defs/error" } }
+  },
+  "$defs": {
+    "error": {
+      "type": "object", "additionalProperties": false, "required": ["code", "message"],
+      "properties": { "code": { "type": "string" }, "message": { "type": "string" } }
+    },
+    "context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "mode", "payload", "dictionary", "coverage", "omitted", "metrics", "budget"],
+      "properties": {
+        "format": { "const": "astro-context/1" },
+        "mode": { "enum": ["compact", "focused", "budgeted"] },
+        "payload": { "$ref": "#/$defs/encodedValue" },
+        "dictionary": { "type": "object", "additionalProperties": { "$ref": "#/$defs/encodedValue" } },
+        "coverage": {
+          "type": "object", "additionalProperties": false, "required": ["complete", "retainedPaths", "scope"],
+          "properties": {
+            "complete": { "type": "boolean" },
+            "retainedPaths": { "type": "array", "items": { "type": "string" } },
+            "scope": {
+              "type": "object", "additionalProperties": false, "required": ["domains", "sections"],
+              "properties": {
+                "domains": { "type": "array", "items": { "type": "string" } },
+                "sections": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "omitted": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false, "required": ["path", "reason"],
+            "properties": { "path": { "type": "string" }, "reason": { "type": "string" } }
+          }
+        },
+        "metrics": {
+          "type": "object", "additionalProperties": false,
+          "required": ["inputBytes", "outputBytes", "estimatedTokens", "tokenEstimateMethod"],
+          "properties": {
+            "inputBytes": { "type": "integer", "minimum": 0 },
+            "outputBytes": { "type": "integer", "minimum": 0 },
+            "estimatedTokens": { "type": "integer", "minimum": 0 },
+            "tokenEstimateMethod": { "const": "utf8-bytes-conservative" }
+          }
+        },
+        "budget": {
+          "type": "object", "additionalProperties": false, "required": ["maxBytes", "maxTokens", "exceeded"],
+          "properties": {
+            "maxBytes": { "type": ["integer", "null"], "minimum": 1, "maximum": 268435456 },
+            "maxTokens": { "type": ["integer", "null"], "minimum": 1, "maximum": 268435456 },
+            "exceeded": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "encodedValue": {
+      "oneOf": [
+        { "type": ["null", "boolean", "number", "string"] },
+        { "type": "array", "items": { "$ref": "#/$defs/encodedValue" } },
+        {
+          "type": "object", "propertyNames": { "not": { "enum": ["$astroTable", "$astroRef", "$astroLiteral"] } },
+          "additionalProperties": { "$ref": "#/$defs/encodedValue" }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["$astroRef"],
+          "properties": { "$astroRef": { "type": "string", "minLength": 1 } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["$astroTable"],
+          "properties": {
+            "$astroTable": {
+              "type": "object", "additionalProperties": false, "required": ["columns", "rows"],
+              "properties": {
+                "columns": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+                "rows": { "type": "array", "items": { "type": "array", "items": { "$ref": "#/$defs/encodedValue" } } }
+              }
+            }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["$astroLiteral"],
+          "properties": {
+            "$astroLiteral": {
+              "type": "array", "items": {
+                "type": "array", "minItems": 2, "maxItems": 2,
+                "prefixItems": [ { "type": "string" }, { "$ref": "#/$defs/encodedValue" } ],
+                "items": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

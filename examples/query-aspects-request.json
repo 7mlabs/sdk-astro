@@ -1,0 +1,29 @@
+{
+  "operation": "query",
+  "group": "aspects",
+  "action": "inspect",
+  "birth": {
+    "utc": {
+      "year": 2000,
+      "month": 1,
+      "day": 1,
+      "hour": 12,
+      "minute": 0
+    },
+    "location": {
+      "latitude": 10.8231,
+      "longitude": 106.6297
+    },
+    "houseSystem": "placidus"
+  },
+  "pointIds": [
+    "sun",
+    "moon"
+  ],
+  "aspectRules": [
+    {
+      "angle": 37.5,
+      "maxOrb": 15
+    }
+  ]
+}
