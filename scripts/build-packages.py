@@ -8,15 +8,24 @@ import hashlib
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--offline", action="store_true")
 args = parser.parse_args()
+version = tomllib.loads((ROOT / "neutral-engine/Cargo.toml").read_text())["workspace"]["package"]["version"]
+python_version = tomllib.loads((ROOT / "bindings/python/pyproject.toml").read_text())["project"]["version"]
+node_version = json.loads((ROOT / "bindings/node/package.json").read_text())["version"]
+dotnet_version = ET.parse(ROOT / "bindings/dotnet/SevenMLabs.Astrology.csproj").getroot().findtext(".//Version")
+if version != node_version or version != dotnet_version or python_version != re.sub(r"-alpha\.(\d+)$", r"a\1", version):
+    raise SystemExit("Core and package versions must be synchronized before building")
 
 
 def run(command, cwd=ROOT):
@@ -52,9 +61,11 @@ run(npm + ["pack", "--ignore-scripts", "--cache", ROOT / "artifacts/npm-build-ca
 run([sys.executable, "-m", "pip", "wheel", "--no-deps", "--no-build-isolation", "--no-index", "--wheel-dir", packages, ROOT / "bindings/python"])
 run(["dotnet", "pack", ROOT / "bindings/dotnet/SevenMLabs.Astrology.csproj", "-c", "Release", "-o", packages,
      "-p:RestoreSources=" + str(packages), "-p:NuGetAudit=false", "--verbosity", "quiet"])
-manifest = {"platform": system, "arch": arch, "rid": rid, "engineVersion": "0.10.0-alpha.1", "files": {}}
-for item in packages.iterdir():
-    if item.name.startswith(("7mlabs-astrology-0.10.0-alpha.1", "sevenmlabs_astrology-0.10.0a1", "SevenMLabs.Astrology.0.10.0-alpha.1")):
-        manifest["files"][item.name] = hashlib.sha256(item.read_bytes()).hexdigest()
+manifest = {"platform": system, "arch": arch, "rid": rid, "engineVersion": version, "files": {}}
+wheels = sorted(packages.glob(f"sevenmlabs_astrology-{python_version}-*.whl"))
+if len(wheels) != 1:
+    raise SystemExit("Expected exactly one wheel for the current version/target")
+for item in (packages / f"7mlabs-astrology-{version}.tgz", packages / f"SevenMLabs.Astrology.{version}.nupkg", wheels[0]):
+    manifest["files"][item.name] = hashlib.sha256(item.read_bytes()).hexdigest()
 (packages / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
 print("Built local packages for", system, arch)

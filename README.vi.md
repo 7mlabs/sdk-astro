@@ -4,7 +4,7 @@
 
 Engine chiêm tinh chạy offline, dùng chung lõi Rust qua các SDK native. Nhận dữ liệu sinh để tính lá số, quan hệ và dự báo ngay trong ứng dụng của bạn.
 
-[![npm alpha](https://img.shields.io/npm/v/%407mlabs%2Fastrology/alpha?label=npm&color=afe8cc)](https://www.npmjs.com/package/@7mlabs/astrology)
+[![npm](https://img.shields.io/npm/v/%407mlabs%2Fastrology/latest?label=npm&color=afe8cc)](https://www.npmjs.com/package/@7mlabs/astrology)
 [![CI](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml/badge.svg)](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml)
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-afe8cc)](LICENSE)
 
@@ -17,10 +17,10 @@ Engine chiêm tinh chạy offline, dùng chung lõi Rust qua các SDK native. Nh
 
 ## Bắt đầu nhanh
 
-Cài bản alpha hiện tại:
+Cài bản npm ổn định:
 
 ```sh
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 ```
 
 Lưu ví dụ vào `chart.cjs`, sau đó chạy `node chart.cjs`:
@@ -96,17 +96,17 @@ const restored = expandContext(context);
 
 | Ngôn ngữ | Phân phối | Trạng thái |
 | --- | --- | --- |
-| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Public npm alpha: `0.10.0-alpha.1` |
-| Python | `sevenmlabs-astrology` | Wheel local; chưa phát hành PyPI |
-| .NET | `SevenMLabs.Astrology` | Artifact NuGet local; chưa phát hành public |
+| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Mục tiêu npm ổn định: `0.10.0` (`latest`); đang chờ xác minh phát hành |
+| Python | `sevenmlabs-astrology` | Wheel local `0.10.0`; chưa phát hành PyPI |
+| .NET | `SevenMLabs.Astrology` | Artifact NuGet local `0.10.0`; chưa phát hành public |
 | Rust / C | Core crates và C ABI | Có source mẫu tích hợp |
 
 Bản npm có binary cho **macOS ARM64** và **Linux x64**. Linux cần **glibc 2.38+** và `libgcc_s.so.1`. Đã kiểm thử Node.js 18/24 trên cả hai target; khuyến nghị Node.js 22 hoặc 24 cho ứng dụng mới. Chưa có binary Windows, macOS Intel, Linux ARM64 hoặc Alpine/musl. [Yêu cầu nền tảng đầy đủ →](docs/node-release.md)
 
-Chạy lại lệnh cài để cập nhật kênh alpha. Để giữ đúng bản hiện tại:
+Chạy lại lệnh cài để cập nhật kênh ổn định `latest`. Để giữ đúng bản hiện tại:
 
 ```sh
-npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1
+npm install --save-exact @7mlabs/astrology@0.10.0
 ```
 
 Commit lockfile của ứng dụng và dùng `npm ci` để cài lại đúng dependencies. [Hướng dẫn cài các ngôn ngữ khác →](docs/packages.md)
@@ -127,7 +127,7 @@ Commit lockfile của ứng dụng và dùng `npm ci` để cài lại đúng de
 
 Tính từ dữ liệu sinh hỗ trợ Gregorian UTC **1800–2399**, tropical geocentric và hệ nhà **Placidus** hoặc **Whole Sign**. Swiss Ephemeris dùng mô hình Moshier tích hợp. Caller phụ trách chuyển timezone; IANA timezone, sidereal/topocentric, Davison, progression và return charts thuộc lộ trình tiếp theo. [Phạm vi tính toán →](docs/natal.md)
 
-Bản đã phát hành qua **108 tests Rust** và **339 cases đối chiếu giữa các ngôn ngữ**. Tarball npm cuối được kiểm thử trên macOS ARM64/Linux x64 với Node.js 18/24, sau đó cài mới từ registry trên macOS ARM64. [Bằng chứng CI](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Chi tiết kiểm thử](docs/testing.md)
+Bản **0.10.0** đang chờ xác minh phát hành. Bản **0.10.0-alpha.1** trước đó qua **108 tests Rust** và **339 cases đối chiếu giữa các ngôn ngữ**; tarball cuối được kiểm thử trên macOS ARM64/Linux x64 với Node.js 18/24 rồi cài mới từ npm trên macOS ARM64. [Bằng chứng CI alpha trước đó](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Chi tiết kiểm thử](docs/testing.md)
 
 Để phát triển từ source, bắt đầu với [hướng dẫn build](docs/github-setup.md). Góp ý và báo lỗi kèm cách tái hiện tại [GitHub Issues](https://github.com/7mlabs/sdk-astro/issues).
 

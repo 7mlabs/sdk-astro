@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>SevenMLabs.Astrology</PackageId>
-    <Version>0.10.0-alpha.1</Version>
+    <Version>0.10.0</Version>
     <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/7mlabs/sdk-astro</RepositoryUrl>

@@ -2,7 +2,11 @@
 
 Bản mẫu được chạy trên macOS ARM64, Node.js 24.19.0, Python 3.13.3, .NET SDK 10.0.101 và Rust 1.83.0. Các test xác minh geometry từ positions, natal, báo cáo cá nhân, synastry, midpoint composite C, events và forecast cá nhân của bản `0.10.0-alpha.1`, gồm grouped queries và bộ nén payload; không xác minh toàn bộ source legacy.
 
-## Bản npm đã phát hành: 0.10.0-alpha.1
+## Xác minh bản ổn định 0.10.0
+
+Đang chờ kết quả release gate và publish cho npm `0.10.0` trên kênh `latest`. Phần này sẽ ghi CI run, commit, SHA256 tarball, registry integrity/dist-tag và fresh registry install sau khi đã kiểm tra; cấu hình trusted publisher chưa tự chứng minh publish OIDC thành công. Python/.NET vẫn chưa phát hành registry.
+
+## Lịch sử: bản npm alpha đã phát hành 0.10.0-alpha.1
 
 [@7mlabs/astrology](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành public ngày 2026-10-03 với tag `alpha`. [CI run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) kiểm tra commit `a17850e01507485312e5cb584ed1eb82a786fcbc` trên macOS 15 ARM64 và Ubuntu 24.04 x64:
 
@@ -204,7 +208,7 @@ Fixtures đã lưu trong `tests/conformance/natal-references.json`; scripts test
 
 Repeated calls và concurrency không thay thế memory leak sanitizer/fuzz tests. Parity cùng core xác minh binding/serialization; references thiên văn được kiểm tra riêng như dưới đây. Chưa kiểm tra rộng toàn bộ lịch sử hoặc toàn khoảng năm 1800–2399.
 
-Candidate tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda` từng qua [run 37093556052](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) với 107 Rust tests. Bản npm public dùng commit mới `a17850e01507485312e5cb584ed1eb82a786fcbc` và [run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), thêm regression về trạng thái provider giữa các lần gọi và 108 Rust tests, cùng bốn final npm consumer jobs Node 18/24. Bản sửa station giữ nguyên tolerance và kiểm tra giới hạn thời điểm biểu diễn bằng f64. Parity dùng chung core xác minh bindings/serialization; không thay thế toàn bộ kiểm chứng thiên văn độc lập.
+Candidate tại commit `2e1f53a0f786f3d0ad6309b8c659d6911717acda` từng qua [run 37093556052](https://github.com/7mlabs/sdk-astro/actions/runs/37093556052) với 107 Rust tests. Bản npm alpha `0.10.0-alpha.1` dùng commit mới `a17850e01507485312e5cb584ed1eb82a786fcbc` và [run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), thêm regression về trạng thái provider giữa các lần gọi và 108 Rust tests, cùng bốn final npm consumer jobs Node 18/24. Bản sửa station giữ nguyên tolerance và kiểm tra giới hạn thời điểm biểu diễn bằng f64. Parity dùng chung core xác minh bindings/serialization; không thay thế toàn bộ kiểm chứng thiên văn độc lập.
 
 Windows Node linking chưa được triển khai. Final npm matrix xác minh Node 18 và 24 trên macOS ARM64/Linux x64; Node 20/22 chưa có final release matrix riêng. Python 3.10–3.12, .NET TFM khác, Linux distro/architecture khác và macOS x64 chưa được xác minh. Linux addon yêu cầu glibc 2.38+; Ubuntu CI không thay thế kiểm tra manylinux wheel. Không quảng bá các target chưa kiểm chứng là supported registry release. Các kết quả macOS trong các mục lịch sử phía trên thuộc phiên bản/đợt chạy được mô tả ở từng mục.
 

@@ -1,11 +1,11 @@
 {
   "name": "sevenmlabs-astrology-mcp-example",
-  "version": "0.10.0-alpha.1",
+  "version": "0.10.0",
   "private": true,
   "description": "Optional local stdio MCP adapter for the offline astrology engine",
   "main": "server.cjs",
   "scripts": { "start": "node server.cjs", "test": "node smoke.cjs && node smoke-compression.cjs" },
   "engines": { "node": ">=18" },
   "dependencies": { "@modelcontextprotocol/sdk": "1.29.0", "ajv": "8.20.0" },
-  "peerDependencies": { "@7mlabs/astrology": "0.10.0-alpha.1" }
+  "peerDependencies": { "@7mlabs/astrology": "0.10.0" }
 }

@@ -1,30 +1,24 @@
 # Phát hành package Node.js
 
-Package [@7mlabs/astrology `0.10.0-alpha.1`](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành public trên npm ngày 2026-10-03 với dist-tag `alpha`. Source trong `bindings/node/package.json` vẫn đặt `private: true`; chỉ artifact đã qua kiểm tra release được chuyển sang metadata có thể publish. Python, .NET và UI renderer chưa phát hành registry.
+Mục tiêu phát hành là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) trên kênh ổn định `latest`; đang chờ xác minh release gate và publication. Source trong `bindings/node/package.json` vẫn đặt `private: true`; chỉ artifact đã qua kiểm tra release được chuyển sang metadata có thể publish. Python/.NET có version `0.10.0` nhưng chưa phát hành registry. UI renderer giữ version riêng `0.9.0-alpha.1` và chưa phát hành registry.
 
 ## Cài đặt và cập nhật
 
-Lần phát hành thử nghiệm dùng kênh `alpha`:
+Cài hoặc cập nhật kênh ổn định `latest`:
 
 ```sh
-npm install @7mlabs/astrology@alpha
-```
-
-Để cập nhật chủ động sang alpha mới:
-
-```sh
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 ```
 
 Để tái tạo đúng một phiên bản, chỉ định version và commit lockfile của ứng dụng:
 
 ```sh
-npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1
+npm install --save-exact @7mlabs/astrology@0.10.0
 ```
 
-Package chứa sẵn native addon; người dùng không cần Rust, compiler, server hay bước tải binary sau cài đặt. `npm ci` dùng lockfile để cài lại đúng dependency của dự án. Package alpha chưa được đưa vào kênh `latest`.
+Package chứa sẵn native addon; người dùng không cần Rust, compiler, server hay bước tải binary sau cài đặt. `npm ci` dùng lockfile để cài lại đúng dependency của dự án. Kênh `alpha` tiếp tục trỏ tới các bản thử nghiệm riêng; chọn `latest` không mở rộng phạm vi platform của binary.
 
-## Nền tảng của lần phát hành đầu
+## Nền tảng của bản npm
 
 Một tarball npm chứa cả hai binary, với cùng version, wrapper và TypeScript declarations:
 
@@ -43,7 +37,7 @@ Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa có binary trong release
 
 ## Node.js
 
-Metadata đặt minimum Node.js 18. Native adapter sử dụng Node-API v1 và không phụ thuộc V8 API; bản npm cuối đã được kiểm tra thực tế trên Node 18/24 ở cả hai target. [Node-API duy trì ABI giữa các phiên bản Node.js](https://nodejs.org/api/n-api.html).
+Metadata đặt minimum Node.js 18. Native adapter sử dụng Node-API v1 và không phụ thuộc V8 API; gate npm kiểm tra thực tế trên Node 18/24 ở cả hai target. Bản alpha trước đó đã qua đủ bốn tổ hợp; kết quả của bản ổn định được ghi riêng bên dưới. [Node-API duy trì ABI giữa các phiên bản Node.js](https://nodejs.org/api/n-api.html).
 
 Khuyến nghị ứng dụng mới dùng Node.js 22 hoặc 24 LTS. Node.js 18 và 20 đã EOL tại thời điểm tháng 10/2026; kiểm tra tương thích với chúng không kéo dài hỗ trợ bảo mật của Node.js. [Lịch phát hành Node.js](https://nodejs.org/en/about/previous-releases), [các phiên bản EOL](https://nodejs.org/en/about/eol).
 
@@ -61,23 +55,28 @@ Release gate chạy consumer tests trên minimum Node.js 18 và Node.js 24 ở m
 Artifact đã build cũng có thể cài local để kiểm tra đúng tarball:
 
 ```sh
-npm install --offline --ignore-scripts /absolute/path/7mlabs-astrology-0.10.0-alpha.1.tgz
+npm install --offline --ignore-scripts /absolute/path/7mlabs-astrology-0.10.0.tgz
 ```
 
 ## Publish và phát hành tiếp theo
 
-Workflow candidate hiện chỉ tạo và kiểm tra artifacts. Workflow publish tách riêng, giới hạn quyền, kiểm tra commit/tag, checksum và release evidence trước khi gọi npm. Lần phát hành scoped package dùng public access và dist-tag `alpha`; chỉ chuyển sang `latest` khi chủ động phát hành bản ổn định.
+Workflow candidate tạo và kiểm tra artifacts. Workflow publish tách riêng, giới hạn quyền, kiểm tra commit/tag, checksum và release evidence trước khi gọi npm. Version stable như `0.10.0` dùng `latest`; prerelease như `0.10.1-alpha.1` dùng `alpha`. Release tooling phải xác thực SemVer và dist-tag cùng khớp version ở mọi bước assemble, gate, publish và registry verification.
 
-Scope npm `7mlabs` đã được xác minh và lần phát hành đầu đã hoàn tất bằng tài khoản npm có 2FA. Trusted publisher đã cấu hình đúng repository `7mlabs/sdk-astro`, workflow `npm-release.yml` và environment `npm-release`. Workflow publish có quyền OIDC riêng và dùng npm đáp ứng [yêu cầu trusted publishing của npm](https://docs.npmjs.com/trusted-publishers/); chưa có lần phát hành thực tế bằng OIDC, nên không coi cấu hình này là bằng chứng publish tự động đã chạy thành công. Bản cập nhật phải tăng version trước khi push tag tương ứng, ví dụ `v0.10.0-alpha.2`; không publish lại version hiện có.
+Scope npm `7mlabs` đã được xác minh; bản alpha đầu phát hành bằng tài khoản npm có 2FA. Trusted publisher đã cấu hình đúng repository `7mlabs/sdk-astro`, workflow `npm-release.yml` và environment `npm-release`. Workflow publish có quyền OIDC riêng và dùng npm đáp ứng [yêu cầu trusted publishing của npm](https://docs.npmjs.com/trusted-publishers/). Chỉ ghi publish OIDC thành công khi workflow thực tế và registry đã được kiểm tra; hiện đang chờ bằng chứng lần phát hành ổn định này.
 
 Checklist cho maintainer khi tăng version:
 
-1. Đồng bộ version trong `neutral-engine/Cargo.toml`, `bindings/node/package.json`, `bindings/python/pyproject.toml`, `bindings/dotnet/SevenMLabs.Astrology.csproj` và package reference của `examples/dotnet/Example.csproj`; cập nhật `neutral-engine/Cargo.lock` và `examples/rust/Cargo.lock`. Python dùng dạng PEP 440 tương ứng, ví dụ `0.10.0a2` cho `0.10.0-alpha.2`.
-2. Cập nhật các version/filename đang khai báo trực tiếp trong `scripts/build-packages.py` và `scripts/test-packages.py`. Hiện builder chưa tự lấy mọi version từ metadata; chỉ sửa version npm sẽ làm candidate build/test không đồng bộ.
-3. Commit/push source mới và đợi toàn bộ candidate CI qua. Có thể chạy workflow `npm release` trên nhánh với input `publish: false` để kiểm tra pipeline mà chưa phát hành.
-4. Tạo/push tag khớp version mới để chạy publish; kiểm tra registry và cài mới sau khi workflow hoàn tất. Cập nhật docs và website bằng artifact/version đã xác minh.
+1. Đồng bộ version trong `neutral-engine/Cargo.toml`, `bindings/node/package.json`, `bindings/python/pyproject.toml`, Python `__version__` ở `bindings/python/sevenmlabs_astrology/__init__.py`, `bindings/dotnet/SevenMLabs.Astrology.csproj` và package reference của `examples/dotnet/Example.csproj`; cập nhật `neutral-engine/Cargo.lock` và `examples/rust/Cargo.lock`. Đồng bộ version/`peerDependencies` của `examples/mcp/package.json` và `examples/frontend/package.json`, cùng `engineVersion` trong ba bản `rust-manifest.json` ở `bindings/node/third-party/`, `bindings/python/sevenmlabs_astrology/third-party/` và `bindings/dotnet/third-party/`. Stable dùng `0.10.0`; prerelease Python dùng PEP 440 tương ứng, ví dụ `0.10.1a1` cho `0.10.1-alpha.1`. UI renderer có vòng version riêng.
+2. Chạy repository checks để xác nhận metadata đồng bộ và source npm vẫn có `private: true`. Builder/test runner đọc version từ metadata đã xác thực để tạo filename tgz/wheel/nupkg và evidence; không duy trì version/filename riêng bằng cách sửa tay trong scripts.
+3. Commit/push source mới và đợi toàn bộ candidate CI qua. Có thể chạy workflow `npm release` trên nhánh với input `publish: false` để kiểm tra pipeline trước khi phát hành.
+4. Tạo/push tag chính xác `v<version>`, ví dụ `v0.10.0` cho stable hoặc `v0.10.1-alpha.1` cho alpha. Workflow kiểm tra tag, provenance, checksum và bốn consumer reports trước publish. Mỗi version public là bất biến; không publish lại bytes khác với cùng version.
+5. Sau publish, kiểm tra registry version, integrity và dist-tag khớp tarball đã qua gate; cài mới trong project độc lập rồi chạy native checksum/natal/query/compression smoke. Cập nhật docs và website bằng artifact/version đã xác minh.
 
-## Bằng chứng bản phát hành đầu
+## Bằng chứng bản ổn định 0.10.0
+
+Đang chờ CI run, commit, SHA256 tarball, registry integrity/dist-tag `latest` và fresh registry install. Cấu hình trusted publisher là điều kiện của đường OIDC; chưa ghi lần publish ổn định thành công trước khi có kết quả thực tế.
+
+## Lịch sử: bằng chứng npm alpha 0.10.0-alpha.1
 
 [CI run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) xác minh commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: mỗi candidate target qua 108 tests Rust, 339 parity cases giữa năm ngôn ngữ, compression và license gates. Cùng tarball npm cuối được fresh-install offline và chạy 339 cases, query schema/semantic checks, 13 compression roundtrips và TypeScript trên bốn tổ hợp macOS ARM64/Linux x64 × Node 18/24.
 

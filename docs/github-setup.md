@@ -2,11 +2,13 @@
 
 ## Trạng thái
 
-Repo GitHub: [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro). Source tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, giữ third-party notices. Owner đã chọn AGPL-3.0-only ngày 2026-10-03; xem [license.md](license.md). [@7mlabs/astrology `0.10.0-alpha.1`](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành npm với tag `alpha`. PyPI, NuGet, crates.io và UI renderer chưa phát hành registry.
+Repo GitHub: [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro). Source tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, giữ third-party notices. Owner đã chọn AGPL-3.0-only ngày 2026-10-03; xem [license.md](license.md). Mục tiêu npm hiện tại là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) trên `latest`; đang chờ xác minh phát hành. Bản `0.10.0-alpha.1` trước đó đã phát hành với tag `alpha`. PyPI, NuGet, crates.io và UI renderer chưa phát hành registry.
 
 Source đã được push lên nhánh `main` của repo công khai ngày 2026-10-03 bằng Git HTTPS qua credential helper sẵn có. Không cần gửi token trong chat hoặc commit credentials.
 
-[CI run 37096125672 đã qua trên macOS ARM64 và Linux x64](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: mỗi candidate job có 108 tests Rust, 339 cases parity giữa 5 ngôn ngữ, 106 compression checks, 13 fixture roundtrips, installed SDK helpers/TypeScript và license/checksum validation. Assembler ghép hai binary; bốn final consumer jobs kiểm tra cùng tarball trên Node 18/24 ở cả hai target. Artifacts candidate lưu 14 ngày, `npm-release` và các báo cáo final verification lưu 30 ngày. Bản registry npm đã kiểm tra integrity/tag và cài mới thực tế; SHA256 tarball là `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`.
+Bằng chứng lịch sử của npm alpha `0.10.0-alpha.1`: [CI run 37096125672 đã qua trên macOS ARM64 và Linux x64](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: mỗi candidate job có 108 tests Rust, 339 cases parity giữa 5 ngôn ngữ, 106 compression checks, 13 fixture roundtrips, installed SDK helpers/TypeScript và license/checksum validation. Assembler ghép hai binary; bốn final consumer jobs kiểm tra cùng tarball trên Node 18/24 ở cả hai target. Artifacts candidate lưu 14 ngày, `npm-release` và các báo cáo final verification lưu 30 ngày. Bản registry npm đã kiểm tra integrity/tag và cài mới thực tế; SHA256 tarball là `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`.
+
+Bằng chứng stable `0.10.0` sẽ được ghi sau khi release gate, publish và registry smoke hoàn tất; không dùng CI run/checksum alpha làm bằng chứng của tarball mới.
 
 ## Kiểm tra source và build candidate
 
@@ -41,9 +43,9 @@ Khi GitHub credential có quyền ghi, checkout local có remote `origin` trỏ 
 
 1. npm scope `7mlabs` và package `@7mlabs/astrology` đã xác minh; lần phát hành đầu hoàn tất bằng tài khoản có 2FA. Giữ root LICENSE AGPL, package metadata và third-party provenance đã chốt. Xác minh các tên PyPI/NuGet/crates.io khi phát triển tiếp những registry đó.
 2. npm đã có một tarball chứa hai addon và loader chọn binary theo host. Giữ final fresh-install tests trên Node 18/24 và hai target. NuGet còn cần một nupkg tập hợp runtime assets; Python cần wheels được build/repair trên nền tảng tương ứng.
-3. npm trusted publisher đã cấu hình theo repository `7mlabs/sdk-astro`, workflow filename `npm-release.yml`, environment `npm-release`. Job publish có OIDC riêng; chưa có lần publish thực tế bằng OIDC. Cần xác nhận lần phát hành tự động tiếp theo qua trước khi coi đường publish này đã được kiểm chứng. Không cần gửi token trong chat.
-4. Khi cập nhật, đồng bộ version engine/SDK và các version/filename của builder theo [checklist phát hành](node-release.md), rồi chạy toàn bộ gate; push tag alpha khớp version, ví dụ `v0.10.0-alpha.2`. Workflow kiểm tra HEAD/tag/provenance/checksum/bốn consumer reports trước publish. Không push tag để publish lại `0.10.0-alpha.1`; version registry là bất biến.
-5. Sau mỗi release, kiểm tra registry integrity/dist-tag và cài trong project mới rồi cập nhật website với version/platform thực tế. Lần đầu đã hoàn tất các kiểm tra này trên macOS ARM64; Linux được kiểm chứng với cùng tarball trong CI.
+3. npm trusted publisher đã cấu hình theo repository `7mlabs/sdk-astro`, workflow filename `npm-release.yml`, environment `npm-release`. Job publish có OIDC riêng; đang chờ xác minh lần publish stable thực tế bằng OIDC. Chỉ coi đường publish đã được kiểm chứng sau khi workflow và registry verification qua. Không cần gửi token trong chat.
+4. Khi cập nhật, đồng bộ metadata version engine/SDK theo [checklist phát hành](node-release.md). Builder/test runner lấy version từ metadata đã xác thực; chạy toàn bộ gate rồi push tag khớp version, ví dụ `v0.10.0` cho stable hoặc `v0.10.1-alpha.1` cho alpha. Stable publish lên `latest`, prerelease lên `alpha`; workflow kiểm tra HEAD/tag/provenance/checksum/bốn consumer reports trước publish. Version registry là bất biến.
+5. Sau mỗi release, kiểm tra registry integrity/dist-tag và cài trong project mới rồi cập nhật website với version/platform thực tế. Bản alpha đầu đã hoàn tất các kiểm tra này trên macOS ARM64; Linux được kiểm chứng với cùng tarball trong CI. Stable cần bằng chứng riêng của tarball `0.10.0`.
 
 Nguồn cấu hình chính thức:
 

@@ -77,6 +77,13 @@ def check_source():
     require(node["version"] == dotnet.findtext(".//Version") == version,
             "Core/npm/NuGet versions differ")
     require(python["version"] == python_version, "Python/core versions differ")
+    python_binding = (ROOT / "bindings/python/sevenmlabs_astrology/__init__.py").read_text()
+    require(re.search(r'^__version__ = "' + re.escape(python_version) + r'"$', python_binding, re.MULTILINE),
+            "Python binding version differs from package metadata")
+    for filename in ("examples/mcp/package.json", "examples/frontend/package.json"):
+        example = load_json(filename)
+        require(example["version"] == version and example["peerDependencies"][node["name"]] == version,
+                f"Integration example package/core versions differ: {filename}")
     repository = "https://github.com/7mlabs/sdk-astro"
     node_repository = node.get("repository", {}).get("url", "").removeprefix("git+").removesuffix(".git")
     require(node_repository == repository, "npm repository metadata differs from destination")
@@ -99,7 +106,7 @@ def check_source():
     for filename in (ROOT / "schemas").glob("*.json"):
         json.loads(filename.read_text(encoding="utf-8"))
 
-    markdown = [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")),
+    markdown = [*sorted(ROOT.glob("README*.md")), *sorted((ROOT / "docs").glob("*.md")),
                 *sorted((ROOT / "bindings").glob("*/README.md")),
                 *sorted((ROOT / "examples").glob("*/README.md"))]
     broken = []

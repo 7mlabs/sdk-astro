@@ -5,10 +5,10 @@ Offline natal, synastry, composite, forecasts and astronomical event data using 
 ## Install and update
 
 ```sh
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 ```
 
-The alpha channel is updated explicitly with the same command. Pin `@7mlabs/astrology@0.10.0-alpha.1` and commit your application's lockfile to reproduce a specific release; `npm ci` restores that lockfile. New applications should use Node.js 22 or 24. Minimum supported Node.js is 18.
+This release uses version `0.10.0` and the stable `latest` channel. Update explicitly with the same command. Pin `@7mlabs/astrology@0.10.0` and commit your application's lockfile to reproduce a specific release; `npm ci` restores that lockfile. New applications should use Node.js 22 or 24. Minimum supported Node.js is 18.
 
 The public tarball includes both `darwin-arm64` (Apple Silicon) and `linux-x64` (glibc **2.38+**, with `libgcc_s.so.1`) addons. macOS 15 and Ubuntu 24.04 are the verified build/test environments. The macOS addon targets macOS 11+, but your Node.js version can require a newer OS. Windows, macOS Intel, Linux ARM64 and Alpine/musl are not included. See [platform and release details](https://github.com/7mlabs/sdk-astro/blob/main/docs/node-release.md).
 
@@ -39,7 +39,7 @@ Source: https://github.com/7mlabs/sdk-astro. The engine/SDK use AGPL-3.0-only, c
 
 `composite` takes two birth inputs and builds a third, symbolic midpoint chart C. It returns source natals in `data.subjects` and C in `data.composite`, including all 10 individual-profile domains/30 sections, 26 points/325 angular relations/66 house-ruler relations, custom profiles and construction provenance. Geometry, rulers, report facts and patterns are recomputed for C. No fictional birth epoch, geographic location or planet motion is assigned: C speed/retrograde/applying are null. Default `houseMethod: "midpoint"` validates the 12 midpoint cusps; invalid ordering fails. An explicit `"wholeSignFromMidpointAscendant"` option builds Whole Sign houses from C ASC. Default antipodal policy fails on ambiguous midpoints; explicit `"lowerLongitude"` resolves them deterministically.
 
-Alternatively add `composite: {}` to a `couple` request to reuse its two computed natals and receive C beside synastry. Child options select C house method/antipodal policy, domains and custom profiles; root rulership/aspect rules are inherited. Root couple domain IDs and child C domain IDs are different catalogs. Omitting `composite` preserves the previous couple payload shape. Use the same calculate API; repository `docs/composite.md` and installed `composite`/`couple-composite` examples show complete calls. Version 0.10.0-alpha.1 uses the experimental alpha channel.
+Alternatively add `composite: {}` to a `couple` request to reuse its two computed natals and receive C beside synastry. Child options select C house method/antipodal policy, domains and custom profiles; root rulership/aspect rules are inherited. Root couple domain IDs and child C domain IDs are different catalogs. Omitting `composite` preserves the previous couple payload shape. Use the same calculate API; repository `docs/composite.md` and installed `composite`/`couple-composite` examples show complete calls. Version 0.10.0 uses the stable npm channel `latest`.
 
 `events` searches a civil day/month/year for ingress, longitude stations, primary Moon phases, exact planetary aspects and real global solar/lunar eclipses. `forecast` adds one `birth` natal and all exact transit contacts to its 26 fixed points. Period examples: `{ kind: 'day', year: 2026, month: 3, day: 3, utcOffsetMinutes: 420 }`, `{ kind: 'month', year: 2026, month: 3 }`, `{ kind: 'year', year: 2026 }`. The offset is fixed and caller-supplied; no IANA/DST conversion. Default aspect preset is major; preset and custom rules are mutually exclusive. Optional `bodies`, `eventTypes` and `includeNatalTransits` select the supported search. Phases/eclipses always use Sun/Moon when enabled, independently of the bodies filter.
 

@@ -1,6 +1,6 @@
 # Raw birth data → natal chart cơ bản
 
-Bản `0.9.0-alpha.1` tính thiên văn thực bằng Swiss Ephemeris native/Moshier. Node, Python, .NET, Rust và C cùng dùng provider này; không gọi HTTP, process Python hoặc dịch vụ bên ngoài.
+Engine tính thiên văn thực bằng Swiss Ephemeris native/Moshier. Node, Python, .NET, Rust và C cùng dùng provider này; không gọi HTTP, process Python hoặc dịch vụ bên ngoài.
 
 Tài liệu này mô tả operation `natal` cơ bản. [Operation natalDomains](domains.md) bổ sung views theo lĩnh vực, chủ tinh/occupants, body–angle–cusp aspects và đủ pair relations bằng cùng birth input/provider. Shape và defaults của `natal` được giữ riêng.
 
@@ -56,4 +56,4 @@ Bản vá build `ASTRO_MOSHIER_ONLY` chặn đọc ephemeris/leap-second/Delta T
 
 Đã kiểm tra calendar, leap day, tọa độ 0, thời gian thay đổi, hai bán cầu, high latitude, giới hạn năm, concurrent options và parity năm ngôn ngữ. Có bốn reference cases so PySwissEph và vị trí Skyfield/JPL ở cùng TT. Endpoint tests không chứng minh mọi ngày trong 1800–2399; xem `testing.md` cho tolerance và kết quả.
 
-Mở rộng lĩnh vực hiện tổ chức facts của natal theo [profile công khai](domains.md), bổ sung derived facts và report context cá nhân trong [individual-reports.md](individual-reports.md), không bổ sung thiên thể hoặc time model mới. Chart C đã có operation riêng, xem [composite.md](composite.md). Transit/natal event search và calendar ngày/tháng/năm đã có, xem [forecast.md](forecast.md). Progression, return charts, Davison, timezone helper, frontend, MCP và public registry release chưa được triển khai.
+Mở rộng lĩnh vực hiện tổ chức facts của natal theo [profile công khai](domains.md), bổ sung derived facts và report context cá nhân trong [individual-reports.md](individual-reports.md), không bổ sung thiên thể hoặc time model mới. Chart C đã có operation riêng, xem [composite.md](composite.md). Transit/natal event search và calendar ngày/tháng/năm đã có, xem [forecast.md](forecast.md). Progression, return charts, Davison và timezone helper chưa được triển khai. SDK Node.js có [hướng dẫn npm](node-release.md); [MCP adapter và frontend host](integrations.md) là các phần tích hợp tùy chọn.

@@ -242,7 +242,7 @@ try {
   const downloads = Object.entries(packageManifest.files).map(([filename, expectedSha]) => {
     const sourcePath = `artifacts/packages/${filename}`, bytes = read(sourcePath); assert.equal(sha(bytes), expectedSha, filename);
     return { ...put(`packages/${filename}`, bytes, sourcePath), kind: filename.split('.').at(-1), filename, version: engineVersion,
-      platform: packageManifest.platform, arch: packageManifest.arch, rid: packageManifest.rid, publication: 'local-alpha-artifact' };
+      platform: packageManifest.platform, arch: packageManifest.arch, rid: packageManifest.rid, publication: 'local-artifact' };
   });
   const sdkEntries = languageDefinitions.map(language => ({ ...language, examples: language.examples.map(sourcePath => ({ sourcePath, ...put(`source/${sourcePath}`, read(sourcePath), sourcePath) })),
     ...(language.artifactKind ? { download: downloads.find(d => d.kind === language.artifactKind) } : {}) }));

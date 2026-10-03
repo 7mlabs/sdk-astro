@@ -1,6 +1,6 @@
 # GitHub công khai và phân phối package
 
-Repo công khai là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đã upload source engine/SDK riêng. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. [@7mlabs/astrology `0.10.0-alpha.1`](https://www.npmjs.com/package/@7mlabs/astrology) đã phát hành public trên npm với tag `alpha`; Python/.NET/Rust/UI renderer chưa phát hành registry. Xem [thiết lập GitHub và phát hành](github-setup.md).
+Repo công khai là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đã upload source engine/SDK riêng. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. Mục tiêu hiện tại là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology) trên kênh ổn định `latest`, đang chờ xác minh phát hành; npm alpha `0.10.0-alpha.1` trước đó đã phát hành public; Python/.NET/Rust/UI renderer chưa phát hành registry. Xem [thiết lập GitHub và phát hành](github-setup.md).
 
 ## Điều kiện trước khi public
 
@@ -16,25 +16,25 @@ Checkout mới chỉ chứa `neutral-engine/`, `bindings/`, `schemas/`, `tests/`
 
 ## Package naming và version
 
-Tên npm `@7mlabs/astrology` và scope `7mlabs` đã xác minh quyền sở hữu và phát hành. `sevenmlabs-astrology`, `SevenMLabs.Astrology` và tên crate public còn cần xác minh registry tương ứng. `0.10.0-alpha.1` trong npm/NuGet/Rust tương ứng `0.10.0a1` Python; metadata engine ghi version core. UI renderer có version riêng `0.9.0-alpha.1`, dùng payload schema `1.0`. Version artifact không được tái sử dụng cho bytes khác khi public. ABI/schema có version riêng; neutral engine không có scoring.
+Tên npm `@7mlabs/astrology` và scope `7mlabs` đã xác minh quyền sở hữu và phát hành. `sevenmlabs-astrology`, `SevenMLabs.Astrology` và tên crate public còn cần xác minh registry tương ứng. Core và SDK Node/Python/.NET dùng version stable `0.10.0`; Python/.NET tiếp tục là artifacts local. Khi dùng prerelease, `0.10.1-alpha.1` trong npm/NuGet/Rust tương ứng `0.10.1a1` Python; metadata engine ghi version core. UI renderer có version riêng `0.9.0-alpha.1`, dùng payload schema `1.0`. Version artifact không được tái sử dụng cho bytes khác khi public. ABI/schema có version riêng; neutral engine không có scoring.
 
 ## Cài và cập nhật thuận tiện
 
 Mỗi runtime có một package; engine native được đóng gói hoặc chọn tự động theo OS/CPU. SDK và core cùng version. Bản npm đầu dùng một tarball chứa hai addon macOS ARM64 và Linux x64, loader chọn đúng binary; chưa cần optional platform packages. Có thể tách platform packages khi matrix lớn hơn. Python cần platform wheels; NuGet cần một nupkg chứa runtime assets của các nền tảng được hỗ trợ. Consumer cần runtime và package; Rust/C source build cần compiler.
 
 ```sh
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 ```
 
-Cập nhật bằng cách chạy lại lệnh trên. Pin bằng `npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1` và commit lockfile. Package chưa có stable `latest`; nền tảng và libc requirements nằm trong [hướng dẫn Node.js](node-release.md).
+Cập nhật bằng cách chạy lại lệnh trên. Pin bằng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile. Kênh ổn định dùng `latest`; nền tảng và libc requirements nằm trong [hướng dẫn Node.js](node-release.md).
 
 Candidate build một platform mỗi lần, tạo tgz/nupkg cùng tên giữa hai job. npm assembler đã ghép hai candidate vào một tarball duy nhất trước release; không publish riêng hai candidate cùng package/version. NuGet vẫn cần assembly nhiều runtime trước public. Linux wheel hiện có tag Linux thường, cần manylinux build/repair và kiểm thử môi trường sạch trước public PyPI. Windows chưa được builder hỗ trợ.
 
 ## CI và phát hành
 
-CI candidate build/test macOS ARM64 và Linux x64, assemble npm tarball rồi fresh-install tarball cuối trên Node 18/24 ở mỗi target; workflow này không publish registry. [Run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) đã qua tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: 108 tests Rust, 339 parity cases giữa năm ngôn ngữ và bốn final npm consumer jobs. SHA256 bản npm đã publish: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. Registry integrity/tag và fresh registry install trên macOS ARM64 đã được kiểm tra. Bằng chứng Linux giới hạn ở Ubuntu 24.04 x64 và không xác nhận tính portable của wheel trên các distro khác.
+CI candidate build/test macOS ARM64 và Linux x64, assemble npm tarball rồi fresh-install tarball cuối trên Node 18/24 ở mỗi target; workflow này không publish registry. Bằng chứng lịch sử npm alpha `0.10.0-alpha.1`: [run 37096125672](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) đã qua tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: 108 tests Rust, 339 parity cases giữa năm ngôn ngữ và bốn final npm consumer jobs. SHA256 tarball alpha đã publish: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. Registry integrity/tag và fresh registry install trên macOS ARM64 đã được kiểm tra. Bằng chứng Linux giới hạn ở Ubuntu 24.04 x64 và không xác nhận tính portable của wheel trên các distro khác.
 
-Workflow `npm-release.yml` tách quyền publish, chạy lại gates rồi dùng tag alpha/version bất biến và kiểm tra registry checksum/dist-tag. Trusted publisher đã cấu hình cho `7mlabs/sdk-astro`, workflow `npm-release.yml`, environment `npm-release`; lần phát hành đầu dùng tài khoản npm có 2FA, chưa có publish thực tế qua OIDC. Bản tiếp theo phải tăng version rồi dùng tag tương ứng. Các publisher PyPI/NuGet/crates.io được xử lý sau; xem [hướng dẫn setup](github-setup.md).
+Bản stable `0.10.0` đang chờ CI run, checksum tarball và registry verification riêng. Workflow `npm-release.yml` tách quyền publish, chạy lại gates rồi chọn `latest` cho stable, `alpha` cho prerelease và kiểm tra registry checksum/dist-tag. Trusted publisher đã cấu hình cho `7mlabs/sdk-astro`, workflow `npm-release.yml`, environment `npm-release`; bản alpha đầu dùng tài khoản npm có 2FA. Đang chờ xác minh publish stable thực tế qua OIDC; cấu hình publisher không tự chứng minh đường phát hành thành công. Bản tiếp theo phải tăng version rồi dùng tag tương ứng. Các publisher PyPI/NuGet/crates.io được xử lý sau; xem [hướng dẫn setup](github-setup.md).
 
 ## Không duy trì server
 

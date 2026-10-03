@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assemble one public npm alpha from two validated, same-commit candidates.
+"""Assemble one public npm release from two validated, same-commit candidates.
 
 Candidate directories are downloaded GitHub artifacts containing packages/,
 test-results.json, compression-test-results.json, compression-binding-tests.json
@@ -23,6 +23,13 @@ MAX_ARCHIVE_BYTES = 256 * 1024 * 1024
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def release_tag(version):
+    number = r"(?:0|[1-9][0-9]*)"
+    match = re.fullmatch(rf"{number}\.{number}\.{number}(-alpha\.{number})?", version) if isinstance(version, str) else None
+    require(match is not None, "Only stable x.y.z or alpha x.y.z-alpha.N versions may publish")
+    return "alpha" if match.group(1) else "latest"
 
 
 def digest(data):
@@ -181,8 +188,7 @@ def main():
     require(re.fullmatch(r"[0-9a-f]{40}", args.commit) is not None, "A full lowercase Git SHA is required")
     source = read_json(ROOT / "bindings/node/package.json")
     version = source["version"]
-    require(re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+", version) is not None,
-            "This assembler only publishes the explicit alpha channel")
+    tag = release_tag(version)
     import tomllib
     core_version = tomllib.loads((ROOT / "neutral-engine/Cargo.toml").read_text())["workspace"]["package"]["version"]
     require(version == core_version and source.get("private") is True, "Source core/version/guard differs")
@@ -200,7 +206,7 @@ def main():
         local = ROOT / "bindings/node" / relative
         require(local.is_file() and local.read_bytes() == entries[name], f"Candidate source differs: {relative}")
     metadata.pop("private")
-    metadata["publishConfig"] = {"access": "public", "tag": "alpha"}
+    metadata["publishConfig"] = {"access": "public", "tag": tag}
     metadata["os"] = ["darwin", "linux"]
     metadata["cpu"] = ["arm64", "x64"]
     entries["package/package.json"] = (json.dumps(metadata, indent=2) + "\n").encode()
@@ -212,7 +218,7 @@ def main():
     artifact = output / filename
     write_tarball(entries, artifact)
     manifest = {"schemaVersion": "1.0", "name": metadata["name"], "engineVersion": version,
-                "version": version, "abiVersion": 1, "tag": "alpha", "access": "public",
+                "version": version, "abiVersion": 1, "tag": tag, "access": "public",
                 "filename": filename, "sha256": digest(artifact.read_bytes()), "bytes": artifact.stat().st_size,
                 "source": {"repository": REPOSITORY, "commitSha": args.commit,
                            "candidates": [candidate[2] for candidate in candidates]},

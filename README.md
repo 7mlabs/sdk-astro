@@ -4,7 +4,7 @@
 
 An offline astrology engine with a shared Rust core and native SDKs. Turn birth data into structured chart, relationship and forecast payloads directly inside your application.
 
-[![npm alpha](https://img.shields.io/npm/v/%407mlabs%2Fastrology/alpha?label=npm&color=afe8cc)](https://www.npmjs.com/package/@7mlabs/astrology)
+[![npm](https://img.shields.io/npm/v/%407mlabs%2Fastrology/latest?label=npm&color=afe8cc)](https://www.npmjs.com/package/@7mlabs/astrology)
 [![CI](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml/badge.svg)](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml)
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-afe8cc)](LICENSE)
 
@@ -17,10 +17,10 @@ An offline astrology engine with a shared Rust core and native SDKs. Turn birth 
 
 ## Quick start
 
-Install the current alpha:
+Install the stable npm release:
 
 ```sh
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 ```
 
 Save this as `chart.cjs`, then run `node chart.cjs`:
@@ -96,17 +96,17 @@ const restored = expandContext(context);
 
 | Language | Distribution | Status |
 | --- | --- | --- |
-| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Public npm alpha: `0.10.0-alpha.1` |
-| Python | `sevenmlabs-astrology` | Local wheels; PyPI release pending |
-| .NET | `SevenMLabs.Astrology` | Local NuGet artifacts; public release pending |
+| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Stable npm target: `0.10.0` (`latest`); publication verification pending |
+| Python | `sevenmlabs-astrology` | Local `0.10.0` wheels; PyPI release pending |
+| .NET | `SevenMLabs.Astrology` | Local `0.10.0` NuGet artifacts; public release pending |
 | Rust / C | Core crates and C ABI | Source integration examples |
 
 The npm release includes **macOS ARM64** and **Linux x64** binaries. Linux requires **glibc 2.38+** and `libgcc_s.so.1`. Node.js 18/24 were tested on both targets; Node.js 22 or 24 is recommended for new applications. Windows, macOS Intel, Linux ARM64 and Alpine/musl binaries are not included. [Full platform requirements →](docs/node-release.md)
 
-Run the install command again to update the alpha channel. To pin this release:
+Run the install command again to update from the stable `latest` channel. To pin this release:
 
 ```sh
-npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1
+npm install --save-exact @7mlabs/astrology@0.10.0
 ```
 
 Commit your application's lockfile and use `npm ci` for reproducible installs. [Other language installation guides →](docs/packages.md)
@@ -129,7 +129,7 @@ Most detailed guides are currently written in Vietnamese; API identifiers and JS
 
 Birth calculations currently support Gregorian UTC **1800–2399**, tropical geocentric positions, and **Placidus** or **Whole Sign** houses. Swiss Ephemeris uses the bundled Moshier model. Timezone conversion is caller-managed; IANA timezone conversion, sidereal/topocentric charts, Davison, progressions and return charts are future work. [Calculation scope →](docs/natal.md)
 
-The published release passed **108 Rust tests** and **339 cross-language conformance cases**. Its final npm tarball was tested on macOS ARM64 and Linux x64 with Node.js 18/24, followed by a fresh registry install on macOS ARM64. [CI evidence](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Validation details](docs/testing.md)
+Publication verification for **0.10.0** is pending. The earlier **0.10.0-alpha.1** release passed **108 Rust tests** and **339 cross-language conformance cases**; its final tarball was tested on macOS ARM64 and Linux x64 with Node.js 18/24, then installed from npm on macOS ARM64. [Historical alpha CI evidence](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Validation details](docs/testing.md)
 
 For source development, start with the [build instructions](docs/github-setup.md). Suggestions and reproducible bug reports are welcome in [GitHub Issues](https://github.com/7mlabs/sdk-astro/issues).
 

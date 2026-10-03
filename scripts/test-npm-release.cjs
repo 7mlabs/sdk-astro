@@ -18,6 +18,13 @@ let failureReportPath;
 let failureContext;
 let conformanceCasesPassed = 0;
 
+function releaseTag(version) {
+  const number = '(?:0|[1-9][0-9]*)';
+  const match = typeof version === 'string' && new RegExp(`^${number}\\.${number}\\.${number}(-alpha\\.${number})?$`).exec(version);
+  assert(match && match[0] === version, 'Only stable x.y.z or alpha x.y.z-alpha.N versions may publish');
+  return match[1] ? 'alpha' : 'latest';
+}
+
 function options(argv) {
   const allowed = new Set(['manifest', 'reference-cli', 'typescript', 'ajv-module', 'npm-cli', 'report']);
   const result = {};
@@ -128,7 +135,8 @@ function main() {
   assert.equal(manifest.name, '@7mlabs/astrology');
   assert.equal(manifest.version, manifest.engineVersion);
   assert.equal(manifest.abiVersion, 1);
-  assert.equal(manifest.tag, 'alpha');
+  const tag = releaseTag(manifest.version);
+  assert.equal(manifest.tag, tag);
   assert.equal(manifest.access, 'public');
   assert.match(manifest.source.commitSha, /^[0-9a-f]{40}$/);
   assert.equal(manifest.source.repository, '7mlabs/sdk-astro');
@@ -142,7 +150,7 @@ function main() {
   assert.equal(metadata.name, manifest.name);
   assert.equal(metadata.version, manifest.version);
   assert(!Object.hasOwn(metadata, 'private'), 'Release must remove private guard');
-  assert.deepEqual(metadata.publishConfig, { access: 'public', tag: 'alpha' });
+  assert.deepEqual(metadata.publishConfig, { access: 'public', tag });
   assert.equal(metadata.license, 'AGPL-3.0-only');
   assert.deepEqual(metadata.os, ['darwin', 'linux']);
   assert.deepEqual(metadata.cpu, ['arm64', 'x64']);

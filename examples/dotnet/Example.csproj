@@ -3,5 +3,5 @@
     <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
   </PropertyGroup>
-  <ItemGroup><PackageReference Include="SevenMLabs.Astrology" Version="0.10.0-alpha.1" /></ItemGroup>
+  <ItemGroup><PackageReference Include="SevenMLabs.Astrology" Version="0.10.0" /></ItemGroup>
 </Project>

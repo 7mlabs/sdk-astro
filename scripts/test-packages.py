@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGES = ROOT / "artifacts/packages"
 manifest = json.loads((PACKAGES / "manifest.json").read_text())
+version = manifest["engineVersion"]
 fingerprint = hashlib.sha256(json.dumps(manifest["files"], sort_keys=True).encode()).hexdigest()[:12]
 CONSUMERS = ROOT / "artifacts/consumers" / fingerprint
 CONSUMERS.mkdir(parents=True, exist_ok=True)
@@ -33,7 +34,7 @@ def run(command, cwd=ROOT, capture=False):
 for filename, expected_digest in manifest["files"].items():
     if hashlib.sha256((PACKAGES / filename).read_bytes()).hexdigest() != expected_digest:
         raise SystemExit("Package checksum differs from manifest: " + filename)
-with zipfile.ZipFile(PACKAGES / "SevenMLabs.Astrology.0.10.0-alpha.1.nupkg") as package:
+with zipfile.ZipFile(PACKAGES / f"SevenMLabs.Astrology.{version}.nupkg") as package:
     native_assets = [name for name in package.namelist() if name.startswith("runtimes/")]
     library = "libastro_engine.dylib" if sys.platform == "darwin" else "libastro_engine.so"
     expected_path = f"runtimes/{manifest['rid']}/native/{library}"
@@ -46,7 +47,7 @@ node_dir.mkdir(exist_ok=True)
 for source in (ROOT / "examples/node").iterdir():
     if source.is_file(): shutil.copy2(source, node_dir / source.name)
 run(npm + ["install", "--offline", "--ignore-scripts", "--no-audit", "--no-fund",
-    "--cache", CONSUMERS / "npm-cache", PACKAGES / "7mlabs-astrology-0.10.0-alpha.1.tgz"], node_dir)
+    "--cache", CONSUMERS / "npm-cache", PACKAGES / f"7mlabs-astrology-{version}.tgz"], node_dir)
 run([node, "test.cjs"], node_dir)
 
 python_dir = CONSUMERS / "python"
@@ -54,7 +55,7 @@ python_dir.mkdir(exist_ok=True)
 venv = python_dir / "venv"
 if not venv.exists(): run([sys.executable, "-m", "venv", venv])
 python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-wheels = sorted(PACKAGES.glob("sevenmlabs_astrology-0.10.0a1-*.whl"))
+wheels = [PACKAGES / filename for filename in manifest["files"] if filename.startswith("sevenmlabs_astrology-") and filename.endswith(".whl")]
 if len(wheels) != 1: raise SystemExit("Expected exactly one wheel for the current target")
 run([python, "-m", "pip", "install", "--no-index", "--no-deps", "--force-reinstall", wheels[0]])
 for name in ("sample.py", "test_sample.py", "domains.py", "custom_profiles.py", "couple.py", "composite.py", "couple_composite.py", "forecast.py", "query.py"):
@@ -192,7 +193,7 @@ for case in references["cases"]:
     for i, name in enumerate(("ascendant", "midheaven")):
         close_angle(output["data"]["angles"][i]["longitude"], expected[name], tol["swissAngleDegrees"])
     print("PASS reference:", case["name"])
-summary = {"platform": sys.platform, "engineVersion": "0.10.0-alpha.1", "languages": list(commands),
+summary = {"platform": sys.platform, "engineVersion": version, "languages": list(commands),
            "consumerFingerprint": fingerprint,
            "parityCases": len(cases), "nodeRepeatedCalls": 1000, "pythonConcurrentCalls": 1000,
            "dotnetConcurrentCalls": 1000, "natalRepeatedNodeCalls": 1000,

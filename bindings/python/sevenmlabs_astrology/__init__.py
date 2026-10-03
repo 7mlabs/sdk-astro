@@ -4,7 +4,7 @@ import json
 import platform
 from pathlib import Path
 
-__version__ = "0.10.0a1"
+__version__ = "0.10.0"
 _system = {"Darwin": "darwin", "Linux": "linux", "Windows": "win32"}[platform.system()]
 _machine = {"aarch64": "arm64", "arm64": "arm64", "AMD64": "x64", "x86_64": "x64"}.get(platform.machine(), platform.machine())
 _file = {"darwin": "libastro_engine.dylib", "linux": "libastro_engine.so", "win32": "astro_engine.dll"}[_system]

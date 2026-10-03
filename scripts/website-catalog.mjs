@@ -1,6 +1,6 @@
 // Human-readable catalog metadata. Numeric summaries are derived by the exporter.
 export const product = {
-  id: 'astrology', name: 'Astrology Engine', status: 'local-alpha',
+  id: 'astrology', name: 'Astrology Engine', status: 'stable-core',
   description: 'One Rust calculation core, local packages, and neutral JSON for natal charts, relationships, event calendars, focused queries and offline LLM context preparation.',
   publication: 'Local artifacts are available. No public registry release or new public GitHub remote is verified.',
   runtime: 'Native, offline, inside the caller process; no calculation server or credentials.',

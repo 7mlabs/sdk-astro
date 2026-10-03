@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1",
-  "engineVersion": "0.10.0-alpha.1",
+  "engineVersion": "0.10.0",
   "lockfile": "neutral-engine/Cargo.lock",
   "description": "Exact upstream license texts for the pinned Rust runtime and build dependencies. Dependency licenses remain their upstream terms. Build dependency inclusion does not assert inclusion in runtime binaries.",
   "dependencies": [

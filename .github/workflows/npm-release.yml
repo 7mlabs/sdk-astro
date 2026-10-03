@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: Publish the verified alpha using the configured npm trusted publisher
+        description: Publish the verified release using the configured npm trusted publisher
         type: boolean
         default: false
   push:
-    tags: ['v*-alpha.*']
+    tags: ['v[0-9]*.[0-9]*.[0-9]*']
 
 permissions:
   contents: read
@@ -62,7 +62,9 @@ jobs:
           else
             python scripts/check-npm-release.py --manifest artifacts/npm-release/manifest.json --commit "$GITHUB_SHA" --reports artifacts/npm-reports
           fi
-      - name: Publish the verified alpha with npm OIDC
-        run: node artifacts/npm-cli/node_modules/npm/bin/npm-cli.js publish artifacts/npm-release/*.tgz --access public --tag alpha --registry=https://registry.npmjs.org/
+      - name: Publish the verified release with npm OIDC
+        run: |
+          RELEASE_TAG=$(python -c 'import json; from pathlib import Path; print(json.loads(Path("artifacts/npm-release/manifest.json").read_text())["tag"])')
+          node artifacts/npm-cli/node_modules/npm/bin/npm-cli.js publish artifacts/npm-release/*.tgz --access public --tag "$RELEASE_TAG" --registry=https://registry.npmjs.org/
       - name: Verify registry received the exact tested tarball
         run: python scripts/check-npm-registry.py --manifest artifacts/npm-release/manifest.json

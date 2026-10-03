@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify a public npm alpha and its installed-consumer evidence before publish."""
+"""Verify a public npm release and its installed-consumer evidence before publish."""
 import argparse
 import hashlib
 import json
@@ -21,6 +21,13 @@ GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def release_tag(version):
+    number = r"(?:0|[1-9][0-9]*)"
+    match = re.fullmatch(rf"{number}\.{number}\.{number}(-alpha\.{number})?", version) if isinstance(version, str) else None
+    require(match is not None, "Only stable x.y.z or alpha x.y.z-alpha.N versions may publish")
+    return "alpha" if match.group(1) else "latest"
 
 
 def sha(data):
@@ -149,14 +156,14 @@ def main():
     manifest = json.loads(manifest_bytes)
     source = read_json(ROOT / "bindings/node/package.json")
     version = source["version"]
-    require(re.fullmatch(r"\d+\.\d+\.\d+-alpha\.\d+", version), "Only explicit alpha versions may publish")
+    tag = release_tag(version)
     core = tomllib.loads((ROOT / "neutral-engine/Cargo.toml").read_text())["workspace"]["package"]["version"]
     require(source.get("private") is True and core == version, "Source version/private guard differs")
     for key, expected in {"schemaVersion": "1.0", "name": "@7mlabs/astrology", "engineVersion": version,
-                          "version": version, "abiVersion": 1, "tag": "alpha", "access": "public"}.items():
+                          "version": version, "abiVersion": 1, "tag": tag, "access": "public"}.items():
         require(manifest.get(key) == expected, f"Release metadata differs: {key}")
     if args.tag is not None:
-        require(args.tag == "v" + version, "Git tag must exactly match the public alpha version")
+        require(args.tag == "v" + version, "Git tag must exactly match the public release version")
     provenance = manifest.get("source")
     require(isinstance(provenance, dict) and provenance.get("repository") == REPOSITORY
             and provenance.get("commitSha") == args.commit, "Release source provenance differs")
@@ -196,7 +203,7 @@ def main():
     metadata = json.loads(entries["package/package.json"])
     expected = dict(source)
     expected.pop("private")
-    expected.update(publishConfig={"access": "public", "tag": "alpha"}, os=["darwin", "linux"], cpu=["arm64", "x64"])
+    expected.update(publishConfig={"access": "public", "tag": tag}, os=["darwin", "linux"], cpu=["arm64", "x64"])
     require(metadata == expected and "private" not in metadata, "Public npm metadata differs from guarded source")
     require(metadata.get("license") == "AGPL-3.0-only", "Release license differs")
     for key in ("scripts", "dependencies", "optionalDependencies", "peerDependencies", "bundledDependencies", "bundleDependencies"):
@@ -240,7 +247,7 @@ def main():
     print(json.dumps({"result": "passed", "name": manifest["name"], "version": version,
                       "packageSha256": manifest["sha256"], "sourceCommit": args.commit,
                       "candidateRunId": next(iter(runs)), "nativeTargets": sorted(f"{p}-{a}" for p, a in TARGETS),
-                      "installedConsumerReports": reports, "tag": "alpha"}, indent=2))
+                      "installedConsumerReports": reports, "tag": tag}, indent=2))
 
 
 if __name__ == "__main__":

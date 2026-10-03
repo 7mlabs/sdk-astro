@@ -1,6 +1,6 @@
 # Cài package và chạy source mẫu
 
-Node.js đã có [@7mlabs/astrology `0.10.0-alpha.1` trên npm](https://www.npmjs.com/package/@7mlabs/astrology), kênh `alpha`. Python, .NET, Rust và UI renderer chưa phát hành registry; các hướng dẫn tương ứng bên dưới vẫn dùng source hoặc artifacts local. Local artifacts từ builder có binary của host; bản npm public đã ghép macOS ARM64 và Linux x64 vào cùng tarball.
+Mục tiêu phát hành Node.js là [@7mlabs/astrology `0.10.0`](https://www.npmjs.com/package/@7mlabs/astrology), kênh ổn định `latest`; đang chờ xác minh phát hành. Python/.NET cũng có metadata `0.10.0` nhưng cùng Rust và UI renderer chưa phát hành registry; hướng dẫn tương ứng bên dưới dùng source hoặc artifacts local. Local artifacts từ builder có binary của host; npm assembler ghép macOS ARM64 và Linux x64 vào cùng tarball.
 
 ## Build từ repo
 
@@ -20,13 +20,13 @@ Nếu Node/npm không nằm trên PATH, set `NODE_BIN` và `NPM_CLI` đến exec
 ## Node.js
 
 ```bash
-npm install @7mlabs/astrology@alpha
+npm install @7mlabs/astrology
 node sample.cjs
 ```
 
-Cập nhật alpha bằng cách chạy lại `npm install @7mlabs/astrology@alpha`. Để pin version, dùng `npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1` và commit lockfile; `npm ci` cài lại theo lockfile. Bản thử nghiệm chưa đưa vào `latest`, nên dùng tag `alpha` hoặc version tường minh.
+Cập nhật kênh ổn định `latest` bằng cách chạy lại `npm install @7mlabs/astrology`. Để pin version, dùng `npm install --save-exact @7mlabs/astrology@0.10.0` và commit lockfile; `npm ci` cài lại theo lockfile.
 
-Package npm chứa sẵn addon cho macOS ARM64 và Linux x64/glibc 2.38+. Cùng tarball đã qua CI trên hai target với Node 18/24 và cài lại từ registry trên macOS ARM64; Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa hỗ trợ. Consumer không cần Rust/compiler/server hoặc tải binary sau cài đặt. Xem [nền tảng và release evidence](node-release.md). Muốn thử artifact local, thay tên package trong lệnh bằng đường dẫn tuyệt đối tới `.tgz`.
+Package npm chứa sẵn addon cho macOS ARM64 và Linux x64/glibc 2.38+. Tarball alpha trước đó đã qua CI trên hai target với Node 18/24 và cài lại từ registry trên macOS ARM64; bản ổn định phải qua lại cùng gate; Windows, macOS Intel, Linux ARM64 và Alpine/musl chưa hỗ trợ. Consumer không cần Rust/compiler/server hoặc tải binary sau cài đặt. Xem [nền tảng và release evidence](node-release.md). Muốn thử artifact local, thay tên package trong lệnh bằng đường dẫn tuyệt đối tới `.tgz`.
 
 ```js
 const { calculate } = require('@7mlabs/astrology');
@@ -43,7 +43,7 @@ Package có TypeScript declarations. `calculate` synchronous, dùng cho natal/ge
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install --no-index /absolute/path/to/sevenmlabs_astrology-0.10.0a1-py3-none-PLATFORM.whl
+.venv/bin/python -m pip install --no-index /absolute/path/to/sevenmlabs_astrology-0.10.0-py3-none-PLATFORM.whl
 .venv/bin/python sample.py
 ```
 
@@ -121,4 +121,4 @@ PyPI `sevenmlabs-astrology`, NuGet `SevenMLabs.Astrology` và crates.io chưa ph
 
 ## Bộ nén payload riêng
 
-Bản `0.10.0-alpha.1` thêm `compressPayload`, `expandContext`, `calculateWithContext` trong Node; API tương ứng dạng snake_case trong Python và `Engine.CompressPayload/ExpandContext/CalculateWithContext` trong .NET. Rust/C dùng cùng thuật toán core. Xem [contract và ví dụ](payload-compression.md). Chạy `scripts/test-compression.py` sau kiểm thử cài package, và `scripts/check-compression-bindings.py` để xác minh helper/TypeScript trên SDK đã cài.
+Dòng version `0.10` thêm `compressPayload`, `expandContext`, `calculateWithContext` trong Node; API tương ứng dạng snake_case trong Python và `Engine.CompressPayload/ExpandContext/CalculateWithContext` trong .NET. Rust/C dùng cùng thuật toán core. Xem [contract và ví dụ](payload-compression.md). Chạy `scripts/test-compression.py` sau kiểm thử cài package, và `scripts/check-compression-bindings.py` để xác minh helper/TypeScript trên SDK đã cài.
