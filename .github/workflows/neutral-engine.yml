@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: sdk-candidate-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   packages:
     name: Candidate ${{ matrix.platform }}-${{ matrix.arch }}

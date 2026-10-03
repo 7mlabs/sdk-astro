@@ -4,6 +4,11 @@ fn main() {
     // identical when Cargo builds the wrapper in debug or release mode.
     build.opt_level(3);
     build.define("ASTRO_MOSHIER_ONLY", None);
+    // Strict C99 hides Linux libc's POSIX file-offset and GNU dl declarations.
+    // Swiss uses off_t/fseeko/ftello and recommends this feature-test macro.
+    if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("linux") {
+        build.define("_GNU_SOURCE", None);
+    }
     build
         .include("vendor")
         .warnings(false)

@@ -8,6 +8,7 @@
 - Bindings và examples Node.js/TypeScript, Python, .NET, Rust, C; mẫu MCP local và UI renderer có bridge được inject.
 - Schema JSON, reference fixtures, parity/fresh-install tests và docs.
 - Chuẩn bị repo `7mlabs/sdk-astro`, metadata repository và CI candidate có artifact checksums/evidence. CI không publish registry.
+- Build provider C99 trên Linux khai báo `_GNU_SOURCE` để có đủ libc file-offset/dl declarations; không đổi thuật toán thiên văn.
 
 Nền tảng có bằng chứng local: macOS ARM64. Linux x64 là CI candidate, cần kết quả runner xác nhận. Windows và final multi-platform registry packages chưa hoàn thiện. Owner đã chọn AGPL-3.0-only cho engine/SDK mới, giữ notices và license MIT riêng của UI. Quyền registry và kiểm tra platform vẫn là điều kiện trước registry release.
 
