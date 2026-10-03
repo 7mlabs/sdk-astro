@@ -1,110 +1,138 @@
-# Astrology Engine
+![7mlabs Astrology — local computation, structured JSON](assets/readme-banner.svg)
 
-Engine chiêm tinh trung lập hướng đến package chạy cục bộ cho nhiều ngôn ngữ. Dev cài thư viện vào dự án và gọi hàm; không cần duy trì server tính toán. Kiến trúc được chọn là một lõi Rust dùng chung, C ABI cho native bindings và Node-API cho Node.js.
+# 7mlabs Astrology
 
-Repo đích: [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro). Đây là bản source riêng cho engine và SDK; ứng dụng Python/.NET/sandbox cũ và lịch sử Git cũ không được đưa vào repo này. Website giới thiệu và docs: [7mlabs](https://sevenmlabs-packages.velikho.chatgpt.site/astro/).
+An offline astrology engine with a shared Rust core and native SDKs. Turn birth data into structured chart, relationship and forecast payloads directly inside your application.
 
-## Trạng thái hiện tại
+[![npm alpha](https://img.shields.io/npm/v/%407mlabs%2Fastrology/alpha?label=npm&color=afe8cc)](https://www.npmjs.com/package/@7mlabs/astrology)
+[![CI](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml/badge.svg)](https://github.com/7mlabs/sdk-astro/actions/workflows/neutral-engine.yml)
+[![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-afe8cc)](LICENSE)
 
-Node.js đã phát hành [@7mlabs/astrology `0.10.0-alpha.1` trên npm](https://www.npmjs.com/package/@7mlabs/astrology), kênh `alpha`, chứa sẵn binary macOS ARM64 và Linux x64. Python, .NET và UI renderer vẫn là artifacts local, chưa phát hành registry. Xem [cài đặt và cập nhật npm](docs/node-release.md).
+**[Documentation](https://sevenmlabs-packages.velikho.chatgpt.site/docs/astrology-node/) · [Explore the engine](https://sevenmlabs-packages.velikho.chatgpt.site/astro/) · [npm](https://www.npmjs.com/package/@7mlabs/astrology) · [Tiếng Việt](README.vi.md)**
 
-Bản alpha `0.10.0-alpha.1` có hai luồng cá nhân **ngày giờ UTC + tọa độ → natal JSON**: `natal` trả lá số cơ bản và `natalDomains` bổ sung dữ liệu theo 10 lĩnh vực cá nhân: công việc, tình cảm, quan hệ, gia đình, tài chính, bản thân, học tập, sáng tạo, nội tâm và đời sống hằng ngày. Đầu ra cơ bản gồm Sun–Pluto, longitude/latitude/distance, speed/retrograde, zodiac sign, ASC/MC/DSC/IC, 12 nhà và major aspects. Hỗ trợ tropical, geocentric, Placidus hoặc Whole Sign; dùng Swiss Ephemeris native với Moshier tích hợp, chạy offline trong process của caller.
+- **Local calculation:** native binaries are included in the npm package. No engine server, compiler or runtime data download is required.
+- **Structured results:** planets, houses, aspects, derived facts and evidence references in versioned JSON envelopes.
+- **One calculation core:** Node.js, Python, .NET, Rust and C share the same Rust/Swiss Ephemeris implementation.
+- **Context preparation:** optional payload compression for LLM workflows, with reversible compact encoding and explicit coverage metadata.
 
-`natalDomains` trả natal của **một cá nhân**, 26 points, đủ 325 cặp góc, aspects theo preset hoặc custom rules, chủ tinh/occupants của 12 nhà và các views có selection reasons. Mỗi lĩnh vực có `report` mở rộng nhà liên quan và facts nâng cao: body conditions, distributions, dispositor chains/cycles, mutual domicile receptions, supported aspect patterns và evidence để dựng báo cáo. `love`/`relationships` không so sánh hai người. Có các mục báo cáo con và `customProfiles` để dev khai báo selectors riêng; mọi profile dùng chung công thức core. Profile và rules có version; engine không trả scoring hoặc luận giải. Bỏ `domains` mặc định tạo cả 10 lĩnh vực; chọn danh sách IDs để giảm phần report lặp lại.
+## Quick start
 
-`couple` nhận birth input của hai người, tính hai natal độc lập rồi dựng dữ liệu synastry: 52 points có namespace theo người, đủ 676 cross-relations, contacts, 20 house overlays và 144 quan hệ giữa chủ tinh nhà A/B. Có 6 lĩnh vực cặp đôi, 18 sections và custom profiles; xem [contract cặp đôi](docs/couple.md). Đây là payload thô phục vụ báo cáo, không có compatibility score hoặc lời luận giải.
-
-`composite` dựng chart C bằng trung điểm của hai natal, có đủ 10 lĩnh vực/30 sections như lá số đơn. Tọa độ, nhà, góc chiếu, chủ tinh và advanced facts được tính lại cho C; không gán ngày sinh hay tốc độ hành tinh giả. Có thể gọi riêng hoặc thêm `composite: {}` vào `couple` để dùng lại hai natal đã tính; xem [contract composite](docs/composite.md).
-
-Package local Node.js, Python, .NET và sample Rust/C cùng gọi một core. Geometry `chart`, `harmonic`, `synastry` từ positions vẫn được giữ. `events` quét ngày/tháng/năm gồm ingress, stations, Moon phases, planetary aspects và global eclipses. `forecast` gắn các mốc với natal cá nhân: snapshot, exact natal transits, house/ruler/contact evidence, 10 lĩnh vực/30 sections và messageContext thô; xem [payload ngày/tháng/năm](docs/forecast.md). `query` bổ sung 8 phép tính/truy vấn theo nhóm geometry/aspects/houses/points; xem [truy vấn theo nhu cầu](docs/query.md). Có [mẫu MCP local và frontend worker bridge](docs/integrations.md). Chưa thêm Davison, progression/return charts, timezone IANA hoặc browser WASM. Xem [kết quả kiểm thử](docs/testing.md), [API natal](docs/natal.md) và [payload theo lĩnh vực](docs/domains.md).
-
-`compressPayload` là bước xử lý riêng sau tính toán. Chế độ `compact` nén biểu diễn và giải nén được toàn bộ giá trị JSON; `focused` chọn lĩnh vực/sections, giữ context hỗ trợ; `budgeted` kiểm tra giới hạn và báo rõ khi dữ liệu tối thiểu vượt budget. `calculateWithContext` trả cả `result` gốc và `context` đã nén. Xem [hướng dẫn bộ nén](docs/payload-compression.md); API tính toán hiện có không đổi.
-
-## Tài liệu
-
-| Tài liệu | Nội dung |
-|---|---|
-| [Kiến trúc](docs/architecture.md) | Lựa chọn lõi, binding, provider và ranh giới module |
-| [Plan chuyển đổi theo phase](docs/phases.md) | Đầu ra, gate và trạng thái từng phase |
-| [Plan triển khai](docs/implementation.md) | Mapping legacy, backlog, build và release |
-| [Natal cơ bản](docs/natal.md) | Birth input, provider, phạm vi và ví dụ output |
-| [Payload theo lĩnh vực](docs/domains.md) | 10 lĩnh vực cá nhân, nhà H, rulership và toàn bộ contacts |
-| [Báo cáo natal cá nhân](docs/individual-reports.md) | Advanced facts, nhà hỗ trợ có evidence, các mục báo cáo con và giới hạn |
-| [Ngày/tháng/năm và sự kiện](docs/forecast.md) | Daily messageContext, monthly overview, annual events và ảnh hưởng theo natal |
-| [Lá số thứ ba](docs/composite.md) | Midpoint composite C, 10 lĩnh vực/30 sections và provenance |
-| [Lá số cặp đôi](docs/couple.md) | Birth input hai người, synastry, overlays, lĩnh vực và reference joins |
-| [Profiles tùy chỉnh](docs/profiles.md) | Catalog 10 profiles, custom selectors, validation và migration |
-| [Truy vấn theo nhu cầu](docs/query.md) | Góc tùy ý, nhà/điểm được chọn và 4 nhóm SDK |
-| [Nén payload cho LLM](docs/payload-compression.md) | Bộ nén dùng chung, chọn lĩnh vực, budget và giải nén |
-| [MCP và frontend host](docs/integrations.md) | Adapter stdio local, native worker và runtime matrix |
-| [API](docs/api.md) | Input/output, quy ước tính, lỗi và giới hạn |
-| [Cài package](docs/packages.md) | Cài npm alpha hoặc local wheel/nupkg và chạy từng ngôn ngữ |
-| [Phát hành Node.js](docs/node-release.md) | Cài/cập nhật npm, nền tảng, checksum và release gate |
-| [Kiểm thử](docs/testing.md) | Unit, fresh install, parity và giới hạn bằng chứng |
-| [Frontend](docs/frontend.md) | Playground JSON/chart, WASM và chức năng offline |
-| [Phân phối public](docs/distribution.md) | GitHub, registry, license và dữ liệu |
-| [License miễn phí](docs/license.md) | AGPL-3.0, Swiss Ephemeris và license của UI renderer |
-| [Thiết lập GitHub và phát hành](docs/github-setup.md) | Repo đích, CI candidate, registry và các bước còn cần owner cấu hình |
-| [Tài liệu legacy](docs/legacy-source.md) | Source Python/.NET/sandbox và lần tách .NET trước |
-
-## Build và test trực tiếp
-
-Máy build cần Rust 1.83+, Node/npm, Python và .NET 10 SDK. Consumer npm chỉ cần Node.js trên nền tảng được hỗ trợ; không cần toolchain build.
-
-```bash
-python3 -m venv artifacts/python-build
-artifacts/python-build/bin/python -m pip install setuptools wheel
-artifacts/python-build/bin/python scripts/build-packages.py
-artifacts/python-build/bin/python scripts/test-packages.py
-```
-
-Script test cài các artifact thật vào project riêng, không dùng source imports của Node/Python/.NET. Tất cả calculation/parity chạy local. `NODE_BIN` và `NPM_CLI` cho phép chọn tool không nằm trên PATH. Dùng `--offline` khi Cargo dependencies đã có trong cache.
-
-## Ví dụ Node.js
-
-Cài bản alpha đã phát hành, rồi chạy ví dụ:
+Install the current alpha:
 
 ```sh
 npm install @7mlabs/astrology@alpha
 ```
 
-Để cập nhật, chạy lại lệnh trên. Dùng `npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1` và commit lockfile để giữ đúng phiên bản.
+Save this as `chart.cjs`, then run `node chart.cjs`:
 
 ```js
 const { calculate } = require('@7mlabs/astrology');
-const result = calculate({
-  operation: 'natal',
+
+const birth = {
   utc: { year: 2000, month: 1, day: 1, hour: 12, minute: 0 },
   location: { latitude: 10.8231, longitude: 106.6297 },
   houseSystem: 'placidus'
+};
+
+const chart = calculate({ operation: 'natal', ...birth });
+
+console.log({
+  sun: chart.data.placements.find(body => body.id === 'sun').sign,
+  planets: chart.data.placements.length,
+  houses: chart.data.houses.length
 });
-console.log(result.data.placements, result.data.houses);
+// { sun: 'Capricorn', planets: 10, houses: 12 }
 ```
 
-Lấy dữ liệu theo lĩnh vực bằng cùng SDK:
+Input time is **UTC**; convert local civil time before calling the SDK. Coordinates use degrees, with north/east positive. The response includes calculation metadata, warnings and errors alongside `data`. [View a complete request and response →](docs/natal.md)
+
+TypeScript declarations are included. `calculate()` is synchronous and throws an error with `.code` and `.result` on calculation failure; `calculateJson()` returns a JSON envelope. Use a worker for long month/year scans in interactive applications.
+
+## Capabilities
+
+| Area | API | Result |
+| --- | --- | --- |
+| Natal charts | `natal` | Sun–Pluto, four angles, 12 houses and major aspects |
+| Individual reports | `natalDomains` | Ten domain views, advanced facts, custom profiles and supporting evidence |
+| Relationship comparison | `couple` | Two natal charts, synastry contacts, house overlays and six domain views |
+| Composite charts | `composite` | A symbolic midpoint chart C with ten domain views |
+| Astronomical events | `events` | Day/month/year searches for ingress, stations, Moon phases, aspects and global eclipses |
+| Personal forecasts | `forecast` | Natal transits, event impacts, calendar overviews and domain-specific context |
+| Geometry | `chart`, `harmonic`, `synastry` | Calculations from supplied positions |
+| On-demand queries | `geometry`, `aspects`, `houses`, `points` | Eight helpers backed by the `query` operation |
+| Payload compression | `compressPayload`, `calculateWithContext` | Compact, focused or budgeted context, with `expandContext` for decoding |
+
+The engine returns calculated data and report context. Narrative interpretation and compatibility scoring belong to the consuming application. Individual domain reports use one person's chart; `couple` compares two people.
+
+### Select individual domains
+
+Using `birth` from the quick start:
 
 ```js
-const domains = calculate({
+const report = calculate({
   operation: 'natalDomains',
-  utc: { year: 2000, month: 1, day: 1, hour: 12, minute: 0 },
-  location: { latitude: 10.8231, longitude: 106.6297 },
-  domains: ['career', 'love'],
-  aspectPreset: 'extended',
-  rulership: 'traditional'
+  ...birth,
+  domains: ['career', 'love']
 });
-console.log(domains.data.domains.career.houses);
-console.log(domains.data.domains.love.aspects);
-console.log(domains.data.domains.love.report.sections);
+
+console.log(report.data.domains.career.report.sections);
 ```
 
-Lá số cặp đôi dùng cùng SDK với `operation: 'couple'`, `personA` và `personB`; mỗi người có `utc`, `location` và `houseSystem` riêng. [Request mẫu](examples/couple-request.json) và samples [Node.js](examples/node/couple.cjs), [Python](examples/python/couple.py), [.NET `--couple`](examples/dotnet/Program.cs) tạo đủ 6 lĩnh vực.
+Built-in domains cover career, love, relationships, family, finance, identity, learning, creativity, inner life and daily life. [Domain payloads](docs/domains.md) · [Advanced reports](docs/individual-reports.md) · [Custom profiles](docs/profiles.md)
 
-Ví dụ dùng ngày 01/01/2000 lúc 12:00 UTC và tọa độ TP.HCM; giờ địa phương phải được caller đổi sang UTC. [Source mẫu](examples/) gồm Node.js, Python, .NET, Rust và C.
+### Prepare LLM context
 
-## Public release
+```js
+const { compressPayload, expandContext } = require('@7mlabs/astrology');
 
-Repo `7mlabs/sdk-astro` chứa source engine và SDK mới theo `AGPL-3.0-only`, dùng nhánh miễn phí của Swiss Ephemeris. Toàn văn [LICENSE](LICENSE) và [NOTICE](NOTICE) được giữ trong source và SDK packages. UI renderer độc lập có [license MIT riêng](examples/frontend/ui/LICENSE).
+const context = compressPayload(report, { mode: 'compact' });
+const restored = expandContext(context);
+// restored preserves the JSON values in report.
+```
 
-Package npm `@7mlabs/astrology@0.10.0-alpha.1` đã phát hành public với dist-tag `alpha`; đã kiểm tra registry integrity/tag và cài lại từ registry vào project mới. Python/PyPI, .NET/NuGet, Rust/crates.io và UI renderer chưa phát hành. Source npm vẫn giữ `private: true`; chỉ tarball đã qua release gate có metadata public. Xem [license](docs/license.md), [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).
+`focused` selects domains/sections; `budgeted` additionally checks delivery limits and reports when they are exceeded. Compression savings depend on the payload. [Compression contract and examples →](docs/payload-compression.md)
 
-[CI của bản phát hành ngày 2026-10-03 đã qua](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672), tại commit `a17850e01507485312e5cb584ed1eb82a786fcbc`: 108 tests Rust, 339 cases parity giữa 5 ngôn ngữ và kiểm tra tarball npm cuối trên cả hai target với Node 18/24, gồm schema, compression và TypeScript. SHA256 tarball: `d8dcfdbaea4e66070a75f9e5ef91d0e6302b33995b364dce40b6a1e28eba9748`. npm trusted publisher đã cấu hình cho workflow `npm-release.yml`, environment `npm-release`; lần phát hành đầu dùng tài khoản npm đã xác thực, chưa có lần publish thực tế bằng OIDC. Xem [phạm vi bằng chứng](docs/testing.md); Linux wheel vẫn cần bước manylinux trước khi phát hành PyPI.
+## Packages and platforms
+
+| Language | Distribution | Status |
+| --- | --- | --- |
+| Node.js / TypeScript | [`@7mlabs/astrology`](https://www.npmjs.com/package/@7mlabs/astrology) | Public npm alpha: `0.10.0-alpha.1` |
+| Python | `sevenmlabs-astrology` | Local wheels; PyPI release pending |
+| .NET | `SevenMLabs.Astrology` | Local NuGet artifacts; public release pending |
+| Rust / C | Core crates and C ABI | Source integration examples |
+
+The npm release includes **macOS ARM64** and **Linux x64** binaries. Linux requires **glibc 2.38+** and `libgcc_s.so.1`. Node.js 18/24 were tested on both targets; Node.js 22 or 24 is recommended for new applications. Windows, macOS Intel, Linux ARM64 and Alpine/musl binaries are not included. [Full platform requirements →](docs/node-release.md)
+
+Run the install command again to update the alpha channel. To pin this release:
+
+```sh
+npm install --save-exact @7mlabs/astrology@0.10.0-alpha.1
+```
+
+Commit your application's lockfile and use `npm ci` for reproducible installs. [Other language installation guides →](docs/packages.md)
+
+## Documentation and examples
+
+Most detailed guides are currently written in Vietnamese; API identifiers and JSON contracts are shared across languages.
+
+| Topic | Guides |
+| --- | --- |
+| Charts and reports | [Natal](docs/natal.md) · [Domains](docs/domains.md) · [Advanced facts](docs/individual-reports.md) · [Profiles](docs/profiles.md) |
+| Relationships | [Synastry](docs/couple.md) · [Composite](docs/composite.md) |
+| Time and calculations | [Events / forecasts](docs/forecast.md) · [Queries](docs/query.md) · [API reference](docs/api.md) |
+| Integrations | [Compression](docs/payload-compression.md) · [Local MCP](examples/mcp/README.md) · [Frontend host](examples/frontend/README.md) · [UI renderer](examples/frontend/ui/README.md) |
+| Installation and development | [Packages](docs/packages.md) · [Architecture](docs/architecture.md) · [Build / release](docs/github-setup.md) · [Roadmap](docs/phases.md) |
+
+[Runnable examples](examples/) include Node.js, Python, .NET, Rust and C. The local MCP adapter and frontend worker bridge are optional integrations. Browser-only calculation requires a separate WASM build, which is not part of this release.
+
+## Calculation scope and validation
+
+Birth calculations currently support Gregorian UTC **1800–2399**, tropical geocentric positions, and **Placidus** or **Whole Sign** houses. Swiss Ephemeris uses the bundled Moshier model. Timezone conversion is caller-managed; IANA timezone conversion, sidereal/topocentric charts, Davison, progressions and return charts are future work. [Calculation scope →](docs/natal.md)
+
+The published release passed **108 Rust tests** and **339 cross-language conformance cases**. Its final npm tarball was tested on macOS ARM64 and Linux x64 with Node.js 18/24, followed by a fresh registry install on macOS ARM64. [CI evidence](https://github.com/7mlabs/sdk-astro/actions/runs/37096125672) · [Validation details](docs/testing.md)
+
+For source development, start with the [build instructions](docs/github-setup.md). Suggestions and reproducible bug reports are welcome in [GitHub Issues](https://github.com/7mlabs/sdk-astro/issues).
+
+## License
+
+Engine and SDKs are licensed under **[AGPL-3.0-only](LICENSE)**, using the free AGPL option of Swiss Ephemeris. License text and third-party notices are included in the packages. The independent UI renderer has a [separate MIT license](examples/frontend/ui/LICENSE). See [NOTICE](NOTICE) and the [license guide](docs/license.md) for details.

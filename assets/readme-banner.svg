@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">7mlabs Astrology</title>
+  <desc id="desc">Astrology Engine. Local computation. Structured JSON. A mint orbital geometry illustration on a dark background.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101a20"/>
+      <stop offset="1" stop-color="#080d12"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#afe8cc" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#afe8cc" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="bounds"><rect width="1200" height="300" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#bounds)">
+    <rect width="1200" height="300" fill="url(#background)"/>
+    <circle cx="1000" cy="148" r="260" fill="url(#glow)"/>
+    <path d="M56 62h23" stroke="#afe8cc" stroke-width="3" stroke-linecap="round"/>
+    <text x="92" y="69" fill="#afe8cc" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="1">7m/labs</text>
+    <text x="56" y="150" fill="#f1f4f8" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="700" letter-spacing="-2">Astrology Engine</text>
+    <text x="58" y="192" fill="#a9b9c5" font-family="Arial, Helvetica, sans-serif" font-size="21">Local computation. Structured JSON.</text>
+    <path d="M58 233h336" stroke="#283a43"/>
+    <text x="58" y="262" fill="#8196a6" font-family="monospace" font-size="12" letter-spacing="2">RUST CORE / NATIVE SDKS / OFFLINE</text>
+    <g transform="translate(970 148)" fill="none">
+      <circle r="113" stroke="#34534c"/>
+      <circle r="83" stroke="#29403d"/>
+      <circle r="48" stroke="#34534c" stroke-dasharray="3 7"/>
+      <path d="M0-113v226M-113 0h226M-80-80l160 160M-80 80 80-80" stroke="#263d3b"/>
+      <path d="M-97-58 40-72 79 40-45 97Z" stroke="#afe8cc" stroke-opacity=".65" stroke-width="1.5"/>
+      <path d="M-97-58 79 40M40-72-45 97" stroke="#afe8cc" stroke-opacity=".28"/>
+      <circle cx="-97" cy="-58" r="5" fill="#afe8cc"/>
+      <circle cx="40" cy="-72" r="5" fill="#afe8cc"/>
+      <circle cx="79" cy="40" r="5" fill="#afe8cc"/>
+      <circle cx="-45" cy="97" r="5" fill="#afe8cc"/>
+      <circle r="6" fill="#afe8cc"/>
+      <circle r="13" stroke="#afe8cc" stroke-opacity=".3"/>
+    </g>
+    <path d="M835 31h25M847.5 18.5v25M1132 242h16M1140 234v16" stroke="#afe8cc" stroke-opacity=".5"/>
+  </g>
+  <rect x=".5" y=".5" width="1199" height="299" rx="15.5" fill="none" stroke="#283940"/>
+</svg>
