@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "1",
+  "engineVersion": "0.10.0-alpha.1",
+  "lockfile": "neutral-engine/Cargo.lock",
+  "description": "Exact upstream license texts for the pinned Rust runtime and build dependencies. Dependency licenses remain their upstream terms. Build dependency inclusion does not assert inclusion in runtime binaries.",
+  "dependencies": [
+    {
+      "name": "cc",
+      "version": "1.0.79",
+      "classification": "build",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/cc-rs",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/cc/1.0.79",
+      "cargoPackageChecksum": "50d30906286121d95be3d479533b458f87493b30a4b5f79a607db8f5d11aa91f",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "cc-1.0.79-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-cc-1.0.79-LICENSE-APACHE",
+          "bytes": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "cc-1.0.79-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-cc-1.0.79-LICENSE-MIT",
+          "bytes": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.8",
+      "classification": "runtime",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/dtolnay/itoa",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/itoa/1.0.8",
+      "cargoPackageChecksum": "62b02a5381cc465bd3041d84623d0fa3b66738b52b8e2fc3bab8ad63ab032f4a",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "itoa-1.0.8-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-itoa-1.0.8-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "itoa-1.0.8-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-itoa-1.0.8-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.76",
+      "classification": "build",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/dtolnay/proc-macro2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/proc-macro2/1.0.76",
+      "cargoPackageChecksum": "95fc56cda0b5c3325f5fbbd7ff9fda9e02bb00bb3dac51252d2f1bfa1cb8cc8c",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "proc-macro2-1.0.76-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-proc-macro2-1.0.76-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "proc-macro2-1.0.76-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-proc-macro2-1.0.76-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "quote",
+      "version": "1.0.35",
+      "classification": "build",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/dtolnay/quote",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/quote/1.0.35",
+      "cargoPackageChecksum": "291ec9ab5efd934aaf503a6466c5d5251535d108ee747472c3977cc5acc868ef",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "quote-1.0.35-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-quote-1.0.35-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "quote-1.0.35-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-quote-1.0.35-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "ryu",
+      "version": "1.0.14",
+      "classification": "runtime",
+      "license": "Apache-2.0 OR BSL-1.0",
+      "repository": "https://github.com/dtolnay/ryu",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/ryu/1.0.14",
+      "cargoPackageChecksum": "fe232bdf6be8c8de797b22184ee71118d63780ea42ac85b61d1baa6d3b782ae9",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "ryu-1.0.14-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-ryu-1.0.14-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "ryu-1.0.14-LICENSE-BOOST",
+          "sdkPackagePath": "third-party/rust-ryu-1.0.14-LICENSE-BOOST",
+          "bytes": 1338,
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+        }
+      ]
+    },
+    {
+      "name": "serde",
+      "version": "1.0.195",
+      "classification": "runtime",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/serde-rs/serde",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/serde/1.0.195",
+      "cargoPackageChecksum": "63261df402c67811e9ac6def069e4786148c4563f4b50fd4bf30aa370d626b02",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "serde-1.0.195-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-serde-1.0.195-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "serde-1.0.195-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-serde-1.0.195-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.195",
+      "classification": "build",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/serde-rs/serde",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/serde_derive/1.0.195",
+      "cargoPackageChecksum": "46fe8f8603d81ba86327b23a2e9cdf49e1255fb94a4c5f297f6ee0547178ea2c",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "serde_derive-1.0.195-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-serde_derive-1.0.195-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "serde_derive-1.0.195-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-serde_derive-1.0.195-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.109",
+      "classification": "runtime",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/serde-rs/json",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/serde_json/1.0.109",
+      "cargoPackageChecksum": "cb0652c533506ad7a2e353cce269330d6afd8bdfb6d75e0ace5b35aacbd7b9e9",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "serde_json-1.0.109-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-serde_json-1.0.109-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "serde_json-1.0.109-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-serde_json-1.0.109-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "syn",
+      "version": "2.0.48",
+      "classification": "build",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/dtolnay/syn",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/syn/2.0.48",
+      "cargoPackageChecksum": "0f3531638e407dfc0814761abb7c00a5b54992b849452a0646b7f65c9f770f3f",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "syn-2.0.48-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-syn-2.0.48-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "syn-2.0.48-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-syn-2.0.48-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.10",
+      "classification": "build",
+      "license": "(MIT OR Apache-2.0) AND Unicode-DFS-2016",
+      "repository": "https://github.com/dtolnay/unicode-ident",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "registryUrl": "https://crates.io/crates/unicode-ident/1.0.10",
+      "cargoPackageChecksum": "22049a19f4a68748a168c0fc439f9516686aa045927ff767eca0a85101fb6e73",
+      "cachedCrateArchiveVerified": true,
+      "licenses": [
+        {
+          "path": "unicode-ident-1.0.10-LICENSE-APACHE",
+          "sdkPackagePath": "third-party/rust-unicode-ident-1.0.10-LICENSE-APACHE",
+          "bytes": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "unicode-ident-1.0.10-LICENSE-MIT",
+          "sdkPackagePath": "third-party/rust-unicode-ident-1.0.10-LICENSE-MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "unicode-ident-1.0.10-LICENSE-UNICODE",
+          "sdkPackagePath": "third-party/rust-unicode-ident-1.0.10-LICENSE-UNICODE",
+          "bytes": 2315,
+          "sha256": "68f5b9f5ea36881a0942ba02f558e9e1faf76cc09cb165ad801744c61b738844"
+        }
+      ]
+    }
+  ]
+}

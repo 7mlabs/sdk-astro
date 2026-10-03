@@ -137,7 +137,7 @@ Operation query có 4 groups/8 actions, custom aspect angles, natal house/point 
 - Sinh checksums, dependency/data manifest, changelog và hướng dẫn migration.
 - Registry install tests dùng đúng version vừa release; rollback bằng version mới hoặc thu hồi theo policy registry, không thay bytes cùng version.
 
-**Gate:** legal/provenance resolved; CI sạch; security/dependency review đạt; install test từ registry thực qua. Repo đích đã chọn là `7mlabs/sdk-astro`; source đang chuẩn bị local, chưa push/publish registry. Xem [github-setup.md](github-setup.md).
+**Gate:** legal/provenance resolved; CI sạch; security/dependency review đạt; install test từ registry thực qua. Repo đã chọn là `7mlabs/sdk-astro`, source mới dùng AGPL-3.0-only theo lựa chọn miễn phí của owner. Public registry release còn chờ platform/ownership gates. Xem [github-setup.md](github-setup.md).
 
 ## Phase 5 CLI và MCP cục bộ
 

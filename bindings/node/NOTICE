@@ -1,0 +1,36 @@
+7mlabs Astrology Engine
+
+The new engine, language bindings, schemas, examples and documentation in
+this repository are distributed under GNU Affero General Public License
+version 3 only (SPDX: AGPL-3.0-only), except the separately identified files
+below. See LICENSE for the complete license text.
+
+Source repository: https://github.com/7mlabs/sdk-astro
+
+Swiss Ephemeris
+--------------
+Copyright Astrodienst AG, Switzerland, as stated in the upstream files.
+Upstream: https://github.com/aloistr/swisseph
+Pinned commit: aacf962d19d79f8bc921dbcdaacf306d85be1917
+Provider version: 2.10.03
+
+This project chooses the free AGPL licensing option of Swiss Ephemeris.
+The original license and copyright notices are preserved in the vendor
+directory and in each SDK's third-party directory.
+
+Local modification, 2026-10-02: sweph.c:swi_fopen returns NULL when
+ASTRO_MOSHIER_ONLY is defined, preventing external ephemeris/time-table
+file access. The provider uses the compiled Moshier model. No external
+ephemeris data files are distributed. See the provider PROVENANCE.md.
+
+Separately licensed components
+------------------------------
+examples/frontend/ui is the independent payload renderer, licensed under
+MIT as specified in its own LICENSE. This exception does not change the
+license of the engine or of applications incorporating the engine.
+
+Third-party Rust dependency license texts and version/source inventory
+are preserved in third-party/rust and copied into SDK third-party folders.
+Their original licenses remain applicable to those components.
+
+Legacy application source and Git history are not included in this repo.

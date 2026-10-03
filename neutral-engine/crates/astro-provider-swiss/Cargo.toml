@@ -5,6 +5,7 @@ edition.workspace = true
 rust-version.workspace = true
 publish = false
 repository.workspace = true
+license.workspace = true
 
 [build-dependencies]
 cc = "=1.0.79"

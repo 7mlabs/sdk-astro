@@ -40,6 +40,7 @@ Package local Node.js, Python, .NET và sample Rust/C cùng gọi một core. Ge
 | [Kiểm thử](docs/testing.md) | Unit, fresh install, parity và giới hạn bằng chứng |
 | [Frontend](docs/frontend.md) | Playground JSON/chart, WASM và chức năng offline |
 | [Phân phối public](docs/distribution.md) | GitHub, registry, license và dữ liệu |
+| [License miễn phí](docs/license.md) | AGPL-3.0, Swiss Ephemeris và license của UI renderer |
 | [Thiết lập GitHub và phát hành](docs/github-setup.md) | Repo đích, CI candidate, registry và các bước còn cần owner cấu hình |
 | [Tài liệu legacy](docs/legacy-source.md) | Source Python/.NET/sandbox và lần tách .NET trước |
 
@@ -93,6 +94,6 @@ Ví dụ dùng ngày 01/01/2000 lúc 12:00 UTC và tọa độ TP.HCM; giờ đ�
 
 ## Public release
 
-Repo đích đã được xác định là `7mlabs/sdk-astro`; source hiện được chuẩn bị ở local, chưa push. Package chưa publish trên registry; các tên package chưa được xác nhận quyền sở hữu. CI candidate build/test artifact trên macOS ARM64 và Linux x64, không phát hành package. Kết quả build ở local chỉ xác nhận nền tảng đã chạy, không thay thế kết quả GitHub Actions.
+Repo `7mlabs/sdk-astro` chứa source engine và SDK mới theo `AGPL-3.0-only`, dùng nhánh miễn phí của Swiss Ephemeris. Toàn văn [LICENSE](LICENSE) và [NOTICE](NOTICE) được giữ trong source và SDK packages. UI renderer độc lập có [license MIT riêng](examples/frontend/ui/LICENSE).
 
-License của source mới và mô hình phân phối Swiss Ephemeris cần được owner xác định trước khi public. Giữ nguyên vendor licenses và notices; không tự relicense source clone. Xem [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).
+Package chưa publish trên registry; các tên package chưa được xác nhận quyền sở hữu. CI candidate build/test artifact trên macOS ARM64 và Linux x64, không phát hành package. Kết quả build ở local chỉ xác nhận nền tảng đã chạy, không thay thế kết quả GitHub Actions. Xem [license](docs/license.md), [các bước thiết lập](docs/github-setup.md) và [phân phối](docs/distribution.md).

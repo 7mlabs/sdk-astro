@@ -2,6 +2,7 @@
   "name": "@7mlabs/astrology",
   "version": "0.10.0-alpha.1",
   "description": "Offline natal, synastry, composite, forecasts and astronomical event data using a shared native engine",
+  "license": "AGPL-3.0-only",
   "main": "index.cjs",
   "types": "index.d.ts",
   "exports": {
@@ -15,6 +16,8 @@
     "index.d.ts",
     "native",
     "README.md",
+    "LICENSE",
+    "NOTICE",
     "third-party"
   ],
   "engines": {

@@ -1,19 +1,24 @@
 """Validate candidate source/metadata; optionally verify built package evidence.
 
 Uses Python 3.11+ standard library only. This is not a public-release approval:
-license, registry ownership and the final platform packaging remain separate.
+the chosen AGPL license/notices are checked; registry ownership and final
+platform packaging remain separate.
 """
 import argparse
+from email.parser import BytesParser
 import hashlib
 import json
 from pathlib import Path
 import re
 import sys
+import tarfile
 import tomllib
 from urllib.parse import unquote, urlsplit
 import xml.etree.ElementTree as ET
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+LICENSE_ID = "AGPL-3.0-only"
 
 
 def load_json(relative):
@@ -23,6 +28,40 @@ def load_json(relative):
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def check_license_source(cargo, node, python, dotnet):
+    license_bytes = (ROOT / "LICENSE").read_bytes()
+    license_text = license_bytes.decode("utf-8")
+    require(len(license_bytes) > 30000
+            and "GNU AFFERO GENERAL PUBLIC LICENSE" in license_text[:200]
+            and "Version 3, 19 November 2007" in license_text[:500]
+            and "13. Remote Network Interaction" in license_text
+            and "END OF TERMS AND CONDITIONS" in license_text,
+            "Root LICENSE must contain the full GNU AGPL version 3 text")
+    require(cargo["workspace"]["package"].get("license") == LICENSE_ID,
+            "Workspace must declare the chosen AGPL license")
+    require(node.get("license") == LICENSE_ID, "npm license metadata differs from AGPL decision")
+    require(python.get("license") == LICENSE_ID, "Python license expression differs from AGPL decision")
+    require({"LICENSE", "NOTICE"}.issubset(python.get("license-files", [])),
+            "Python license-files must include LICENSE and NOTICE")
+    require(dotnet.findtext(".//PackageLicenseExpression") == LICENSE_ID,
+            "NuGet license expression differs from AGPL decision")
+    vendor = ROOT / "neutral-engine/crates/astro-provider-swiss/vendor"
+    for binding, third_party in (("node", "third-party"),
+                                 ("python", "sevenmlabs_astrology/third-party"),
+                                 ("dotnet", "third-party")):
+        directory = ROOT / "bindings" / binding
+        require((directory / "LICENSE").read_bytes() == license_bytes,
+                f"Full AGPL license copy differs: bindings/{binding}/LICENSE")
+        notice = (directory / "NOTICE").read_text(encoding="utf-8")
+        require(LICENSE_ID in notice and "Swiss Ephemeris" in notice,
+                f"SDK NOTICE must identify AGPL and Swiss Ephemeris: {binding}")
+        for name in ("LICENSE", "LICENSE.TXT"):
+            require((directory / third_party / ("swisseph-" + name)).read_bytes()
+                    == (vendor / name).read_bytes(),
+                    f"Swiss Ephemeris notice differs from upstream vendor: {binding}/{name}")
+    return {"expression": LICENSE_ID, "licenseSha256": hashlib.sha256(license_bytes).hexdigest()}
 
 
 def check_source():
@@ -46,9 +85,12 @@ def check_source():
     require(dotnet.findtext(".//RepositoryUrl") == repository,
             "NuGet repository metadata differs from destination")
     require(node.get("private") is True, "Candidate npm package must retain private:true")
+    license_summary = check_license_source(cargo, node, python, dotnet)
     for manifest in sorted((ROOT / "neutral-engine/crates").glob("*/Cargo.toml")):
         package = tomllib.loads(manifest.read_text())["package"]
         require(package.get("publish") is False, f"Registry guard missing: {manifest.relative_to(ROOT)}")
+        require(package.get("license") == {"workspace": True},
+                f"Crate must inherit workspace AGPL license: {manifest.relative_to(ROOT)}")
     workflow = (ROOT / ".github/workflows/neutral-engine.yml").read_text()
     require(not re.search(r"(?:npm|cargo)\s+publish|twine\s+upload|dotnet\s+nuget\s+push|gh\s+release|(?:contents|id-token):\s*write", workflow),
             "Candidate workflow must not grant publication permissions or publish packages")
@@ -79,11 +121,64 @@ def check_source():
     blockers = ["Registry ownership/trusted publishers not verified",
                 "Final multi-platform npm/NuGet assembly and portable Linux wheels not verified",
                 "Windows package builder not implemented"]
-    if not any((ROOT / name).is_file() for name in ("LICENSE", "LICENSE.md", "LICENSE.txt")):
-        blockers.insert(0, "Root license/provenance decision pending")
     return {"engineVersion": version, "pythonVersion": python_version,
             "documentationFiles": len(markdown), "localLinks": link_count,
+            "license": license_summary,
             "candidateWorkflowPublishingEnabled": False, "releaseBlockers": blockers}
+
+
+def check_package_licenses(packages, version, wheel):
+    def expected_files(binding, prefix):
+        directory = ROOT / "bindings" / binding
+        files = {prefix + "LICENSE": (ROOT / "LICENSE").read_bytes(),
+                 prefix + "NOTICE": (directory / "NOTICE").read_bytes()}
+        third_party = "sevenmlabs_astrology/third-party" if binding == "python" else "third-party"
+        for source in sorted((directory / third_party).iterdir()):
+            if source.is_file():
+                files[prefix + third_party + "/" + source.name] = source.read_bytes()
+        return files
+
+    with tarfile.open(packages / f"7mlabs-astrology-{version}.tgz", "r:gz") as archive:
+        for name, expected in expected_files("node", "package/").items():
+            member = archive.getmember(name)
+            require(member.isfile(), f"npm notice is not a regular file: {name}")
+            require(archive.extractfile(member).read() == expected, f"npm notice content differs: {name}")
+        metadata = json.load(archive.extractfile("package/package.json"))
+        require(metadata.get("license") == LICENSE_ID, "Built npm license metadata differs")
+
+    with zipfile.ZipFile(packages / wheel) as archive:
+        metadata_names = [name for name in archive.namelist() if name.endswith(".dist-info/METADATA")]
+        require(len(metadata_names) == 1, "Expected one wheel METADATA file")
+        metadata = BytesParser().parsebytes(archive.read(metadata_names[0]))
+        require(metadata.get("License-Expression") == LICENSE_ID, "Built wheel license expression differs")
+        require({"LICENSE", "NOTICE"}.issubset(metadata.get_all("License-File", [])),
+                "Built wheel must declare LICENSE and NOTICE")
+        dist_info = metadata_names[0].rsplit("/", 1)[0]
+        source_root = ROOT / "bindings/python"
+        for name in metadata.get_all("License-File", []):
+            source = (source_root / name).resolve()
+            require(source.is_relative_to(source_root) and source.is_file(),
+                    f"Wheel declares an unavailable/outside-source license file: {name}")
+            matches = [path for path in (dist_info + "/licenses/" + name, dist_info + "/" + name)
+                       if path in archive.namelist()]
+            require(len(matches) == 1 and archive.read(matches[0]) == source.read_bytes(),
+                    f"Wheel declared license file missing or different: {name}")
+        for name, expected in expected_files("python", "").items():
+            if name in ("LICENSE", "NOTICE"):
+                matches = [path for path in (dist_info + "/licenses/" + name, dist_info + "/" + name)
+                           if path in archive.namelist()]
+                require(len(matches) == 1, f"Expected one full wheel license/notice: {name}")
+                name = matches[0]
+            require(archive.read(name) == expected, f"Wheel notice content differs: {name}")
+
+    with zipfile.ZipFile(packages / f"SevenMLabs.Astrology.{version}.nupkg") as archive:
+        for name, expected in expected_files("dotnet", "").items():
+            require(archive.read(name) == expected, f"NuGet notice content differs: {name}")
+        nuspecs = [name for name in archive.namelist() if name.endswith(".nuspec")]
+        require(len(nuspecs) == 1, "Expected one NuGet nuspec")
+        license_element = ET.fromstring(archive.read(nuspecs[0])).find(".//{*}license")
+        require(license_element is not None and license_element.get("type") == "expression"
+                and (license_element.text or "").strip() == LICENSE_ID, "Built NuGet license expression differs")
 
 
 def check_artifacts(summary, expected_platform, expected_arch):
@@ -107,6 +202,7 @@ def check_artifacts(summary, expected_platform, expected_arch):
         file = ROOT / "artifacts/packages" / name
         require(file.is_file(), f"Missing artifact: {name}")
         require(hashlib.sha256(file.read_bytes()).hexdigest() == digest, f"Artifact checksum differs: {name}")
+    check_package_licenses(ROOT / "artifacts/packages", version, wheels[0])
     fingerprint = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()[:12]
     for relative in ("artifacts/test-results.json", "artifacts/compression-test-results.json",
                      "artifacts/compression-binding-tests.json"):
@@ -135,7 +231,7 @@ def main():
             check_artifacts(summary, args.platform, args.arch)
         summary["result"] = "passed"
         print(json.dumps(summary, indent=2))
-    except (ValueError, KeyError, OSError, ET.ParseError) as error:
+    except (ValueError, KeyError, OSError, ET.ParseError, tarfile.TarError, zipfile.BadZipFile) as error:
         print(f"Repository check failed: {error}", file=sys.stderr)
         return 1
     return 0

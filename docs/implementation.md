@@ -73,7 +73,7 @@ Builder hiện dùng `scripts/build-packages.py`, tạo binary rồi stage vào 
 
 CI candidate trong `.github/workflows/neutral-engine.yml` chỉ chạy core/package tests trên macOS/Linux, chưa publish. Nó không thay thế kết quả kiểm thử Windows hoặc Linux ARM64. Release workflow tương lai cần tag chính thức, GitHub environment và registry credential/trusted publishing được cấu hình bởi owner.
 
-Các bước release: checkout sạch → test Rust → build current target → pack → cài artifacts trong consumer sạch → parity → tạo checksums/SBOM/notice → candidate review → publish version đã kiểm tra → registry install verification. Artifact thử nội bộ hiện chưa có license public đã giải quyết và không được publish.
+Các bước release: checkout sạch → test Rust → build current target → pack → cài artifacts trong consumer sạch → parity → tạo checksums/SBOM/notice → candidate review → publish version đã kiểm tra → registry install verification. License đã chốt AGPL-3.0-only cho source mới; artifacts candidate còn chờ multi-platform assembly và registry ownership trước khi publish registry.
 
 ## Definition of done
 

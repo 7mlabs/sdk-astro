@@ -1,12 +1,12 @@
 # GitHub công khai và phân phối package
 
-Repo đích là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), đang public và trống khi kiểm tra ngày 2026-10-03. Source engine/SDK được chuẩn bị trong checkout local riêng; chưa push hoặc publish registry. Connector chỉ có quyền đọc và CLI chưa đăng nhập, nhưng Git HTTPS qua credential helper đã xác thực bằng dry run thành công. Bước push thật còn chờ owner chọn license. Xem [thiết lập GitHub và phát hành](github-setup.md).
+Repo là [7mlabs/sdk-astro](https://github.com/7mlabs/sdk-astro), tách riêng source engine/SDK mới. Owner đã chọn nhánh license miễn phí AGPL ngày 2026-10-03. Package chưa publish registry. Git HTTPS qua credential helper đã xác thực bằng dry run thành công. Xem [thiết lập GitHub và phát hành](github-setup.md).
 
 ## Điều kiện trước khi public
 
-Source clone ban đầu chưa có LICENSE ở gốc. Repo mới không import ứng dụng/history legacy; owner vẫn cần xác định license cho source mới và ghi nhận provenance. Không tự gán MIT/Apache cho toàn bộ source. Giữ npm `private: true` và Cargo `publish = false` đến khi gate đạt. Python/NuGet vẫn có thể upload về mặt công cụ, nhưng workflow hiện không có bước publish.
+Repo mới không import ứng dụng/history legacy. Source mới và engine packages dùng `AGPL-3.0-only`, có toàn văn LICENSE/NOTICE và provenance của third-party. Renderer độc lập giữ MIT. Giữ npm `private: true` và Cargo `publish = false` đến khi registry/platform gates đạt. Python/NuGet vẫn có thể upload về mặt công cụ, nhưng workflow hiện không có bước publish.
 
-Swiss Ephemeris có license kép AGPL hoặc Professional theo [tài liệu upstream](https://www.astro.com/swisseph-download/doc/swephprg.pdf). Provider hiện đã được vendor để build/test local; source pin commit, có bản vá chặn file ngoài và notices được đóng gói. Không publish trước khi quyết định mô hình phù hợp. Việc tách provider không mặc nhiên giải quyết nghĩa vụ license của sản phẩm tích hợp. Cần giữ notices của source và data đi kèm.
+Swiss Ephemeris có license kép AGPL hoặc Professional theo [tài liệu upstream](https://www.astro.com/swisseph-download/doc/swephprg.pdf); dự án chọn AGPL miễn phí. Provider được vendor theo commit đã pin, có bản vá chặn file ngoài ngày 2026-10-02 và notices đi kèm. Phần mềm tích hợp engine cần tuân thủ các nghĩa vụ AGPL tương ứng; xem [license.md](license.md).
 
 ## Tổ chức public repository
 

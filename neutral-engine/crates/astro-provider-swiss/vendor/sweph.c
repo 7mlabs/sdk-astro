@@ -2363,7 +2363,7 @@ again:
 FILE *swi_fopen(int ifno, char *fname, char *ephepath, char *serr)
 {
 #ifdef ASTRO_MOSHIER_ONLY
-  /* 7mlabs local-only provider: use compiled ephemeris/time tables exclusively. */
+  /* Modified by 7mlabs on 2026-10-02: use compiled ephemeris/time tables exclusively. */
   if (serr != NULL) strcpy(serr, "External ephemeris files disabled by this build");
   return NULL;
 #endif

@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageId>SevenMLabs.Astrology</PackageId>
     <Version>0.10.0-alpha.1</Version>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/7mlabs/sdk-astro</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -12,6 +13,8 @@
     <Description>Offline natal, synastry, composite, forecasts and astronomical event data using the shared native engine.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="LICENSE" Pack="true" PackagePath="/" />
+    <None Include="NOTICE" Pack="true" PackagePath="/" />
     <None Include="third-party/*" Pack="true" PackagePath="third-party/" />
     <None Include="README.md" Pack="true" PackagePath="/" />
     <None Include="native/**/*" Pack="true" PackagePath="runtimes/%(RecursiveDir)native/%(Filename)%(Extension)" />

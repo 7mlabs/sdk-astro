@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Repo GitHub đích: https://github.com/7mlabs/sdk-astro. Bản source local tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, đã giữ third-party notices. Source chưa được push; package chưa được phát hành trên npm, PyPI, NuGet hoặc crates.io.
+Repo GitHub: https://github.com/7mlabs/sdk-astro. Source tách riêng engine/SDK, không chứa lịch sử hoặc ứng dụng legacy, giữ third-party notices. Owner đã chọn AGPL-3.0-only ngày 2026-10-03; xem [license.md](license.md). Package chưa được phát hành trên npm, PyPI, NuGet hoặc crates.io.
 
 Kiểm tra quyền ngày 2026-10-03: connector GitHub có `pull: true`, `push: false`; `gh auth status` báo chưa đăng nhập. Git HTTPS qua credential helper sẵn có trên máy đã chạy `git push --dry-run origin main` thành công; có thể dùng Git trực tiếp để upload. Đây là dry run, chưa cập nhật GitHub hoặc xác nhận các hooks khi push thật. Không gửi token trong chat hoặc commit credentials.
 
@@ -31,13 +31,13 @@ node scripts/export-website-data.mjs --output artifacts/website-data
 
 ## Đưa source lên GitHub
 
-Trước push, owner xác định license cho source mới và mô hình phân phối Swiss Ephemeris; xem [distribution.md](distribution.md). Giữ các notices trong provider và SDK packages. Không tự gán MIT cho toàn bộ engine.
+License đã chốt là AGPL-3.0-only cho engine/SDK mới, dùng nhánh AGPL miễn phí của Swiss Ephemeris. Giữ toàn văn LICENSE, NOTICE và các notices trong provider/SDK packages; UI renderer có MIT riêng. Xem [distribution.md](distribution.md).
 
 Khi GitHub credential có quyền ghi, checkout local có remote `origin` trỏ đến repo đích. Kiểm tra staged files, chạy repository checks và các tests ở trên, rồi commit/push. Không dùng force push hoặc import history legacy. Sau khi push, theo dõi cả hai jobs và cập nhật trạng thái thực trong README/docs.
 
 ## Cấu hình phát hành public
 
-1. Xác nhận quyền sở hữu scope npm `@7mlabs` và các tên package PyPI/NuGet/crates.io. Chốt root LICENSE, metadata và third-party provenance.
+1. Xác nhận quyền sở hữu scope npm `@7mlabs` và các tên package PyPI/NuGet/crates.io. Giữ root LICENSE AGPL, package metadata và third-party provenance đã chốt.
 2. Hoàn thiện native platform matrix và fresh install tests. Node cần resolver/optional platform packages; NuGet cần một nupkg tập hợp runtime assets; Python cần wheels được build/repair trên nền tảng tương ứng.
 3. Cấu hình GitHub release environment và trusted publisher trên từng registry theo đúng owner `7mlabs`, repo `sdk-astro`, tên workflow và environment. Workflow publish sẽ được thêm khi gates đạt; hiện chưa tồn tại.
 4. Thêm tag-based release workflow, đồng bộ version engine/SDK, xuất checksum/notices. Dùng alpha/prerelease trước stable, không ghi đè version đã phát hành.
