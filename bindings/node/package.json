@@ -1,6 +1,6 @@
 {
   "name": "@7mlabs/astrology",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Offline natal, synastry, composite, forecasts and astronomical event data using a shared native engine",
   "license": "AGPL-3.0-only",
   "main": "index.cjs",
@@ -29,7 +29,6 @@
     "url": "git+https://github.com/7mlabs/sdk-astro.git",
     "directory": "bindings/node"
   },
-  "homepage": "https://sevenmlabs-packages.velikho.chatgpt.site/docs/astrology-node/",
   "bugs": {
     "url": "https://github.com/7mlabs/sdk-astro/issues"
   }

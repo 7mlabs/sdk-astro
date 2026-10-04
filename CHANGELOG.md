@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.1 — metadata fix
+
+- Bỏ trường `homepage` của package npm theo lựa chọn của maintainer; trang npm không khai báo Homepage.
+- Đồng bộ version core/SDK; thuật toán và JSON contract giữ nguyên.
+- Bản `0.10.0` đã phát hành giữ nguyên metadata lịch sử.
+
 ## 0.10.0 — npm stable, 2026-10-03
 
 - Chuyển package npm `@7mlabs/astrology` sang version `0.10.0` và kênh ổn định `latest`; lệnh cài chính là `npm install @7mlabs/astrology`.
